@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0296152C-5F3F-40C2-BA52-52B31DFC4634}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AppMasInfo.Negocio</RootNamespace>
+    <AssemblyName>AppMasInfo.Negocio</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DAL\Database\Cargo.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\CargoFuncion.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\Estado.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\MasInfoModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MasInfoModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\MasInfoModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\MasInfoModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MasInfoModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\Paciente.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\PacienteUbicacion.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\Rol.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\Telefono.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\Trabajador.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\Tutor.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\Ubicacion.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Database\Usuario.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Entities\BaseDto.cs" />
+    <Compile Include="DAL\Entities\CargoDto.cs" />
+    <Compile Include="DAL\Entities\CargoFuncionDto.cs" />
+    <Compile Include="DAL\Entities\EstadoDto.cs" />
+    <Compile Include="DAL\Entities\PacienteDto.cs" />
+    <Compile Include="DAL\Entities\PacienteUbicacionDto.cs" />
+    <Compile Include="DAL\Entities\RolDto.cs" />
+    <Compile Include="DAL\Entities\TelefonoDto.cs" />
+    <Compile Include="DAL\Entities\TrabajadorDto.cs" />
+    <Compile Include="DAL\Entities\TutorDto.cs" />
+    <Compile Include="DAL\Entities\UbicacionDto.cs" />
+    <Compile Include="DAL\Entities\UsuarioDto.cs" />
+    <Compile Include="DAL\Services\CargoFuncionService.cs" />
+    <Compile Include="DAL\Services\CargoService.cs" />
+    <Compile Include="DAL\Services\EstadoService.cs" />
+    <Compile Include="DAL\Services\ICargoFuncionService.cs" />
+    <Compile Include="DAL\Services\ICargoService.cs" />
+    <Compile Include="DAL\Services\IEstadoService.cs" />
+    <Compile Include="DAL\Services\IPacienteService.cs" />
+    <Compile Include="DAL\Services\IPacienteUbicacionService.cs" />
+    <Compile Include="DAL\Services\IRolService.cs" />
+    <Compile Include="DAL\Services\ITelefonoService.cs" />
+    <Compile Include="DAL\Services\ITutorService.cs" />
+    <Compile Include="DAL\Services\IUbicacionService.cs" />
+    <Compile Include="DAL\Services\ITrabajadorService.cs" />
+    <Compile Include="DAL\Services\IUsuarioService.cs" />
+    <Compile Include="DAL\Services\PacienteService.cs" />
+    <Compile Include="DAL\Services\PacienteUbicacionService.cs" />
+    <Compile Include="DAL\Services\RolService.cs" />
+    <Compile Include="DAL\Services\TelefonoService.cs" />
+    <Compile Include="DAL\Services\TutorService.cs" />
+    <Compile Include="DAL\Services\UbicacionService.cs" />
+    <Compile Include="DAL\Services\TrabajadorService.cs" />
+    <Compile Include="DAL\Services\UsuarioService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="DAL\Database\MasInfoModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MasInfoModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="DAL\Database\MasInfoModel.edmx.diagram">
+      <DependentUpon>MasInfoModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DAL\Database\MasInfoModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MasInfoModel.Context.cs</LastGenOutput>
+      <DependentUpon>MasInfoModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="DAL\Database\MasInfoModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MasInfoModel.edmx</DependentUpon>
+      <LastGenOutput>MasInfoModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

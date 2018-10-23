@@ -1,0 +1,185 @@
+﻿@model AppMasInfo.Web.Models.PacienteViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    <script type="text/javascript">
+
+         var viewDetailItem = function (id) {
+            var urlDetallePaciente = '@Url.Content("~/Paciente/Detail")?p_id=' + id;
+            dialogInstanceArchivo = BootstrapDialog.show({
+                title: 'masInfo - Detalle Usuario',
+                message: $('<div></div>').load(urlDetallePaciente),
+                size: BootstrapDialog.SIZE_WIDE,
+                buttons: [{
+                    label: 'Cerrar',
+                    action: function (dialogRef) {
+                        dialogRef.close();
+                    }
+                }]
+            });
+        };
+
+        var deleteItem = function (id) {
+            confirmationDialog(
+                'Eliminar Paciente',
+                '¿Esta seguro(a) que desea eliminar a el Paciente?',
+                function () { doDeleteItem(id); }
+            );
+        };
+
+        var doDeleteItem = function (id) {
+            var objRequestData = new Object();
+            objRequestData.Id = id;
+
+            $.ajax({
+                url: '@Url.Action("Delete", "Paciente")',
+                method: 'POST',
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(objRequestData),
+                beforeSend: function () {
+                    showModalLoading();
+                },
+                success: function (data) {
+                    if (data !== '') {
+                        if (data.status === 'ok') {
+                            showMessageDialogRedirect(BootstrapDialog.TYPE_INFO,
+                                'Información',
+                                data.message,
+                                '@Url.Action("Index", "Paciente")');
+                        }
+                        else {
+                            showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                                'Error',
+                                data.message);
+                        }
+                    }
+                    else {
+                        showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                            'Error',
+                            'Error al intentar ingresar el registro. Por favor, inténtelo nuevamente');
+                    }
+                },
+                error: function (jqXHR, status, error) {
+                    showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                        'Error',
+                        'Ha ocurrido un error al intentar realizar la petición. Por favor, inténtelo nuevamente');
+                    if (jqXHR.status === parseInt('@((int)System.Net.HttpStatusCode.BadRequest)')) {
+                        var modelStateErrors = jqXHR.responseJSON;
+                        for (var i = 0; i < modelStateErrors.length; i++) {
+                            $(`span[data-valmsg-for="${modelStateErrors[i].key}"]`).text(modelStateErrors[i].errors[0]);
+                        }
+                    }
+                },
+                complete: function () {
+                    hideModalLoading();
+                }
+            });
+        };
+
+         $(function () {
+            var saveMessage = '@TempData["SaveOkMessage"]';
+            if (saveMessage !== '') {
+                showMessageDialog(
+                    BootstrapDialog.TYPE_SUCCESS,
+                    'Información',
+                    saveMessage
+                );
+            }
+
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage !== '') {
+                ShowMessageDialog(
+                   BootstrapDialog.TYPE_DANGER,
+                   'Error',
+                   errorMessage
+               );
+            }
+        });
+    </script>
+}
+
+<div class="panel panel-primary">
+    <div class="panel-body" id="panel">
+        <h5 class="m-b-30 m-t-0">Mantenedor Pacientes</h5>
+
+        <br />
+
+        <fieldset>
+            <legend>Lista de datos</legend>
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <div class="col-md-12 text-right">
+                        <a href='@Url.Action("Create", "Paciente")' class="btn btn-primary" role="button" aria-pressed="true">
+                            <i class="glyphicon glyphicon-plus"></i> Crear
+                        </a>
+                    </div>
+                </div>
+                <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
+                    <thead>
+                        <tr>
+                            <th><h6 align="left">Id</h6></th>
+                            <th><h6 align="left">Rut</h6></th>
+                            <th><h6 align="left">Nombre</h6></th>
+                            <th><h6 align="left">Apellido Paterno</h6></th>
+                            <th><h6 align="left">Edad</h6></th>
+                            <th><h6 align="left">Telefono</h6></th>
+                            <th><h6 align="left">Direccion</h6></th>
+                            <th><h6 align="left">Acci&oacute;n</h6></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.lstPaciente.Count() > 0)
+                        {
+                            foreach (var item in Model.lstPaciente)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Rut</td>
+                                    <td>@item.Nombre</td>
+                                    <td>@item.ApellidoPaterno</td>
+                                    <td>@item.Edad</td>
+                                    <td>@item.Telefono</td>
+                                    <td>@item.Direccion</td>
+                                    <td>
+                                        <a href="javascript:viewDetailItem(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>
+                                        <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
+                                        <a href="@Url.Action("Edit", "Paciente", new { p_Id = item.Id })"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="8">No existen datos</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="Eliminar" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Eliminar Registro</h4>
+            </div>
+            <div class="modal-body">
+                <p>Desea Eliminar este Registro</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

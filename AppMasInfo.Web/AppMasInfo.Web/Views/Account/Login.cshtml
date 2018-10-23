@@ -1,0 +1,241 @@
+﻿@model AppMasInfo.Web.Models.AccountViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>masInfo Login</title>
+    <script src="~/Scripts/JsLogin/prefixfree.min.js"></script>
+    <link href="~/Content/css/style.css" rel="stylesheet" />
+
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background: #fff;
+            color: #fff;
+            font-family: Arial;
+            font-size: 12px;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        .body {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -40px;
+            bottom: -40px;
+            width: auto;
+            height: auto;
+            background-image: url(https://getreferralmd.com/wp-content/uploads/2018/06/surgery-1822458_1920-768x512.jpg);
+            background-size: cover;
+            /*
+                -webkit-filter: blur(5px);
+            */
+            z-index: 0;
+        }
+
+        .grad {
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -40px;
+            bottom: -40px;
+            width: auto;
+            height: auto;
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.65))); /* Chrome,Safari4+ */
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        .contenedor {
+            position: relative;
+            top: 280px;
+            left: auto;
+            right: auto;
+            bottom: auto;
+            width: auto;
+            height: 250px;
+            background: rgba(255,255,255,0.9);
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        .header {
+            position: absolute;
+            top: calc(50% - 35px);
+            left: calc(50% - 255px);
+            z-index: 2;
+        }
+
+            .header div {
+                float: left;
+                color: #fff;
+                font-family: 'Exo', sans-serif;
+                font-size: 60px;
+                font-weight: 900;
+            }
+
+                .header div span {
+                    color: #0051DD !important;
+                    font-size: 70px;
+                    font-weight: 900;
+                }
+
+                    .header div span:hover {
+                        opacity: 0.8;
+                    }
+
+                    .header div span:hover {
+                        opacity: 0.6;
+                    }
+
+        .login {
+            position: absolute;
+            top: calc(50% - 75px);
+            left: calc(65% - 210px);
+            height: 150px;
+            width: 500px;
+            padding: 10px;
+            z-index: 2;
+        }
+
+            .login input[type=text] {
+                width: 250px;
+                height: 30px;
+                background: transparent;
+                border: 3px solid rgba(255,255,255,0.6);
+                border-radius: 2px;
+                color: #ECF0F1;
+                font-family: 'Exo', sans-serif;
+                font-size: 18px;
+                font-weight: 400;
+                padding: 4px;
+            }
+
+            .login input[type=password] {
+                width: 250px;
+                height: 30px;
+                background: transparent;
+                border: 3px solid rgba(255,255,255,0.6);
+                border-radius: 2px;
+                color: #fff;
+                font-family: 'Exo', sans-serif;
+                font-size: 18px;
+                font-weight: 400;
+                padding: 4px;
+                margin-top: 10px;
+            }
+
+            .login input[type=submit] {
+                width: 265px;
+                height: 45px;
+                background: #0051DD;
+                border: 3px solid #5379fa;
+                cursor: pointer;
+                border-radius: 2px;
+                color: #fff;
+                font-family: 'Exo', sans-serif;
+                font-size: 20px;
+                font-weight: 400;
+                padding: 6px;
+                margin-top: 10px;
+            }
+
+                .login input[type=submit]:hover {
+                    opacity: 0.8;
+                }
+
+                .login input[type=submit]:active {
+                    opacity: 0.6;
+                }
+
+            .login input[type=text]:focus {
+                outline: none;
+                border: 4px solid rgba(255,255,255,0.9);
+                background: #E5E7E9;
+                color: #515A5A;
+            }
+
+            .login input[type=password]:focus {
+                outline: none;
+                border: 4px solid rgba(255,255,255,0.9);
+                background: #E5E7E9;
+                color: #515A5A;
+            }
+
+            .login input[type=submit]:focus {
+                outline: none;
+            }
+
+        ::-webkit-input-placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        ::-moz-input-placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        
+    </style>
+
+    <script src="js/prefixfree.min.js"></script>
+
+</head>
+
+<body>
+    <div class="body"></div>
+    <div class="grad"></div>
+    <div class="contenedor"></div>
+    <div class="header">
+        <div>mas<span>Info</span></div>
+    </div>
+    <br>
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post, htmlAttributes: new { @class = "form-horizontal m-t-20" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-horizontal" id="div_cont">
+            <div id="divAlertMessage" style="display:none"></div>
+            <div class="login">
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(model => model.Username, htmlAttributes: new { @class = "form-control", @placeholder = "Ingrese Usuario", @type = "text", @name = "user" })
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @Html.PasswordFor(model => model.Pass, htmlAttributes: new { @class = "form-control", placeholder = "Contraseña", @type = "password", @name = "password" })
+                @Html.ValidationMessageFor(model => model.Pass, "", new { @class = "text-danger" })
+                <input type="submit" value="Ingrese" class="btn btn-default" />
+            </div>
+            <script src='http://codepen.io/assets/libs/fullpage/jquery.js'></script>
+        </div>
+    }
+    <!-- Javascript libraries -->
+    @Scripts.Render("~/bundles/jquery")
+    <script type="text/javascript">
+        $(function () {
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage != '') {
+                showAlertMessage(
+                   'danger',
+                   errorMessage
+               );
+            }
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+

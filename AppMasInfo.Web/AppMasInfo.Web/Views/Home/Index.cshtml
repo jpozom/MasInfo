@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<style>
+    #ali {
+        text-align: justify;
+    }
+
+    #jumbotron {
+        background-color: #5379fa;
+        color: #fff;
+    }
+
+    .btn-default {
+        background: #5379fa;
+        color: #fff;
+    }
+</style>
+<div class="jumbotron" id="jumbotron">
+    <h1>masInfo Web</h1>
+    <p class="lead">Bienvenido a la aplicaci&oacute;n de Administarci&oacute;n. En esta secci&oacute;n usted podr&aacute; Crear, Consultar, Editar y Eliminar registros de los Usuarios disponibles.</p>
+    @*<p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>*@
+</div>
+
+<div class="row">
+    <div class="col-md-4" id="ali">
+        <h3>Mantenedor Pacientes</h3>
+        <p>
+            En esta secci&oacute;n usted podr&aacute; acceder a todos los pacientes almacenados en Base de Datos, con esto poder consultar registros, crear nuevos pacientes, modificar registros y eliminar pacientes.
+        </p>
+        <p><a class="btn btn-default" onclick="location.href='@Url.Content("~/Paciente/Index")'">Ingrese &raquo;</a></p>
+    </div>
+    <div class="col-md-4" id="ali">
+        <h3>Mantenedor de Trabajadores</h3>
+        <p>En esta secci&oacute;n usted podr&aacute; acceder a todos los trabajadores almacenados en Base de Datos, con esto poder consultar registros, crear nuevos personal, modificar registros y eliminar trabajadores.</p>
+        <p><a class="btn btn-default" onclick="location.href='@Url.Content("~/Trabajador/Index")'">Ingrese &raquo;</a></p>
+    </div>
+    <div class="col-md-4" id="ali">
+        <h3>Mantenedor de Tutores</h3>
+        <p>En esta secci&oacute;n usted podr&aacute; acceder a todos los tutores/acompa&ntilde;antes almacenados en Base de Datos, con esto poder consultar registros, crear nuevos tutores, modificar registros y eliminar tutores.</p>
+        <p><a class="btn btn-default" onclick="location.href='@Url.Content("~/Home/Index")'">Ingrese &raquo;</a></p>
+    </div>
+</div>
