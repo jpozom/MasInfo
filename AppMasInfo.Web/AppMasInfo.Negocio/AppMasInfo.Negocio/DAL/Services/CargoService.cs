@@ -40,7 +40,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                      select new CargoDto
                                      {
                                          Id = c.Id,                                         
-                                         Descripcion = c.Descripcion,
+                                         Descripcion = c.Descripcion,  
                                          IdCargoFuncion = c.IdCargoFuncion
                                      }).ToList();
 

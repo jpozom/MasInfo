@@ -20,6 +20,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public string Email { get; set; }
         public int IdEstado { get; set; }
         public long? IdUsuario { get; set; }
+        public Nullable<int> IdCargoFuncion { get; set; }
 
         public UsuarioDto DatosUsuario { get; set; }
         

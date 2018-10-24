@@ -26,8 +26,10 @@ namespace AppMasInfo.Negocio.DAL.Database
         public string Email { get; set; }
         public int IdEstado { get; set; }
         public long IdUsuario { get; set; }
+        public Nullable<int> IdCargoFuncion { get; set; }
     
         public virtual Cargo Cargo { get; set; }
+        public virtual CargoFuncion CargoFuncion { get; set; }
         public virtual Estado Estado { get; set; }
         public virtual Usuario Usuario { get; set; }
     }

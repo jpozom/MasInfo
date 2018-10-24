@@ -65,7 +65,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                                 FchCreate = p_Obj.FchCreate,
                                 UsrCreate = p_Obj.UsrCreate,
                                 Email = p_Obj.Email,
-                                IdEstado = p_Obj.IdEstado
+                                IdEstado = p_Obj.IdEstado,
+                                IdCargoFuncion = p_Obj.IdCargoFuncion                                
                             });
                         }
 

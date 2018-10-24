@@ -5,12 +5,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<script src="~/Scripts/sha256.js"></script>
+
 @section Scripts {
     <script type="text/javascript">
         $("#IdCargo .rol").hide();
 
-        $(function () {
+        $("#divStatus").hide();
 
+        $(function () {
+            //evento que carga las funciones del cargo en el id asociado a ese combobox
             $("#IdCargoFuncion").on("change", function () {
                 var idCargoFuncion = $(this).val();
                 $("#IdCargo .rol").hide();
@@ -20,16 +24,49 @@
                 }
                 $("#IdCargo").val(0);
             });
+            
+        //evento que controla el confirm de la contraseña y encripta la contraseña
 
+            $("#passwordTest").on("change", function () {
+
+
+                if (userSHA == storedSHA) {
+                    $("#status").html("<span class=\"label label-success\">Status:</span> The two passwords are the same. At this point you would be logged into whatever website you were logging into.");
+                    $("#PassEncrypted").val(sha256_digest($(this).val()));
+
+                } else {
+                    $("#status").html("<span class=\"label label-danger\">Status:</span> The two passwords are <b>not</b> the same. You would be told that your password or username was incorrect.");
+                    $("#PassEncrypted").val('');
+                }
+                 $("#divStatus").show();
+
+                });
+            
         });
+        
+        var storedSHA;
+        var userSHA;
+
+        $("#passwordInput").keyup(function () {
+            var value = $(this).val();
+            $("#storedSHA").text("SHA256 Hash for Password: " + sha256_digest(value));
+            storedSHA = value;
+        }).keyup();
+
+        $("#passwordTest").keyup(function () {
+            var value = $(this).val();
+            $("#currentSHA").text("SHA256 Hash for Second Password: " + sha256_digest(value));
+            userSHA = value;
+        }).keyup();
+        
     </script>
 }
 
 <style type="text/css">
-    .legend{
+    .legend {
         font-size: 15px;
-        font-weight:200;
-        font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-weight: 200;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
 </style>
 <div class="panel panel-primary">
@@ -41,6 +78,7 @@
 
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.PassEncrypted)
             <fieldset>
                 <legend class="legend">Datos Personales del Usuario</legend>
 
@@ -80,35 +118,47 @@
             <fieldset>
                 <legend class="legend">Datos para Inicio de Sesi&oacute;n</legend>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.Username, "Username", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.DatosUsuario.Username, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.EditorFor(model => model.DatosUsuario.Username, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.DatosUsuario.Username, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.DatosUsuario, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.Pass, "Pass", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.DatosUsuario.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.EditorFor(model => model.DatosUsuario.Pass, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.DatosUsuario.Pass, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.DatosUsuario.Pass, new { htmlAttributes = new { @class = "form-control", type = "password", placeholder = "Ingrese Password", id = "passwordInput" } })
+                        @Html.ValidationMessageFor(model => model.DatosUsuario, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.IdRol, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.ConfirmPass, "Confirma Pass", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ConfirmPass, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirme Password", type = "password", id = "passwordTest" } })
+                        @Html.ValidationMessageFor(model => model.ConfirmPass, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                
+                <div class="alert alert-info" id="divStatus">
+                    <p id="status"></p>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatosUsuario.IdRol," Asigne Rol", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         @Html.DropDownListFor(model => model.DatosUsuario.IdRol,
                                   new SelectList(Model.LstRol, "Id", "Descripcion"),
-                                  "Selecciona", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.DatosUsuario.IdRol, "", new { @class = "text-danger" })
+                                  "Selecciona", new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.DatosUsuario, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </fieldset>
 
             <fieldset>
                 <legend class="legend">Datos Profesionales del Usuario</legend>
-                
+
                 <div class="form-group">
                     @Html.LabelFor(model => model.IdCargoFuncion, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -120,21 +170,21 @@
                 </div>
 
 
-                <div class="form-group">                                  
-                        @Html.LabelFor(model => model.IdCargo, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <select id="IdCargo" class="form-control" name="IdCargo">
-                                <option value="0" class="">Seleccionar</option>
-                                @if (Model.LstCargo.Count() > 0)
-                                {                      
-                                    foreach (var item in Model.LstCargo)
-                                    {
-                                        <option value="@item.Id" class="rol rol_@item.IdCargoFuncion">@item.Descripcion</option>
-                                    }
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdCargo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select id="IdCargo" class="form-control" name="IdCargo">
+                            <option value="0" class="">Seleccionar</option>
+                            @if (Model.LstCargo.Count() > 0)
+                            {
+                                foreach (var item in Model.LstCargo)
+                                {
+                                    <option value="@item.Id" class="rol rol_@item.IdCargoFuncion">@item.Descripcion</option>
                                 }
-                            </select>
-                        </div>
+                            }
+                        </select>
                     </div>
+                </div>
 
             </fieldset>
 

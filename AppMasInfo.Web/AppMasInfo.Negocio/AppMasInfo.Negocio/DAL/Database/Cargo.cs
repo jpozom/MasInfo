@@ -24,8 +24,8 @@ namespace AppMasInfo.Negocio.DAL.Database
         public string Descripcion { get; set; }
         public Nullable<int> IdCargoFuncion { get; set; }
     
+        public virtual CargoFuncion CargoFuncion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Trabajador> Trabajador { get; set; }
-        public virtual CargoFuncion CargoFuncion { get; set; }
     }
 }

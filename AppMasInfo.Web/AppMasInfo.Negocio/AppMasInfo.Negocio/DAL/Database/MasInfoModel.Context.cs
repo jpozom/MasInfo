@@ -26,6 +26,7 @@ namespace AppMasInfo.Negocio.DAL.Database
         }
     
         public virtual DbSet<Cargo> Cargo { get; set; }
+        public virtual DbSet<CargoFuncion> CargoFuncion { get; set; }
         public virtual DbSet<Estado> Estado { get; set; }
         public virtual DbSet<Paciente> Paciente { get; set; }
         public virtual DbSet<PacienteUbicacion> PacienteUbicacion { get; set; }
@@ -35,6 +36,5 @@ namespace AppMasInfo.Negocio.DAL.Database
         public virtual DbSet<Tutor> Tutor { get; set; }
         public virtual DbSet<Ubicacion> Ubicacion { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
-        public virtual DbSet<CargoFuncion> CargoFuncion { get; set; }
     }
 }

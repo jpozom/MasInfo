@@ -18,6 +18,7 @@ namespace AppMasInfo.Negocio.DAL.Database
         public CargoFuncion()
         {
             this.Cargo = new HashSet<Cargo>();
+            this.Trabajador = new HashSet<Trabajador>();
         }
     
         public int Id { get; set; }
@@ -25,5 +26,7 @@ namespace AppMasInfo.Negocio.DAL.Database
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cargo> Cargo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Trabajador> Trabajador { get; set; }
     }
 }

@@ -91,6 +91,7 @@
           <Property Name="Email" Type="varchar" MaxLength="80" Nullable="false" />
           <Property Name="IdEstado" Type="int" Nullable="false" />
           <Property Name="IdUsuario" Type="bigint" Nullable="false" />
+          <Property Name="IdCargoFuncion" Type="int" />
         </EntityType>
         <EntityType Name="Tutor">
           <Key>
@@ -223,6 +224,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Trabajador_CargoFuncion">
+          <End Role="CargoFuncion" Type="Self.CargoFuncion" Multiplicity="0..1" />
+          <End Role="Trabajador" Type="Self.Trabajador" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CargoFuncion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Trabajador">
+              <PropertyRef Name="IdCargoFuncion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Trabajador_Estado">
           <End Role="Estado" Type="Self.Estado" Multiplicity="1" />
           <End Role="Trabajador" Type="Self.Trabajador" Multiplicity="*" />
@@ -327,6 +340,10 @@
             <End Role="Cargo" EntitySet="Cargo" />
             <End Role="Trabajador" EntitySet="Trabajador" />
           </AssociationSet>
+          <AssociationSet Name="FK_Trabajador_CargoFuncion" Association="Self.FK_Trabajador_CargoFuncion">
+            <End Role="CargoFuncion" EntitySet="CargoFuncion" />
+            <End Role="Trabajador" EntitySet="Trabajador" />
+          </AssociationSet>
           <AssociationSet Name="FK_Trabajador_Estado" Association="Self.FK_Trabajador_Estado">
             <End Role="Estado" EntitySet="Estado" />
             <End Role="Trabajador" EntitySet="Trabajador" />
@@ -354,6 +371,7 @@
       <Schema Namespace="masInfoWebModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="masInfoWebEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Cargo" EntityType="masInfoWebModel.Cargo" />
+          <EntitySet Name="CargoFuncion" EntityType="masInfoWebModel.CargoFuncion" />
           <EntitySet Name="Estado" EntityType="masInfoWebModel.Estado" />
           <EntitySet Name="Paciente" EntityType="masInfoWebModel.Paciente" />
           <EntitySet Name="PacienteUbicacion" EntityType="masInfoWebModel.PacienteUbicacion" />
@@ -363,8 +381,16 @@
           <EntitySet Name="Tutor" EntityType="masInfoWebModel.Tutor" />
           <EntitySet Name="Ubicacion" EntityType="masInfoWebModel.Ubicacion" />
           <EntitySet Name="Usuario" EntityType="masInfoWebModel.Usuario" />
+          <AssociationSet Name="FK_Cargo_CargoFuncion" Association="masInfoWebModel.FK_Cargo_CargoFuncion">
+            <End Role="CargoFuncion" EntitySet="CargoFuncion" />
+            <End Role="Cargo" EntitySet="Cargo" />
+          </AssociationSet>
           <AssociationSet Name="FK_Trabajador_Cargo" Association="masInfoWebModel.FK_Trabajador_Cargo">
             <End Role="Cargo" EntitySet="Cargo" />
+            <End Role="Trabajador" EntitySet="Trabajador" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Trabajador_CargoFuncion" Association="masInfoWebModel.FK_Trabajador_CargoFuncion">
+            <End Role="CargoFuncion" EntitySet="CargoFuncion" />
             <End Role="Trabajador" EntitySet="Trabajador" />
           </AssociationSet>
           <AssociationSet Name="FK_Paciente_Estado" Association="masInfoWebModel.FK_Paciente_Estado">
@@ -411,11 +437,6 @@
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Tutor" EntitySet="Tutor" />
           </AssociationSet>
-          <EntitySet Name="CargoFuncion" EntityType="masInfoWebModel.CargoFuncion" />
-          <AssociationSet Name="FK_Cargo_CargoFuncion" Association="masInfoWebModel.FK_Cargo_CargoFuncion">
-            <End Role="CargoFuncion" EntitySet="CargoFuncion" />
-            <End Role="Cargo" EntitySet="Cargo" />
-          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Cargo">
           <Key>
@@ -423,9 +444,18 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Trabajador" Relationship="masInfoWebModel.FK_Trabajador_Cargo" FromRole="Cargo" ToRole="Trabajador" />
           <Property Name="IdCargoFuncion" Type="Int32" />
           <NavigationProperty Name="CargoFuncion" Relationship="masInfoWebModel.FK_Cargo_CargoFuncion" FromRole="Cargo" ToRole="CargoFuncion" />
+          <NavigationProperty Name="Trabajador" Relationship="masInfoWebModel.FK_Trabajador_Cargo" FromRole="Cargo" ToRole="Trabajador" />
+        </EntityType>
+        <EntityType Name="CargoFuncion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Cargo" Relationship="masInfoWebModel.FK_Cargo_CargoFuncion" FromRole="CargoFuncion" ToRole="Cargo" />
+          <NavigationProperty Name="Trabajador" Relationship="masInfoWebModel.FK_Trabajador_CargoFuncion" FromRole="CargoFuncion" ToRole="Trabajador" />
         </EntityType>
         <EntityType Name="Estado">
           <Key>
@@ -510,7 +540,9 @@
           <Property Name="Email" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
           <Property Name="IdEstado" Type="Int32" Nullable="false" />
           <Property Name="IdUsuario" Type="Int64" Nullable="false" />
+          <Property Name="IdCargoFuncion" Type="Int32" />
           <NavigationProperty Name="Cargo" Relationship="masInfoWebModel.FK_Trabajador_Cargo" FromRole="Trabajador" ToRole="Cargo" />
+          <NavigationProperty Name="CargoFuncion" Relationship="masInfoWebModel.FK_Trabajador_CargoFuncion" FromRole="Trabajador" ToRole="CargoFuncion" />
           <NavigationProperty Name="Estado" Relationship="masInfoWebModel.FK_Trabajador_Estado" FromRole="Trabajador" ToRole="Estado" />
           <NavigationProperty Name="Usuario" Relationship="masInfoWebModel.FK_Trabajador_Usuario" FromRole="Trabajador" ToRole="Usuario" />
         </EntityType>
@@ -557,6 +589,18 @@
           <NavigationProperty Name="Trabajador" Relationship="masInfoWebModel.FK_Trabajador_Usuario" FromRole="Usuario" ToRole="Trabajador" />
           <NavigationProperty Name="Tutor" Relationship="masInfoWebModel.FK_Tutor_Usuario" FromRole="Usuario" ToRole="Tutor" />
         </EntityType>
+        <Association Name="FK_Cargo_CargoFuncion">
+          <End Type="masInfoWebModel.CargoFuncion" Role="CargoFuncion" Multiplicity="0..1" />
+          <End Type="masInfoWebModel.Cargo" Role="Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CargoFuncion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cargo">
+              <PropertyRef Name="IdCargoFuncion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Trabajador_Cargo">
           <End Type="masInfoWebModel.Cargo" Role="Cargo" Multiplicity="0..1" />
           <End Type="masInfoWebModel.Trabajador" Role="Trabajador" Multiplicity="*" />
@@ -566,6 +610,18 @@
             </Principal>
             <Dependent Role="Trabajador">
               <PropertyRef Name="IdCargo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Trabajador_CargoFuncion">
+          <End Type="masInfoWebModel.CargoFuncion" Role="CargoFuncion" Multiplicity="0..1" />
+          <End Type="masInfoWebModel.Trabajador" Role="Trabajador" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CargoFuncion">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Trabajador">
+              <PropertyRef Name="IdCargoFuncion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -701,26 +757,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="CargoFuncion">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Cargo" Relationship="masInfoWebModel.FK_Cargo_CargoFuncion" FromRole="CargoFuncion" ToRole="Cargo" />
-        </EntityType>
-        <Association Name="FK_Cargo_CargoFuncion">
-          <End Type="masInfoWebModel.CargoFuncion" Role="CargoFuncion" Multiplicity="0..1" />
-          <End Type="masInfoWebModel.Cargo" Role="Cargo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CargoFuncion">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Cargo">
-              <PropertyRef Name="IdCargoFuncion" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -731,6 +767,14 @@
             <EntityTypeMapping TypeName="masInfoWebModel.Cargo">
               <MappingFragment StoreEntitySet="Cargo">
                 <ScalarProperty Name="IdCargoFuncion" ColumnName="IdCargoFuncion" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CargoFuncion">
+            <EntityTypeMapping TypeName="masInfoWebModel.CargoFuncion">
+              <MappingFragment StoreEntitySet="CargoFuncion">
                 <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -799,6 +843,7 @@
           <EntitySetMapping Name="Trabajador">
             <EntityTypeMapping TypeName="masInfoWebModel.Trabajador">
               <MappingFragment StoreEntitySet="Trabajador">
+                <ScalarProperty Name="IdCargoFuncion" ColumnName="IdCargoFuncion" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -848,14 +893,6 @@
                 <ScalarProperty Name="IdRol" ColumnName="IdRol" />
                 <ScalarProperty Name="Pass" ColumnName="Pass" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CargoFuncion">
-            <EntityTypeMapping TypeName="masInfoWebModel.CargoFuncion">
-              <MappingFragment StoreEntitySet="CargoFuncion">
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

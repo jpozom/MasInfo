@@ -265,6 +265,7 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\sha256.js" />
     <Content Include="Scripts\spin.min.js" />
     <Content Include="Scripts\waves.js" />
     <Content Include="Scripts\wow.min.js" />

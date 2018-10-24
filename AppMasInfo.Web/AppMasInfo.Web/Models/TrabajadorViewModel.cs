@@ -50,6 +50,8 @@ namespace AppMasInfo.Web.Models
 
     public class TrabajadorCreateViewModel
     {
+        #region propiedades
+
         [Display(Name = "Nombre")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
         [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
@@ -64,7 +66,11 @@ namespace AppMasInfo.Web.Models
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
         [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string ApellidoMaterno { get; set; }
-                
+       
+        public string ConfirmPass { get; set; }
+
+        public string PassEncrypted { get; set; }
+
         [Display(Name = "Ingrese Email")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
@@ -78,8 +84,10 @@ namespace AppMasInfo.Web.Models
         public long? IdUsuario { get; set; }
 
         public int IdEstado { get; set; }
-    
-        public int IdRol { get; set; }
+
+        #endregion
+
+        #region listas
 
         public List<RolDto> LstRol { get; set; }
 
@@ -87,8 +95,14 @@ namespace AppMasInfo.Web.Models
 
         public List<CargoFuncionDto> LstCargoFuncion { get; set; }
 
-        [Display(Name = "Ingrese Rol")]
+        #endregion
+
+        #region objeto tipo
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
         public UsuarioDto DatosUsuario { get; set; }
+        #endregion
+
+
     }
 
     public class TrabajadorEditViewModel

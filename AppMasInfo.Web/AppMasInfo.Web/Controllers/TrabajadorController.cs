@@ -143,10 +143,10 @@ namespace AppMasInfo.Web.Controllers
                     TrabajadorNewDb.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
                     TrabajadorNewDb.DatosUsuario = new UsuarioDto();
                     TrabajadorNewDb.DatosUsuario.Username = p_ViewModel.DatosUsuario.Username;
-                    TrabajadorNewDb.DatosUsuario.Pass = GlobalMethods.EncryptPass(p_ViewModel.DatosUsuario.Pass);
+                    TrabajadorNewDb.DatosUsuario.Pass = p_ViewModel.PassEncrypted;
                     TrabajadorNewDb.DatosUsuario.IdRol = p_ViewModel.DatosUsuario.IdRol;
                     TrabajadorNewDb.IdCargo = p_ViewModel.IdCargo;
-                    TrabajadorNewDb.idc
+                    TrabajadorNewDb.IdCargoFuncion = p_ViewModel.IdCargoFuncion;
                     TrabajadorNewDb.UsrCreate = User.Identity.GetUserId();
                     TrabajadorNewDb.FchCreate = DateTime.Now;
                     TrabajadorNewDb.Email = p_ViewModel.Email;
@@ -187,6 +187,9 @@ namespace AppMasInfo.Web.Controllers
 
             var lstCargos = this.CargoServiceModel.GetListaCargoAll();
             p_ViewModel.LstCargo = lstCargos.HasValue ? lstCargos.Value : new List<CargoDto>();
+
+            var lstCargoFuncion = this.CargoFuncionServiceModel.GetListaCargoFuncionAll();
+            p_ViewModel.LstCargoFuncion = lstCargoFuncion.HasValue ? lstCargoFuncion.Value : new List<CargoFuncionDto>();
         }
         #endregion
 
