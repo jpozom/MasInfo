@@ -2,11 +2,26 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
 
 @section Scripts{
     <script type="text/javascript">
+  
+        var viewDetailItem = function (id) {
+            var urlDetalleUsuario = '@Url.Content("~/Trabajador/Detail")?p_id=' + id;
+            dialogInstanceArchivo = BootstrapDialog.show({
+                title: 'masInfo - Detalle Usuario',
+                message: $('<div></div>').load(urlDetalleUsuario),
+                size: BootstrapDialog.SIZE_WIDE,
+                buttons: [{
+                    label: 'Cerrar',
+                    action: function (dialogRef) {
+                        dialogRef.close();
+                    }
+                }]
+            });
+        };
 
         var deleteItem = function (id) {
             confirmationDialog(
@@ -83,14 +98,17 @@
                    'Error',
                    errorMessage
                );
-            }
+             }
+           
         });
+       
     </script>
 }
+
 <div class="panel panel-primary">
     <div class="panel-body">
         <h5 class="m-b-30 m-t-0">Mantenedor Trabajadores</h5>
-
+ 
         <br />
 
         <fieldset>
@@ -103,7 +121,7 @@
                         </a>
                     </div>
                 </div>
-                <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
+                <table id="lstDatos" class="table table-hover" role="grid" aria-describedby="datatable_info">
                     <thead>
                         <tr>
                             <th><h6 align="left">Id</h6></th>
@@ -116,19 +134,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if (Model.LstTrabajador.Count() > 0)
+                        @if (Model.LstTrabajador.Value.Count() > 0)
                         {
-                            foreach (var item in Model.LstTrabajador)
+                            foreach (var item in Model.LstTrabajador.Value)
                             {
                                 <tr>
                                     <td>@item.Id</td>
                                     <td>@item.Nombre</td>
                                     <td>@item.ApellidoPaterno</td>
-                                    <td>@item.DetalleUsuario.Username</td>
+                                    <td>@item.DatosUsuario.Username</td>
                                     <td>@item.Email</td>
                                     <td>@item.DetalleRol.Descripcion</td>
                                     <td>
-                                        <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i></a>
+                                        <a href="javascript:viewDetailItem(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>&nbsp;
+                                        <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>&nbsp;
                                         <a href="@Url.Action("Edit", "Trabajador", new { p_Id = item.Id })"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;
                                     </td>
                                 </tr>
@@ -141,27 +160,11 @@
                     </tbody>
                 </table>
             </div>
+            @if (Model.LstTrabajador.HasPaginado)
+            {
+                @Html.Partial("~/Views/Shared/_TablePagerPartial.cshtml", Model.LstTrabajador.DatosPaginado)
+            }
         </fieldset>
     </div>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="Eliminar" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Eliminar Registro</h4>
-            </div>
-            <div class="modal-body">
-                <p>Desea Eliminar este Registro</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
+<!-- end row -->

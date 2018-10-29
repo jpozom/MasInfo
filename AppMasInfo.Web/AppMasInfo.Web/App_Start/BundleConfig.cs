@@ -23,8 +23,11 @@ namespace AppMasInfo.Web
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      //"~/Content/bootstrap.css",
+                      "~/Content/css/bootstrap.min.css",
+                      "~/Content/css/icons.css",
+                      "~/Content/css/style.css"
+                     /* "~/Content/site.css"*/));
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery.min.js",
@@ -41,7 +44,8 @@ namespace AppMasInfo.Web
                         "~/Scripts/jquery.scrollTo.min.js",
                         "~/Scripts/spin.min.js",
                         "~/Scripts/app.js",
-                        "~/Scripts/deloitte-core.js"));            
+                        "~/Scripts/deloitte-core.js"
+                        ));
         }
     }
 }

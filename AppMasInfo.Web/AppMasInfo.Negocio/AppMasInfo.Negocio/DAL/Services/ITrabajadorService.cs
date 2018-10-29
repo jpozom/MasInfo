@@ -20,21 +20,21 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// Metodo que obtiene una lista con todos los trabajadores disponibles en DB
         /// </summary>
         /// <returns></returns>
-        List<TrabajadorDto> GetListaTrabajadorAll();
+        BaseDto<List<TrabajadorDto>> GetListaTrabajadorAll();
 
-        ///// <summary>
-        ///// Metodo para eliminar un usuario solo de forma logica del sistema y almacenando el usuario que lo realizo
-        ///// </summary>
-        ///// <param name="p_Obj"></param>
-        ///// <returns></returns>
-        //BaseDto<bool> Delete(UsuarioDto p_Obj);
+        /// <summary>
+        /// Metodo para eliminar un trabajador solo de forma logica del sistema y almacenando el usuario que lo realizo
+        /// </summary>
+        /// <param name="p_Obj"></param>
+        /// <returns></returns>
+        BaseDto<bool> Delete(TrabajadorDto p_Obj);
 
         /// <summary>
         /// Metodo para obtener una lista de trabajadoresS mediante un determinado filtro de busqueda en la DB
         /// </summary>
         /// <param name="p_Filtro"></param>
         /// <returns></returns>
-        List<TrabajadorDto> GetListaTrabajadorbyFiltro(TrabajadorDto p_Filtro);
+       BaseDto<List<TrabajadorDto>> GetListaTrabajadorbyFiltro(TrabajadorDto p_Filtro);
 
         /// <summary>
         /// Metodo para editar un nuevo trabajador en DB

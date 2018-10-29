@@ -1,0 +1,36 @@
+﻿@model AppMasInfo.Negocio.DAL.Entities.PaginadorDto
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="dataTables_info" id="datatable-keytable_info" role="status" aria-live="polite">
+            Total Registros: <span id="CantidadRegistros">@Model.CantidadRegistros</span> &nbsp;
+            @*Tama&ntilde;o P&aacute;gina:
+            <select id="TamanoPagina">
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+            </select>*@
+            <input type="hidden" id="PaginaActual" value="@Model.PaginaActual" />
+            <input type="hidden" id="CantidadPaginas" value="@Model.CantidadPaginas" />
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="dataTables_paginate paging_simple_numbers text-right" id="datatable-keytable_paginate">
+            <ul class="pagination">
+                <li class='paginate_button previous' aria-controls="datatable-keytable" tabindex="0" id="datatable-keytable_previous">
+                    <a id="btnPagerPrevious" href="#">Anterior</a>
+                </li>
+                <li class="paginate_button disabled" aria-controls="datatable-keytable" tabindex="0">
+                    <a href="javascript:void(0)">
+                        P&aacute;gina <span id="DetallePaginaActual">@string.Format("{0}/{1}", Model.PaginaActual, Model.CantidadPaginas)</span>
+                    </a>
+                </li>
+                <li class='paginate_button next' aria-controls="datatable-keytable" tabindex="0" id="datatable-keytable_next">
+                    <a id="btnPagerNext" href="#">Siguiente</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

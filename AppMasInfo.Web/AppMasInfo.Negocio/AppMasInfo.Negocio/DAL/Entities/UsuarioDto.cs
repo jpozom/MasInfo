@@ -16,5 +16,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
 
         public List<TrabajadorDto> ListaTrabajador { get; set; }
 
+        public RolDto DetalleRol { get; set; }
+
     }
 }

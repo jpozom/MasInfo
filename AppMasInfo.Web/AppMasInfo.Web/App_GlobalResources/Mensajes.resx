@@ -126,7 +126,4 @@
   <data name="PropertyValueInvalid" xml:space="preserve">
     <value>El Valor {0} no es valido para {1}</value>
   </data>
-  <data name="PropertyValueRequired" xml:space="preserve">
-    <value>El Valor {0} debe ser obligatorio {1}</value>
-  </data>
 </root>

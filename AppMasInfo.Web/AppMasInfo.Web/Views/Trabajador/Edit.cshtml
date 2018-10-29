@@ -2,9 +2,81 @@
 
 @{
     ViewBag.Title = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
 
+<script src="~/Scripts/sha256.js"></script>
+@section Scripts {
+    <script type="text/javascript">
+        $("#IdCargo .funcion").hide();
+
+        $("#divStatus").hide();
+
+        //evento que permite ocultar y mostrar la contraseña
+        $(document).on("ready", function () {
+            $(".show-hide-pass").on("click", function (e) {
+                e.preventDefault();
+
+                var current = $(this).attr("action");
+
+                if (current == "hide") {
+                    $(this).prev().attr("type", "text");
+                    $(this).removeClass("glyphicon-eye-open").addClass("glyphicon-eye-close").attr("action", "show");
+                }
+
+                if (current == "show") {
+                    $(this).prev().attr("type", "password");
+                    $(this).removeClass("glyphicon-eye-close").addClass("glyphicon-eye-open").attr("action", "hide");
+                }
+            })
+
+        })
+
+        $(function () {
+            //evento que carga las funciones del cargo en el id asociado a ese combobox
+            $("#IdCargoFuncion").on("change", function () {
+                var idCargoFuncion = $(this).val();
+                $("#IdCargo .funcion").hide();
+
+                if (idCargoFuncion != 0) {
+                    $("#IdCargo .funcion_" + idCargoFuncion).show();
+                }
+                $("#IdCargo").val(0);
+            });
+
+            //evento que controla el confirm de la contraseña y encripta la contraseña
+            $("#passwordTest").on("change", function () {
+
+
+                if (userSHA == storedSHA) {
+                    $("#status").html("<span class=\"label label-success\">Status:</span> Las contraseñas coinciden.");
+
+                } else {
+                    $("#status").html("<span class=\"label label-danger\">Status:</span> Las contraseñas <b>No</b> coinciden. Inténtelo nuevamente.");
+                }
+                $("#divStatus").show();
+
+            });
+
+        });
+
+        var storedSHA;
+        var userSHA;
+
+        $("#passwordInput").keyup(function () {
+            var value = $(this).val();
+            $("#storedSHA").text("SHA256 Hash for Password: " + sha256_digest(value));
+            storedSHA = value;
+        }).keyup();
+
+        $("#passwordTest").keyup(function () {
+            var value = $(this).val();
+            $("#currentSHA").text("SHA256 Hash for Second Password: " + sha256_digest(value));
+            userSHA = value;
+        }).keyup();
+
+    </script>
+}
 <div class="panel panel-primary">
     <div class="panel-body">
         <h4 class="m-b-30 m-t-0">Editar Trabajador</h4>
@@ -17,12 +89,11 @@
             @Html.HiddenFor(model => model.DatosUsuario.Id)
 
             <fieldset>
-                <legend>Datos del Trabajador</legend>
-
+                <legend class="legend">Datos Personales del Usuario</legend>
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+                    <div class="col-md-4">
                         @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
                     </div>
@@ -30,7 +101,7 @@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.ApellidoPaterno, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+                    <div class="col-md-4">
                         @Html.EditorFor(model => model.ApellidoPaterno, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger" })
                     </div>
@@ -38,55 +109,106 @@
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.ApellidoMaterno, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+                    <div class="col-md-4">
                         @Html.EditorFor(model => model.ApellidoMaterno, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.Username, "Username", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.DatosUsuario.Username, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.DatosUsuario.Username, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.Pass, "Pass", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(model => model.DatosUsuario.Pass, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.DatosUsuario.Pass, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
                     @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", type = "email", placeholder = "example@mail.ru" } })
                         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                     </div>
                 </div>
+            </fieldset>
+
+            <fieldset>
+                <legend class="legend">Actualizaci&oacute;n datos para Inicio de Sesi&oacute;n</legend>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DatosUsuario.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.DatosUsuario.Username, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.IdRol, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
+                    @Html.LabelFor(model => model.DatosUsuario.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.Pass, new { htmlAttributes = new { @class = "form-control", placeholder = "Actualize Password", type = "password", id = "passwordInput" } })
+                                <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide"></span>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ConfirmPass, "Confirma Password", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.ConfirmPass, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirme Password", type = "password", id = "passwordTest" } })
+                                <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide"></span>                                                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2"></label>
+                    <div class="col-md-6">
+                        <div class="alert alert-info" id="divStatus">
+                            <p id="status"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdRol, " Asigne Rol", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
                         @Html.DropDownListFor(model => model.DatosUsuario.IdRol,
-                                  new SelectList(Model.LstRol, "Id", "Descripcion"),
+                                  new SelectList(Model.LstRol , "Id", "Descripcion"),
+                                  "Selecciona", new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend class="legend">Datos Profesionales del Usuario</legend>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdCargoFuncion, "Asigne Función", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.IdCargoFuncion,
+                                  new SelectList(Model.LstCargoFuncion, "Id", "Descripcion"),
                                   "Selecciona", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.DatosUsuario.IdRol, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.IdCargoFuncion, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
+
                 <div class="form-group">
-                    @Html.LabelFor(model => model.IdCargo, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.DropDownListFor(model => model.IdCargo,
-                                  new SelectList(Model.LstCargo, "Id", "Descripcion"),
-                                  "Selecciona", new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.IdCargo, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.IdCargo, "Asigne Cargo", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        <select id="IdCargo" class="form-control" name="IdCargo">
+                            <option value="0" class="">Seleccionar</option>
+                            @if (Model.LstCargo.Count() > 0)
+                            {
+                                foreach (var item in Model.LstCargo)
+                                {
+                                    <option value="@item.Id" class="funcion funcion_@item.IdCargoFuncion">@item.Descripcion</option>
+                                }
+                            }
+                        </select>
                     </div>
                 </div>
+
             </fieldset>
 
             <br />
@@ -102,3 +224,4 @@
         }
     </div>
 </div>
+<!-- end row -->           

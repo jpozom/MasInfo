@@ -62,9 +62,7 @@ namespace AppMasInfo.Web.Controllers
         #region Index
         [HttpGet]
         public ActionResult Index()
-        {
-            TempData.Clear();
-
+        {            
             TrabajadorViewModel viewModel = new TrabajadorViewModel();
 
             try
@@ -72,16 +70,21 @@ namespace AppMasInfo.Web.Controllers
                 var lstRoles = this.RolServiceModel.GetListaRolAll();
                 viewModel.LstRoles = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
+                var lstTrabajador = this.TrabajadorServiceModel.GetListaTrabajadorAll();
+                viewModel.LstTrabajadores = lstTrabajador.HasValue ? lstTrabajador.Value : new List<TrabajadorDto>();
+
                 var trabajadorFiltroObj = new TrabajadorDto();
-                trabajadorFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Habilitado;
-                var trabajadorListDbResponse = this.TrabajadorServiceModel.GetListaTrabajadorbyFiltro(trabajadorFiltroObj);
+                trabajadorFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Habilitado;           
+                var trabajadorListDbResponse = TrabajadorServiceModel.GetListaTrabajadorbyFiltro(trabajadorFiltroObj);
 
-                if (trabajadorListDbResponse != null)
-                    viewModel.LstTrabajador = trabajadorListDbResponse;
-
-                if (trabajadorListDbResponse == null)
+                if (!trabajadorListDbResponse.HasError)
                 {
-                    TempData["MessageError"] = "Ha ocurrido un error al obtener la lista de trabajadores. Por favor, inténtelo nuevamente";
+                    viewModel.LstTrabajador = trabajadorListDbResponse;
+                }
+                                   
+                if (trabajadorListDbResponse.HasError)
+                {
+                    TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de grupos de trabajo. Por favor, inténtelo nuevamente";                   
                 }
             }
             catch (Exception ex)
@@ -96,11 +99,13 @@ namespace AppMasInfo.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Index(TrabajadorViewModel p_ViewModel)
         {
+            TrabajadorViewModel viewModel = new TrabajadorViewModel();
+
             if (ModelState.IsValid)
             {
 
             }
-            return View(p_ViewModel);
+            return View(viewModel);
         }
         #endregion
 
@@ -113,7 +118,7 @@ namespace AppMasInfo.Web.Controllers
             try
             {
                 var lstRoles = this.RolServiceModel.GetListaRolAll();
-                viewModel.LstRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
+                viewModel.LstCRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
                 var lstCargos = this.CargoServiceModel.GetListaCargoAll();
                 viewModel.LstCargo = lstCargos.HasValue ? lstCargos.Value : new List<CargoDto>();
@@ -143,7 +148,7 @@ namespace AppMasInfo.Web.Controllers
                     TrabajadorNewDb.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
                     TrabajadorNewDb.DatosUsuario = new UsuarioDto();
                     TrabajadorNewDb.DatosUsuario.Username = p_ViewModel.DatosUsuario.Username;
-                    TrabajadorNewDb.DatosUsuario.Pass = p_ViewModel.PassEncrypted;
+                    TrabajadorNewDb.DatosUsuario.Pass = GlobalMethods.EncryptPass(p_ViewModel.DatosUsuario.Pass);
                     TrabajadorNewDb.DatosUsuario.IdRol = p_ViewModel.DatosUsuario.IdRol;
                     TrabajadorNewDb.IdCargo = p_ViewModel.IdCargo;
                     TrabajadorNewDb.IdCargoFuncion = p_ViewModel.IdCargoFuncion;
@@ -183,7 +188,7 @@ namespace AppMasInfo.Web.Controllers
         private void CargarDatosCreatePaciente(TrabajadorCreateViewModel p_ViewModel)
         {
             var lstRoles = this.RolServiceModel.GetListaRolAll();
-            p_ViewModel.LstRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
+            p_ViewModel.LstCRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
             var lstCargos = this.CargoServiceModel.GetListaCargoAll();
             p_ViewModel.LstCargo = lstCargos.HasValue ? lstCargos.Value : new List<CargoDto>();
@@ -200,14 +205,15 @@ namespace AppMasInfo.Web.Controllers
             TrabajadorEditViewModel viewModel = new TrabajadorEditViewModel();
 
             try
-            {
-                TempData.Clear();
-
+            {               
                 var lstRoles = this.RolServiceModel.GetListaRolAll();
                 viewModel.LstRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
                 var lstCargos = this.CargoServiceModel.GetListaCargoAll();
                 viewModel.LstCargo = lstCargos.HasValue ? lstCargos.Value : new List<CargoDto>();
+
+                var lstCargoFuncion = this.CargoFuncionServiceModel.GetListaCargoFuncionAll();
+                viewModel.LstCargoFuncion = lstCargoFuncion.HasValue ? lstCargoFuncion.Value : new List<CargoFuncionDto>();
 
                 var filtroTrabajador = new TrabajadorDto();
                 filtroTrabajador.FiltroId = p_Id;
@@ -226,7 +232,10 @@ namespace AppMasInfo.Web.Controllers
                     viewModel.DatosUsuario.Id = objResultadoDb.Value.DatosUsuario.Id;
                     viewModel.DatosUsuario.IdRol = objResultadoDb.Value.DatosUsuario.IdRol;
                     viewModel.DatosUsuario.Username = objResultadoDb.Value.DatosUsuario.Username;
-                    viewModel.IdCargo = (int)objResultadoDb.Value.IdCargo;
+                    viewModel.IdCargo = objResultadoDb.Value.IdCargo;
+                    viewModel.IdCargoFuncion = objResultadoDb.Value.IdCargoFuncion;
+
+
                 }
 
                 if (objResultadoDb.HasError)
@@ -247,9 +256,7 @@ namespace AppMasInfo.Web.Controllers
         public ActionResult Edit(TrabajadorEditViewModel p_ViewModel)
         {
             try
-            {
-                TempData.Clear();
-
+            {                
                 if (ModelState.IsValid)
                 {
                     TrabajadorDto objTrabajadorEdit = new TrabajadorDto();
@@ -258,6 +265,7 @@ namespace AppMasInfo.Web.Controllers
                     objTrabajadorEdit.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
                     objTrabajadorEdit.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
                     objTrabajadorEdit.IdCargo = p_ViewModel.IdCargo;
+                    objTrabajadorEdit.IdCargoFuncion = p_ViewModel.IdCargoFuncion;
                     objTrabajadorEdit.UsrUpdate = User.Identity.GetUserId();
                     objTrabajadorEdit.FchUpdate = DateTime.Now;
                     objTrabajadorEdit.DatosUsuario = new UsuarioDto();
@@ -305,54 +313,105 @@ namespace AppMasInfo.Web.Controllers
 
             var lstCargos = this.CargoServiceModel.GetListaCargoAll();
             p_ViewModel.LstCargo = lstCargos.HasValue ? lstCargos.Value : new List<CargoDto>();
+
+            var lstCargoFuncion = this.CargoFuncionServiceModel.GetListaCargoFuncionAll();
+            p_ViewModel.LstCargoFuncion = lstCargoFuncion.HasValue ? lstCargoFuncion.Value : new List<CargoFuncionDto>();
         }
         #endregion
-        
-        ////#region Delete
-        ////[HttpPost]
-        ////public string Delete(UsuarioDetailViewModel p_ViewModel)
-        ////{
-        ////    String jsonResult = String.Empty;
 
-        //    //try
-        //    //{
-        //    //    //UsuarioDto userDelete = new UsuarioDto();
-        //    //    //userDelete.Id = p_ViewModel.Id;
-        //    //    //userDelete.IdEstado = (int)EnumUtils.EstadoEnum.Usuario_Deshabilitado;
-        //    //    //userDelete.FchUpdate = DateTime.Now;
-        //    //    //userDelete.UsrUpdate = User.Identity.GetUserId();
+        #region Delete
+        [HttpPost]
+        public string Delete(TrabajadorDetailViewModel p_ViewModel)
+        {
+            String jsonResult = String.Empty;
 
-        //    //    //User.Identity.GetUserId();
+            try
+            {
+                TrabajadorDto userDelete = new TrabajadorDto();
+                userDelete.Id = p_ViewModel.Id;
+                userDelete.IdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Deshabilitado;
+                userDelete.FchUpdate = DateTime.Now;
+                userDelete.UsrUpdate = User.Identity.GetUserId();
 
-        //    //    //var objRespuesta = this.UsuarioServiceModel.Delete(userDelete);
+                User.Identity.GetUserId();
 
-        //    //    //if (!objRespuesta.HasError)
-        //    //    //{
-        //    //    //    jsonResult = JsonConvert.SerializeObject(
-        //    //    //        new
-        //    //    //        {
-        //    //    //            status = "ok",
-        //    //    //            message = "Usuario eliminado correctamente"
-        //    //    //        });
-        //    //    //}
-        //    //    else
-        //    //    {
-        //    //        jsonResult = JsonConvert.SerializeObject(
-        //    //                new
-        //    //                {
-        //    //                    status = "error",
-        //    //                    message = "No puede eliminar al usuario"
-        //    //                });
-        //    //    }
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    jsonResult = JsonConvert.SerializeObject(new { status = "error", message = "Error al intentar eliminar el usuario", ex });
-        //    //}
+                var objRespuesta = this.TrabajadorServiceModel.Delete(userDelete);
 
-        //    //return jsonResult;
-        //}
+                if (!objRespuesta.HasError)
+                {
+                    jsonResult = JsonConvert.SerializeObject(
+                        new
+                        {
+                            status = "ok",
+                            message = "Usuario eliminado correctamente"
+                        });
+                }
+                else
+            {
+                    jsonResult = JsonConvert.SerializeObject(
+                            new
+                            {
+                                status = "error",
+                                message = "No puede eliminar al usuario"
+                            });
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonResult = JsonConvert.SerializeObject(new { status = "error", message = "Error al intentar eliminar el usuario", ex });
+            }
+
+            return jsonResult;
+        }
         #endregion
 
+        #region Detail
+        [HttpGet]
+        public ActionResult Detail(long p_Id)
+        {
+            TrabajadorDetailViewModel viewModel = new TrabajadorDetailViewModel();
+
+            try
+            {
+                TrabajadorDto filtroTrabajador = new TrabajadorDto();
+                filtroTrabajador.FiltroId = p_Id;
+
+                var objRespuestaDb = TrabajadorServiceModel.GetTrabajadorById(filtroTrabajador);
+
+                if (objRespuestaDb.HasValue)
+                {
+                    viewModel = new TrabajadorDetailViewModel
+                    {
+                        DetalleEstado = objRespuestaDb.Value.DetalleEstado,
+                        FchCreate = objRespuestaDb.Value.FchCreate,
+                        FchUpdate = objRespuestaDb.Value.FchUpdate,                       
+                        Id = objRespuestaDb.Value.Id,
+                        Email = objRespuestaDb.Value.Email,
+                        IdEstado = objRespuestaDb.Value.IdEstado,
+                        Nombre = objRespuestaDb.Value.Nombre,
+                        ApellidoPaterno = objRespuestaDb.Value.ApellidoPaterno,
+                        ApellidoMaterno = objRespuestaDb.Value.ApellidoMaterno,                                                
+                        UsrUpdate = objRespuestaDb.Value.UsrUpdate,
+                        UsrCreate = objRespuestaDb.Value.UsrCreate,
+                        DatosUsuario = objRespuestaDb.Value.DatosUsuario,
+                        DetalleRol = objRespuestaDb.Value.DetalleRol,
+                        DetalleCargo = objRespuestaDb.Value.DetalleCargo,
+                        DetalleFuncion = objRespuestaDb.Value.DetalleFuncion
+                    };
+                }
+
+                if (objRespuestaDb.HasError)
+                    throw objRespuestaDb.Error;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return View(viewModel);
+        }
+        #endregion
+
+        #endregion
     }
 }

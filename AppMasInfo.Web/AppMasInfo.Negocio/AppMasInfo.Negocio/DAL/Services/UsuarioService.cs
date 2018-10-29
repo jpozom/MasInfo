@@ -39,7 +39,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                 {
                     //El metodo .FirstOrDefault, retorna el primer objeto encontrado de acuerdo
                     //a un determinado filtro de búsqueda, y en caso contrario, retorna null
-                    var usuarioDb = (from u in this.dbContext.Usuario                                     
+                    var usuarioDb = (from u in this.dbContext.Usuario.Include("Trabajador").Include("Rol")
+                                     join r in this.dbContext.Rol on u.IdRol equals r.Id
                                      where u.Username == p_Filtro.Username &&
                                            u.Pass == p_Filtro.Pass
                                      select u).FirstOrDefault();
@@ -51,7 +52,22 @@ namespace AppMasInfo.Negocio.DAL.Services
                             // Asignar propiedades
                             Id = usuarioDb.Id,                            
                             Username = usuarioDb.Username,
-                            IdRol = usuarioDb.IdRol
+                            IdRol = usuarioDb.IdRol,
+                            DetalleRol = new RolDto
+                            {
+                                Id = usuarioDb.Rol.Id,
+                                Descripcion = usuarioDb.Rol.Descripcion
+                            },
+                            //se retorna una lista completa de trabajdor con sus propiedades para ser utilizadas para la sesion del usuario actual
+                            ListaTrabajador = (from ut in usuarioDb.Trabajador
+                                               select new TrabajadorDto
+                                               {
+                                                   Nombre = ut.Nombre,
+                                                   ApellidoPaterno = ut.ApellidoPaterno,
+                                                   ApellidoMaterno = ut.ApellidoMaterno,
+                                                   Email = ut.Email                                                   
+                                               }).ToList()
+
                         };
                     }
                 }

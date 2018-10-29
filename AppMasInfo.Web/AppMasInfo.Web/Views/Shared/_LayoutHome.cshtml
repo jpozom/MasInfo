@@ -1,0 +1,21 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutBase.cshtml";
+}
+
+@section UserMenu{
+    @Html.Partial("_UserMenuPartial")
+}
+
+@section Menu{
+    @Html.Partial("_MenuPartial")
+}
+
+@section BreadCrumb{
+    @RenderSection("breadcrumb", required: false)
+}
+
+@RenderBody()
+
+@section Scripts{
+    @RenderSection("scripts", required: false)
+}

@@ -86,14 +86,5 @@ namespace Resources {
                 return ResourceManager.GetString("PropertyValueInvalid", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to El Valor {0} debe ser obligatorio {1}.
-        /// </summary>
-        internal static string PropertyValueRequired {
-            get {
-                return ResourceManager.GetString("PropertyValueRequired", resourceCulture);
-            }
-        }
     }
 }

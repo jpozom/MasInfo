@@ -11,7 +11,8 @@ namespace AppMasInfo.Negocio.DAL.Entities
         #region constructores
         public BaseDto()
         {
-            this.Error = null;           
+            this.Error = null;
+            this.DatosPaginado = null;
             this.Error = null;
         }
 
@@ -20,7 +21,9 @@ namespace AppMasInfo.Negocio.DAL.Entities
             this.HasError = false;
             this.Error = null;
             this.HasValue = (Value != null ? true : false);
-            this.Value = Value;         
+            this.Value = Value;
+            this.HasPaginado = false;
+            this.DatosPaginado = null;
         }
 
         public BaseDto(bool HasError, Exception Error)
@@ -28,8 +31,23 @@ namespace AppMasInfo.Negocio.DAL.Entities
             this.HasError = HasError;
             this.Error = Error;
             this.HasValue = false;
-            this.Value = default(T);          
-        }       
+            this.Value = default(T);
+            this.HasPaginado = false;
+            this.DatosPaginado = null;
+        }
+
+        public BaseDto(bool HasPaginado, PaginadorDto DatosPaginado, T Value)
+        {
+            this.HasError = false;
+            this.Error = null;
+            this.HasValue = (Value != null ? true : false);
+            this.Value = Value;
+            this.HasPaginado = true;
+            this.DatosPaginado = new PaginadorDto(DatosPaginado.PaginaActual,
+                DatosPaginado.TamanoPagina,
+                DatosPaginado.CantidadPaginas,
+                DatosPaginado.CantidadRegistros);
+        }
         #endregion
 
         #region propiedades publicas
@@ -55,7 +73,19 @@ namespace AppMasInfo.Negocio.DAL.Entities
         {
             get;
             set;
-        }        
+        }
+
+        public bool HasPaginado
+        {
+            get;
+            set;
+        }
+
+        public PaginadorDto DatosPaginado
+        {
+            get;
+            set;
+        }
         #endregion
     }
 }

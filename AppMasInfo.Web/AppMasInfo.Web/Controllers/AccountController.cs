@@ -57,7 +57,7 @@ namespace AppMasInfo.Web.Controllers
                     UsuarioDto userInfo = new UsuarioDto
                     {
                         Username = p_ViewModel.Username,
-                        Pass = p_ViewModel.Pass                        
+                        Pass = p_ViewModel.Pass
                     };
 
                     //creamos una condicion que valide que los objetos no se devuelvan nulos
@@ -73,13 +73,19 @@ namespace AppMasInfo.Web.Controllers
                         // Si el usuario es distinto de nulo, significa que esta autenticado en el sistema
                         if (userDb != null)
                         {
+                            ////string nombreCompleto = string.Format("{0} {1} {2}",
+                            //    userDb.ListaTrabajador.FirstOrDefault().Nombre,
+                            //    userDb.ListaTrabajador.FirstOrDefault().ApellidoPaterno,
+                            //    userDb.ListaTrabajador.FirstOrDefault().ApellidoMaterno,
+                            //    userDb.ListaTrabajador.FirstOrDefault().Email);
+                            
                             // Generamos la identidad con Owin
                             var identity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie);
                             identity.AddClaims(new List<Claim>
                             {
                                 new Claim(ClaimTypes.NameIdentifier, userDb.Username),
-                                //new Claim(ClaimTypes.Name, userDb.Nombre),
-                                //new Claim(ClaimTypes.Role, userInfo.IdCargo.ToString() ?? string.Empty),
+                                //new Claim(ClaimTypes.Name, nombreCompleto),
+                                new Claim(ClaimTypes.Role, userDb.DetalleRol.Descripcion),
                                 //new Claim(ClaimTypes.Email, userInfo.),
                             });
                             HttpContext.GetOwinContext().Authentication.SignIn(identity);

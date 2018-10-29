@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AppMasInfo.Negocio.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -23,5 +24,7 @@ namespace AppMasInfo.Web.Models
             get;
             set;
         }
+
+        public RolDto DetalleRol { get; set; }
     }
 }

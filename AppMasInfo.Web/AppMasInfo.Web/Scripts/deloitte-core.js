@@ -38,7 +38,7 @@ var hideModalLoading = function () {
 var showMessageDialog = function (type, title, message) {
     BootstrapDialog.show({
         type: type,
-        title: 'F22 - ' + title,
+        title: 'masInfo - ' + title,
         message: message,
         buttons: [{
             label: 'Aceptar',
@@ -77,7 +77,7 @@ var showAlertMessage = function (type, message) {
 var logoutConfirmation = function (url) {
     BootstrapDialog.show({
         type: BootstrapDialog.TYPE_INFO,
-        title: 'F22 - Cerrar Sesión',
+        title: 'masInfo - Cerrar Sesión',
         message: '¿Esta seguro(a) que desea cerrar su sesión?',
         buttons: [{
             label: 'Aceptar',
@@ -99,7 +99,7 @@ var logoutConfirmation = function (url) {
 var confirmationDialog = function (title, message, callback) {
     BootstrapDialog.show({
         type: BootstrapDialog.TYPE_INFO,
-        title: `F22 - ${title}`,
+        title: `masInfo - ${title}`,
         message: message,
         buttons: [{
             label: 'Aceptar',

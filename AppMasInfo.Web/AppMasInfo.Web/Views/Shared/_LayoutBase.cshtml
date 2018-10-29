@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>WebmasInfo - Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta content="Admin Dashboard" name="description" />
+    <meta content="ThemeDesign" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="shortcut icon" href="~/Content/images/favicon.ico">
+
+    <!--Morris Chart CSS -->
+    <link href="~/Content/plugins/morris/morris.css" rel="stylesheet" />
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/icons.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body class="fixed-left">   
+    <!-- Begin page -->
+    <div id="wrapper">
+
+        <!-- Top Bar Start -->
+        <div class="topbar">
+            <!-- LOGO -->
+            <div class="topbar-left">
+                <div class="text-center">
+                    <a href="@Url.Content("~/Home/Index")" class="logo"><span style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 22px; font-weight:900;">masInfo</span><span style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 18px; font-weight:900; color: #000;">Web</span><i style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 10px; font-weight:900; color: #000;">©2018</i></a>
+                    <a href="@Url.Content("~/Home/Index")" class="logo-sm"><span style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 30px; font-weight:900;">M</span></a>
+                </div>
+            </div>
+            <!-- Button mobile view to collapse sidebar menu -->
+            <div class="navbar navbar-default" role="navigation" style="background: #000000;">
+                <div class="container">
+                    <div class="">
+                        <div class="pull-left">
+                            <button type="button" class="button-menu-mobile open-left waves-effect waves-light">
+                                <i class="ion-navicon"></i>
+                            </button>
+                            <span class="clearfix"></span>
+                        </div>
+
+                        @RenderSection("UserMenu", required: false)
+                    </div>
+                    <!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+        <!-- Top Bar End -->
+        <!-- ========== Left Sidebar Start ========== -->
+
+        <div class="left side-menu">
+            <div class="sidebar-inner slimscrollleft">
+
+                <div class="user-details">
+                    <div class="text-center">
+                    </div>
+                    <div class="user-info">
+                        <div class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">App Web</a>
+                            <ul class="dropdown-menu">
+                                @*<li><a href="javascript:void(0)"> Profile</a></li>
+                                <li><a href="javascript:void(0)"> Settings</a></li>
+                                <li><a href="javascript:void(0)"> Lock screen</a></li>*@
+                                <li class="divider"></li>
+                                <li><a href="javascript:logoutConfirmation('@Url.Content("~/Account/Logout")')">Logout</a></li>
+                            </ul>
+                        </div>
+
+                        <p class="text-muted m-0"><i class="fa fa-dot-circle-o text-success"></i> Online</p>
+                    </div>
+                </div>
+                <!--- Divider -->
+
+
+                <div id="sidebar-menu">
+                    @RenderSection("Menu", required: false)
+
+                </div>
+                <div class="clearfix"></div>
+            </div> <!-- end sidebarinner -->
+        </div>
+        <!-- Left Sidebar End -->
+        <!-- Start right Content here -->
+
+        <div class="content-page">
+            <!-- Start content -->
+            <div class="content">
+                <div class="page-header-title">                   
+                </div>
+
+                <div class="page-content-wrapper ">
+                    <div class="container">
+                        @RenderSection("BreadCrumb", required: false)
+
+                        @RenderBody()
+                        <!-- end row -->
+                    </div><!-- container -->
+                </div> <!-- Page content Wrapper -->
+            </div> <!-- content -->
+
+            <footer class="footer">
+                © 2018 App masInfo Web - Todos los derechos reservados.
+            </footer>
+
+        </div>
+       
+
+    </div>
+    <!-- End Right content here -->
+    <!-- END wrapper -->
+    <!-- jQuery  -->
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+
