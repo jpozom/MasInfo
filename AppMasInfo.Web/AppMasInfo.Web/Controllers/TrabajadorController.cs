@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 
 namespace AppMasInfo.Web.Controllers
 {
+    //Describe cómo usar el atributo Authorize para controlar el acceso a las paginas y a sus metodos.
     [Authorize]
     public class TrabajadorController : Controller
     {

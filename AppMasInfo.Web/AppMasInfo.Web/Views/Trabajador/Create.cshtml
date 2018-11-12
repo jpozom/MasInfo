@@ -131,21 +131,21 @@
             <fieldset>
                 <legend class="legend">Datos para Inicio de Sesi&oacute;n</legend>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.DatosUsuario.Username, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
                         @Html.EditorFor(model => model.DatosUsuario.Username, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.DatosUsuario.Username, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.DatosUsuario.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div>
                         <div class="col-md-4">
                             <div class="input-group">
                                 @Html.EditorFor(model => model.DatosUsuario.Pass, new { htmlAttributes = new { @class = "form-control", type = "password", placeholder = "Ingrese Password", id = "passwordInput" } })
                                 <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide">
-                                    @Html.ValidationMessageFor(model => model.Pass, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(model => model.DatosUsuario.Pass, "", new { @class = "text-danger" })
                                 </span>
                             </div>
                         </div>
@@ -179,7 +179,7 @@
                         @Html.DropDownListFor(model => model.DatosUsuario.IdRol,
                                   new SelectList(Model.LstCRol , "Id", "Descripcion"),
                                   "Selecciona", new { @class = "form-control"})
-                        @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.DatosUsuario.IdRol, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </fieldset>

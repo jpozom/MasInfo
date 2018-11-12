@@ -18,6 +18,7 @@ namespace AppMasInfo.Negocio.DAL.Services
         private Database.masInfoWebEntities dbContext = null;
         #endregion
 
+        //Permite el acceso global a dicha instancia a traves de este metodo.
         #region singleton
         private TrabajadorService() { }
 

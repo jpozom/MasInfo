@@ -14,6 +14,7 @@ namespace AppMasInfo.Negocio.DAL.Services
         private Database.masInfoWebEntities dbContext = null;
         #endregion
 
+        //Permite el acceso global a dicha instancia mediante un método de clase.
         #region singleton
         private UsuarioService() { }
 
@@ -53,6 +54,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                             Id = usuarioDb.Id,                            
                             Username = usuarioDb.Username,
                             IdRol = usuarioDb.IdRol,
+
                             DetalleRol = new RolDto
                             {
                                 Id = usuarioDb.Rol.Id,

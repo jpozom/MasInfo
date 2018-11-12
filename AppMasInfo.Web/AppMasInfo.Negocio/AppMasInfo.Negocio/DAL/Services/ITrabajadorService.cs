@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace AppMasInfo.Negocio.DAL.Services
 {
+   // Si una clase implementa una interfaz, entonces tiene que proporcionar implementación a todos sus métodos.
     public interface ITrabajadorService
     {
         /// <summary>
