@@ -14,6 +14,8 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public string Pass { get; set; }
         public int IdRol { get; set; }
 
+        public string FiltroUsername { get; set; }
+
         public List<TrabajadorDto> ListaTrabajador { get; set; }
 
         public RolDto DetalleRol { get; set; }

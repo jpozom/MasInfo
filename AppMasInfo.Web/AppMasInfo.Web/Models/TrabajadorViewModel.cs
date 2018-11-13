@@ -57,21 +57,18 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string ApellidoMaterno { get; set; }
 
-        //[Required(ErrorMessage = Validacion.Mensajes.Required)]
-        //[Display(Name = "Ingrese Username")]
-        //public string Username { get; set; }
+        public string Pass { get; set; }
 
-        //[Required(ErrorMessage = Validacion.Mensajes.Required)]
-        //public string Pass { get; set; }
-        
         public string ConfirmPass { get; set; }
-       
+
+        public string Username { get; set; }
+
         [Display(Name = "Ingrese Email")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string Email { get; set; }
        
-        public int? IdRol { get; set; }
+        public int IdRol { get; set; }
         
         public int? IdCargoFuncion { get; set; }
 

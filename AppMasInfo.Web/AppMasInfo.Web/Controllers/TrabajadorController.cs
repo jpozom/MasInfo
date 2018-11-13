@@ -63,7 +63,7 @@ namespace AppMasInfo.Web.Controllers
         #region Index
         [HttpGet]
         public ActionResult Index()
-        {            
+        {
             TrabajadorViewModel viewModel = new TrabajadorViewModel();
 
             try
@@ -75,22 +75,22 @@ namespace AppMasInfo.Web.Controllers
                 viewModel.LstTrabajadores = lstTrabajador.HasValue ? lstTrabajador.Value : new List<TrabajadorDto>();
 
                 var trabajadorFiltroObj = new TrabajadorDto();
-                trabajadorFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Habilitado;           
+                trabajadorFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Habilitado;
                 var trabajadorListDbResponse = TrabajadorServiceModel.GetListaTrabajadorbyFiltro(trabajadorFiltroObj);
 
                 if (!trabajadorListDbResponse.HasError)
                 {
                     viewModel.LstTrabajador = trabajadorListDbResponse;
                 }
-                                   
+
                 if (trabajadorListDbResponse.HasError)
                 {
-                    TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de grupos de trabajo. Por favor, inténtelo nuevamente";                   
+                    TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de Usuarios. Por favor, inténtelo nuevamente";
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error al obtener una lista de trabajadores", ex);
+                throw new Exception("Error al obtener una lista de Usuarios", ex);
             }
 
             return View(viewModel);
@@ -143,40 +143,55 @@ namespace AppMasInfo.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    TrabajadorDto TrabajadorNewDb = new TrabajadorDto();
-                    TrabajadorNewDb.Nombre = p_ViewModel.Nombre;
-                    TrabajadorNewDb.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
-                    TrabajadorNewDb.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
-                    TrabajadorNewDb.DatosUsuario = new UsuarioDto();
-                    TrabajadorNewDb.DatosUsuario.Username = p_ViewModel.DatosUsuario.Username;
-                    TrabajadorNewDb.DatosUsuario.Pass = GlobalMethods.EncryptPass(p_ViewModel.DatosUsuario.Pass);
-                    TrabajadorNewDb.DatosUsuario.IdRol = p_ViewModel.DatosUsuario.IdRol;
-                    TrabajadorNewDb.IdCargo = p_ViewModel.IdCargo;
-                    TrabajadorNewDb.IdCargoFuncion = p_ViewModel.IdCargoFuncion;
-                    TrabajadorNewDb.UsrCreate = User.Identity.GetUserId();
-                    TrabajadorNewDb.FchCreate = DateTime.Now;
-                    TrabajadorNewDb.Email = p_ViewModel.Email;
-                    TrabajadorNewDb.IdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Habilitado;
-                    TrabajadorNewDb.IdUsuario = p_ViewModel.IdUsuario;
+                    UsuarioDto UsuarioNewDb = new UsuarioDto();
+                    UsuarioNewDb.Username = p_ViewModel.Username;
+                    UsuarioNewDb.Pass = GlobalMethods.EncryptPass(p_ViewModel.Pass);
+                    UsuarioNewDb.IdRol = p_ViewModel.IdRol;
 
-
-                    var objRespuesta = this.TrabajadorServiceModel.InsertarTrabajador(TrabajadorNewDb);
+                    var objRespuesta = UsuarioServiceModel.InsertarUsuario(UsuarioNewDb);
 
                     if (!objRespuesta.HasError)
                     {
-                        TempData["SaveOkMessage"] = "Trabajador ingresado correctamente";
-                        return RedirectToAction("Index");
+                        TempData["SaveOkMessage"] = "Usuario ingresado correctamente";
                     }
                     else
                     {
                         TempData["ErrorMessage"] = "Intente nuevamente";
                     }
-                }
-                else
-                {
-                    CargarDatosCreatePaciente(p_ViewModel);
 
+                    var UsuarioFiltroObj = new UsuarioDto();
+                    UsuarioFiltroObj.FiltroUsername = p_ViewModel.Username;
+                    var usuarioDbResponse = UsuarioServiceModel.GetUsuarioByUsername(UsuarioFiltroObj);
+
+                    if (usuarioDbResponse.HasValue)
+                    {
+                        TrabajadorDto TrabajadorNewDb = new TrabajadorDto();
+                        TrabajadorNewDb.Nombre = p_ViewModel.Nombre;
+                        TrabajadorNewDb.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
+                        TrabajadorNewDb.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
+                        TrabajadorNewDb.IdCargo = p_ViewModel.IdCargo==0?null: p_ViewModel.IdCargo;//si viene un valor 0 que lo cambie a null
+                        TrabajadorNewDb.IdCargoFuncion = p_ViewModel.IdCargoFuncion;               //sino que envie el valor ingresado en la vista
+                        TrabajadorNewDb.UsrCreate = User.Identity.GetUserId();
+                        TrabajadorNewDb.FchCreate = DateTime.Now;
+                        TrabajadorNewDb.Email = p_ViewModel.Email;
+                        TrabajadorNewDb.IdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Habilitado;
+                        TrabajadorNewDb.IdUsuario = usuarioDbResponse.Value.Id;
+
+                        var objTrabajadorResponse = this.TrabajadorServiceModel.InsertarTrabajador(TrabajadorNewDb);
+
+                        if (!objTrabajadorResponse.HasError)
+                        {
+                            TempData["SaveOkMessage"] = "Trabajador ingresado correctamente";
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            TempData["ErrorMessage"] = "Intente nuevamente";
+                        }
+                    }
                 }
+
+                CargarDatosCreatePaciente(p_ViewModel);
             }
             catch (Exception ex)
             {
@@ -206,7 +221,7 @@ namespace AppMasInfo.Web.Controllers
             TrabajadorEditViewModel viewModel = new TrabajadorEditViewModel();
 
             try
-            {               
+            {
                 var lstRoles = this.RolServiceModel.GetListaRolAll();
                 viewModel.LstRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
@@ -257,7 +272,7 @@ namespace AppMasInfo.Web.Controllers
         public ActionResult Edit(TrabajadorEditViewModel p_ViewModel)
         {
             try
-            {                
+            {
                 if (ModelState.IsValid)
                 {
                     TrabajadorDto objTrabajadorEdit = new TrabajadorDto();
@@ -273,7 +288,7 @@ namespace AppMasInfo.Web.Controllers
                     objTrabajadorEdit.DatosUsuario.Id = p_ViewModel.DatosUsuario.Id;
                     objTrabajadorEdit.DatosUsuario.IdRol = p_ViewModel.DatosUsuario.IdRol;
                     objTrabajadorEdit.DatosUsuario.Username = p_ViewModel.DatosUsuario.Username;
-                    objTrabajadorEdit.DatosUsuario.Pass = p_ViewModel.DatosUsuario.Pass==null?"":GlobalMethods.EncryptPass(p_ViewModel.DatosUsuario.Pass);
+                    objTrabajadorEdit.DatosUsuario.Pass = p_ViewModel.DatosUsuario.Pass == null ? "" : GlobalMethods.EncryptPass(p_ViewModel.DatosUsuario.Pass);
                     objTrabajadorEdit.Email = p_ViewModel.Email;
                     objTrabajadorEdit.Id = p_ViewModel.Id;
 
@@ -348,7 +363,7 @@ namespace AppMasInfo.Web.Controllers
                         });
                 }
                 else
-            {
+                {
                     jsonResult = JsonConvert.SerializeObject(
                             new
                             {
@@ -385,13 +400,13 @@ namespace AppMasInfo.Web.Controllers
                     {
                         DetalleEstado = objRespuestaDb.Value.DetalleEstado,
                         FchCreate = objRespuestaDb.Value.FchCreate,
-                        FchUpdate = objRespuestaDb.Value.FchUpdate,                       
+                        FchUpdate = objRespuestaDb.Value.FchUpdate,
                         Id = objRespuestaDb.Value.Id,
                         Email = objRespuestaDb.Value.Email,
                         IdEstado = objRespuestaDb.Value.IdEstado,
                         Nombre = objRespuestaDb.Value.Nombre,
                         ApellidoPaterno = objRespuestaDb.Value.ApellidoPaterno,
-                        ApellidoMaterno = objRespuestaDb.Value.ApellidoMaterno,                                                
+                        ApellidoMaterno = objRespuestaDb.Value.ApellidoMaterno,
                         UsrUpdate = objRespuestaDb.Value.UsrUpdate,
                         UsrCreate = objRespuestaDb.Value.UsrCreate,
                         DatosUsuario = objRespuestaDb.Value.DatosUsuario,

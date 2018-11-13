@@ -24,7 +24,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public string UsrUpdate { get; set; }
         public string Email { get; set; }
         public int IdEstado { get; set; }
-        public long? IdUsuario { get; set; }
+        public long IdUsuario { get; set; }
         public int? IdCargoFuncion { get; set; }
                 
         public int? FiltroIdEstado { get; set; }

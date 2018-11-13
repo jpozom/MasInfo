@@ -11,6 +11,8 @@
 
         $("#divStatus").hide();
 
+        $("#lstFuncion").hide();
+
         //evento que permite ocultar y mostrar la contraseña
         $(document).on("ready", function () {
             $(".show-hide-pass").on("click", function (e) {
@@ -41,6 +43,17 @@
                     $("#IdCargo .funcion_" + idCargoFuncion).show();
                 }
                 $("#IdCargo").val(0);
+            });
+
+            $("#IdRol").on("change", function () {
+                var idCambioRol = $(this).val();
+                $("#lstFuncion").hide();
+
+                if (idCambioRol != 5 && idCambioRol != 6) {
+                    $("#lstFuncion").show();
+                } else {
+                    $("#lstFuncion").hide();
+                }
             });
 
             //evento que controla el confirm de la contraseña y encripta la contraseña
@@ -131,21 +144,21 @@
             <fieldset>
                 <legend class="legend">Datos para Inicio de Sesi&oacute;n</legend>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
-                        @Html.EditorFor(model => model.DatosUsuario.Username, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.DatosUsuario.Username, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div>
                         <div class="col-md-4">
                             <div class="input-group">
-                                @Html.EditorFor(model => model.DatosUsuario.Pass, new { htmlAttributes = new { @class = "form-control", type = "password", placeholder = "Ingrese Password", id = "passwordInput" } })
+                                @Html.EditorFor(model => model.Pass, new { htmlAttributes = new { @class = "form-control", type = "password", placeholder = "Ingrese Password", id = "passwordInput" } })
                                 <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide">
-                                    @Html.ValidationMessageFor(model => model.DatosUsuario.Pass, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(model => model.Pass, "", new { @class = "text-danger" })
                                 </span>
                             </div>
                         </div>
@@ -174,17 +187,17 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.IdRol, " Asigne Rol", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.IdRol, " Asigne Rol", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
-                        @Html.DropDownListFor(model => model.DatosUsuario.IdRol,
+                        @Html.DropDownListFor(model => model.IdRol,
                                   new SelectList(Model.LstCRol , "Id", "Descripcion"),
                                   "Selecciona", new { @class = "form-control"})
-                        @Html.ValidationMessageFor(model => model.DatosUsuario.IdRol, "", new { @class = "text-danger" })
+                        @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </fieldset>
 
-            <fieldset>
+            <fieldset id="lstFuncion">
                 <legend class="legend">Datos Profesionales del Usuario</legend>
 
                 <div class="form-group">

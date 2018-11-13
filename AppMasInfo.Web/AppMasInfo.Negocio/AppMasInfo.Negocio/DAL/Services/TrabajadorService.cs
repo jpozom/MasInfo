@@ -42,45 +42,26 @@ namespace AppMasInfo.Negocio.DAL.Services
             {
                 using (this.dbContext = new masInfoWebEntities())
                 {
-                    using (var trx = new TransactionScope())
-                    {
-                        var usuarioDb = this.dbContext.Usuario.Add(
-                            new Database.Usuario
-                            {
-                                Username = p_Obj.DatosUsuario.Username,
-                                Pass = p_Obj.DatosUsuario.Pass,
-                                IdRol = p_Obj.DatosUsuario.IdRol
-                            });
-
-                        this.dbContext.SaveChanges();
-                        // Si el IdUsuario es mayor a cero, entonces se ingresó correctamente
-                        // el registro en base de datos.
-                        if (usuarioDb.Id > 0)
+                    var trabajadorDb = this.dbContext.Trabajador.Add(
+                        new Database.Trabajador
                         {
-                            this.dbContext.Trabajador.Add(new Trabajador
-                            {
-                                IdUsuario = usuarioDb.Id,
-                                Nombre = p_Obj.Nombre,
-                                ApellidoPaterno = p_Obj.ApellidoPaterno,
-                                ApellidoMaterno = p_Obj.ApellidoMaterno,
-                                IdCargo = p_Obj.IdCargo,
-                                FchCreate = p_Obj.FchCreate,
-                                UsrCreate = p_Obj.UsrCreate,
-                                Email = p_Obj.Email,
-                                IdEstado = p_Obj.IdEstado,
-                                IdCargoFuncion = p_Obj.IdCargoFuncion
-                            });
-                        }
+                            IdUsuario = p_Obj.IdUsuario,
+                            Nombre = p_Obj.Nombre,
+                            ApellidoPaterno = p_Obj.ApellidoPaterno,
+                            ApellidoMaterno = p_Obj.ApellidoMaterno,
+                            IdCargo = p_Obj.IdCargo,
+                            FchCreate = p_Obj.FchCreate,
+                            UsrCreate = p_Obj.UsrCreate,
+                            Email = p_Obj.Email,
+                            IdEstado = p_Obj.IdEstado,
+                            IdCargoFuncion = p_Obj.IdCargoFuncion
+                        });
 
-                        // Guardamos los cambios en base de datos
-                        this.dbContext.SaveChanges();
+                    // Guardamos los cambios en base de datos
+                    this.dbContext.SaveChanges();
 
-                        // Completamos la transacción
-                        trx.Complete();
-
-                        // Asignamos un valor a la variable result describiendo la ejecución correcta
-                        result = new BaseDto<bool>(true);
-                    }
+                    // Asignamos un valor a la variable result describiendo la ejecución correcta
+                    result = new BaseDto<bool>(true);
                 }
             }
             catch (SqlException sqlEx)
@@ -125,7 +106,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                             // si no cambia la contraseña actual por la ingresada en el formulario edit
                             if (p_Obj.DatosUsuario.Pass != "")
                             {
-                                usuarioDb.Pass = p_Obj.DatosUsuario.Pass;                                
+                                usuarioDb.Pass = p_Obj.DatosUsuario.Pass;
                             }
 
                             usuarioDb.IdRol = p_Obj.DatosUsuario.IdRol;
@@ -266,13 +247,15 @@ namespace AppMasInfo.Negocio.DAL.Services
             try
             {
                 using (this.dbContext = new masInfoWebEntities())
-                {
-                    var trabajadorDb = (from t in this.dbContext.Trabajador
+                {//left join al conjunto A sobre B se almacena en un campo temporal
+                    var trabajadorDb = (from t in this.dbContext.Trabajador 
                                         join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                         join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
                                         join r in this.dbContext.Rol on u.IdRol equals r.Id
-                                        join cf in this.dbContext.CargoFuncion on t.IdCargoFuncion equals cf.Id
-                                        join c in this.dbContext.Cargo on t.IdCargo equals c.Id
+                                        join cf in this.dbContext.CargoFuncion on t.IdCargoFuncion equals cf.Id into tmpCf                                        
+                                        join c in this.dbContext.Cargo on t.IdCargo equals c.Id into tmpC
+                                        from cf in tmpCf.DefaultIfEmpty()
+                                        from c in tmpC.DefaultIfEmpty()
                                         where t.Id == p_Filtro.FiltroId
 
                                         select new TrabajadorDto
@@ -285,11 +268,11 @@ namespace AppMasInfo.Negocio.DAL.Services
                                             UsrCreate = t.UsrCreate,
                                             FchUpdate = t.FchUpdate,
                                             UsrUpdate = t.UsrUpdate,
-                                            IdCargo = t.IdCargo,
+                                            IdCargo = c.Id,
                                             Email = t.Email,
                                             IdUsuario = t.IdUsuario,
                                             IdEstado = t.IdEstado,
-                                            IdCargoFuncion = t.IdCargoFuncion,
+                                            IdCargoFuncion = cf.Id,
                                             DetalleEstado = new EstadoDto
                                             {
                                                 Id = es.Id,
@@ -310,13 +293,13 @@ namespace AppMasInfo.Negocio.DAL.Services
                                             },
                                             DetalleCargo = new CargoDto
                                             {
-                                                Id = c.Id,
+                                                Id = c == null? 0 :c.Id,
                                                 Descripcion = c.Descripcion,
-                                                IdCargoFuncion = c.IdCargoFuncion
+                                                IdCargoFuncion = c == null ? 0 : c.IdCargoFuncion
                                             },
                                             DetalleFuncion = new CargoFuncionDto
                                             {
-                                                Id = cf.Id,
+                                                Id = cf == null ? 0 : cf.Id,
                                                 Descripcion = cf.Descripcion
                                             }
                                         }).FirstOrDefault();

@@ -15,5 +15,19 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Filtro">Objeto con las credenciales del usuario</param>
         /// <returns>Usuario del sistema</returns>
         UsuarioDto GetUsuarioByCredentials(UsuarioDto p_Filtro);
+
+        /// <summary>
+        /// Metodo para obtener un usuario creado por un determinado filtro de busqueda
+        /// </summary>
+        /// <param name="p_Filtro">Objeto con las credenciales del usuario</param>
+        /// <returns>Usuario del sistema</returns>
+        BaseDto<UsuarioDto> GetUsuarioByUsername(UsuarioDto p_Filtro);
+
+        /// <summary>
+        /// Metodo para insertar un nuevo Usuario en DB
+        /// </summary>
+        /// <param name="p_Obj"></param>
+        /// <returns></returns>
+        BaseDto<bool> InsertarUsuario(UsuarioDto p_Obj);
     }
 }
