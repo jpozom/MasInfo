@@ -86,8 +86,7 @@ namespace AppMasInfo.Negocio.DAL.Services
             {
                 using (this.dbContext = new masInfoWebEntities())
                 {
-                    var trabajadorDb = this.dbContext.Trabajador.FirstOrDefault(p => p.Id == p_Obj.Id);
-                    var usuarioDb = this.dbContext.Usuario.FirstOrDefault(us => us.Id == p_Obj.DatosUsuario.Id);
+                    var trabajadorDb = this.dbContext.Trabajador.FirstOrDefault(p => p.Id == p_Obj.Id);                    
 
                     if (trabajadorDb != null)
                     {
@@ -99,19 +98,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                         trabajadorDb.Email = p_Obj.Email;
                         trabajadorDb.FchUpdate = p_Obj.FchUpdate;
                         trabajadorDb.UsrUpdate = p_Obj.UsrUpdate;
-
-                        if (usuarioDb != null)
-                        {
-                            //si el pass que viene del formulario edit viene vacio mantiene la contraseña encriptada actual
-                            // si no cambia la contraseña actual por la ingresada en el formulario edit
-                            if (p_Obj.DatosUsuario.Pass != "")
-                            {
-                                usuarioDb.Pass = p_Obj.DatosUsuario.Pass;
-                            }
-
-                            usuarioDb.IdRol = p_Obj.DatosUsuario.IdRol;
-                            usuarioDb.Username = p_Obj.DatosUsuario.Username;
-                        }
+                        
                         this.dbContext.SaveChanges();
                         resultObj = new BaseDto<bool>(true);
                     }
@@ -188,7 +175,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                                      where (t.IdUsuario == p_Filtro.FiltroIdUsuario || p_Filtro.FiltroIdUsuario == null) &&
                                            (t.Nombre.Contains(p_Filtro.FiltroNombre) || string.IsNullOrEmpty(p_Filtro.FiltroNombre)) &&
                                            (t.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null) &&
-                                           (u.IdRol == p_Filtro.FiltroIdRol || p_Filtro.FiltroIdRol == null)
+                                           (u.IdRol == p_Filtro.FiltroIdRol || p_Filtro.FiltroIdRol == null) &&
+                                           (u.Username.Contains(p_Filtro.FiltroUsername) || string.IsNullOrEmpty(p_Filtro.FiltroUsername))
                                      select new TrabajadorDto
                                      {
                                          Id = t.Id,

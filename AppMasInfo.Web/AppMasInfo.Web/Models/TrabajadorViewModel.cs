@@ -16,8 +16,8 @@ namespace AppMasInfo.Web.Models
         }
 
         public BaseDto<List<TrabajadorDto>> LstTrabajador { get; set; }
-
-        public List<TrabajadorDto> LstTrabajadores { get; set; }
+        
+        //public BaseDto<List<UsuarioDto>> lstUsuario { get; set; }
 
         public List<UsuarioDto> LstUsuario { get; set; }
        
@@ -30,12 +30,12 @@ namespace AppMasInfo.Web.Models
         public PaginadorDto FiltroPaginado { get; set; }
 
         public long FiltroIdUsuario { get; set; }
-       
+
+        public string FiltroUsername { get; set; }
+
         public int? FiltroIdEstado { get; set; }
         
-        public int? FiltroIdRol { get; set; }
-
-        public string FiltroNombre { get; set; }
+        public int FiltroIdRol { get; set; }        
     }
 
     public class TrabajadorCreateViewModel
@@ -90,8 +90,8 @@ namespace AppMasInfo.Web.Models
     }
 
     public class TrabajadorEditViewModel
-    {
-        public long Id { get; set; }
+    {       
+        public long IdTrabajador { get; set; }
 
         [Display(Name = "Nombre")]        
         public string Nombre { get; set; }
@@ -116,11 +116,11 @@ namespace AppMasInfo.Web.Models
         
         public int? IdCargoFuncion { get; set; }
 
-        public long? IdUsuario { get; set; }
+        public long IdUsuario { get; set; }
 
         public int IdEstado { get; set; }
 
-        public int? IdRol { get; set; }
+        public int IdRol { get; set; }
 
         public List<RolDto> LstRol { get; set; }
 

@@ -200,6 +200,7 @@
     <Compile Include="Models\TablePagerViewModel.cs" />
     <Compile Include="Models\TrabajadorViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Src\Helpers\ValidateAjaxAttribute.cs" />
     <Compile Include="Src\Storage\SessionKeys.cs" />
     <Compile Include="Src\Storage\SessionStore.cs" />
     <Compile Include="Startup.cs" />

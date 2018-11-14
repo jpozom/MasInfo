@@ -6,7 +6,7 @@
 }
 <script src="~/Scripts/sha256.js"></script>
 @section Scripts {
-    <script type="text/javascript">
+    <script type="text/javascript">       
         $("#IdCargo .funcion").hide();
 
         $("#divStatus").hide();
@@ -83,8 +83,7 @@
             var value = $(this).val();
             $("#currentSHA").text("SHA256 Hash for Second Password: " + sha256_digest(value));
             userSHA = value;
-        }).keyup();
-
+        }).keyup();         
     </script>
 }
 

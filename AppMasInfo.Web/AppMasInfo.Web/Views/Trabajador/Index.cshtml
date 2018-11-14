@@ -7,7 +7,88 @@
 
 @section Scripts{
     <script type="text/javascript">
-  
+
+        var filtroBusqueda = function () {
+            var objRequestData = new Object();
+            objRequestData.FiltroIdRol = $('#FiltroIdRol').find('option:selected').val();
+            objRequestData.FiltroUsername = $('#FiltroUsername').val();
+            objRequestData.FiltroPaginado = new Object();
+            objRequestData.FiltroPaginado.PaginaActual = parseInt($('#PaginaActual').val());
+            objRequestData.FiltroPaginado.TamanoPagina = parseInt($('#TamanoPagina').find('option:selected').val());
+
+             console.log('objRequestData');
+             console.log(objRequestData);
+
+            $.ajax({
+                url: '@Url.Action("Index", "Trabajador")',
+                method: 'POST',
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(objRequestData),
+                beforeSend: function () {
+                    showModalLoading();
+                },
+                success: function (data) {
+                    if (data !== null) {
+                        var tableBody = $('#lstDatos tbody');
+                        var tableBodyData = '';
+                        var urlEdit = '@Url.Action("Edit", "Trabajador", new { p_Id = "UrlEdit" })';
+
+                        $(data.Value).each(function (index, item) {
+                            var urlEditItem = urlEdit.replace('UrlEdit', item.Id);
+                            tableBodyData += `<tr>` +
+                                `<td>${item.Id}</td>` +
+                                `<td>${item.Nombre}</td>` +
+                                `<td>${item.ApellidoPaterno}</td>` +
+                                `<td>${item.DatosUsuario.Username}</td>` +
+                                `<td>${item.Email}</td>` +
+                                `<td>${item.DetalleRol.Descripcion}</td>` +
+                                `<td>` +
+                                `<a href="javascript:viewDetailItem(${item.Id})"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>&nbsp;` +
+                                `<a href="javascript:deleteItem(${item.Id})"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>` +
+                                `<a href="${urlEditItem}"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;` +                                
+                                `</td >` +
+                                `</tr>`;
+                        });
+
+                        if (tableBodyData === '') {
+                            tableBodyData = '<tr><td colspan="7">No existen datos</tr>';
+                        }
+
+                        tableBody.html(tableBodyData);
+                        updatePaginador(data.DatosPaginado);
+                    }
+                    else {
+                        showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                            'Error',
+                            'Error al intentar realizar . Por favor, inténtelo nuevamente');
+                    }
+
+                    hideModalLoading();
+                },
+                error: function (jqXHR, status, error) {
+                    showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                        'Error',
+                        'Ha ocurrido un error al intentar realizar la petición. Por favor, inténtelo nuevamente');
+                    if (jqXHR.status === parseInt('@((int)System.Net.HttpStatusCode.BadRequest)')) {
+                        var modelStateErrors = jqXHR.responseJSON;
+                        for (var i = 0; i < modelStateErrors.length; i++) {
+                            $(`span[data-valmsg-for="${modelStateErrors[i].key}"]`).text(modelStateErrors[i].errors[0]);
+                        }
+                    }
+                },
+                complete: function () {
+                    hideModalLoading();
+                }
+            });
+        };
+
+
+        function Limpiar() {
+            $('#FiltroIdRol').val('');
+            $('#FiltroUsername').val('');
+        }
+
         var viewDetailItem = function (id) {
             var urlDetalleUsuario = '@Url.Content("~/Trabajador/Detail")?p_id=' + id;
             dialogInstanceArchivo = BootstrapDialog.show({
@@ -98,17 +179,53 @@
                    'Error',
                    errorMessage
                );
-             }
-           
+            }
+
+            // Enlazamos los controles del paginador a nuestra función
+            // de búsqueda de datos de la página actual
+            bindPagerControlToEvents(filtroBusqueda);
         });
-       
+
     </script>
 }
 
 <div class="panel panel-primary">
     <div class="panel-body">
         <h5 class="m-b-30 m-t-0">Mantenedor Usuarios</h5>
- 
+        <fieldset>
+            <legend>Filtro de b&uacute;squeda</legend>
+            <div class="row">                
+                <div class="form-group col-sm-4">
+                    <label class="control-label col-md-12" for="txtNombre">Rol</label>
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.FiltroIdRol,
+                          new SelectList(Model.LstRoles, "Id", "Descripcion"),
+                          "Seleccione Rol", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label class="control-label col-md-12" for="ddlEstado">Username</label>
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(model => model.FiltroUsername, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <div class="col-md-12 text-right">
+                        <button type="button" class="btn btn-primary" onclick="filtroBusqueda()">
+                            <i class="glyphicon glyphicon-search"></i>
+                            Buscar
+                        </button> &nbsp;
+                        <button type="button" class="btn btn-default" onclick="Limpiar()">
+                            <i class="glyphicon glyphicon-remove"></i>
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
         <br />
 
         <fieldset>

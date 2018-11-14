@@ -1,5 +1,6 @@
 ﻿using AppMasInfo.Negocio.DAL.Database;
 using AppMasInfo.Negocio.DAL.Entities;
+using AppMasInfo.Negocio.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -161,6 +162,92 @@ namespace AppMasInfo.Negocio.DAL.Services
             return result;
         }
 
+        #endregion
+
+        #region UpdateUsuario
+        public BaseDto<bool> UpdateUsuario(UsuarioDto p_Obj)
+        {
+            BaseDto<bool> resultObj = null;
+
+            try
+            {
+                using (this.dbContext = new masInfoWebEntities())
+                {
+                    var usuarioDb = this.dbContext.Usuario.FirstOrDefault(p => p.Id == p_Obj.Id);                   
+
+                    if (usuarioDb != null)
+                    {
+                        //si el pass que viene del formulario edit viene vacio mantiene la contraseña encriptada actual
+                        // si no cambia la contraseña actual por la ingresada en el formulario edit
+                        if (p_Obj.Pass != "")
+                        {
+                            usuarioDb.Pass = p_Obj.Pass;
+                        }
+
+                        usuarioDb.IdRol = p_Obj.IdRol;
+                       
+                        this.dbContext.SaveChanges();
+                        resultObj = new BaseDto<bool>(true);
+                    }
+                    else
+                    {
+                        throw new Exception("Trabajador no encontrado en base de datos");
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                resultObj = new BaseDto<bool>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                resultObj = new BaseDto<bool>(true, ex);
+            }
+
+            return resultObj;
+        }
+        #endregion
+
+        #region GetListaTrabajadorbyFiltro
+        public BaseDto<List<UsuarioDto>> GetListaUsuariobyFiltro(UsuarioDto p_Filtro)
+        {
+            BaseDto<List<UsuarioDto>> objResult = null;
+
+            try
+            {
+                using (this.dbContext = new Database.masInfoWebEntities())
+                {
+                    var lstResult = (from u in this.dbContext.Usuario                                                                         
+                                     join r in this.dbContext.Rol on u.IdRol equals r.Id
+                                     where (u.Username == p_Filtro.FiltroUsername || string.IsNullOrEmpty(p_Filtro.FiltroUsername)) &&                                          
+                                           (u.IdRol == p_Filtro.FiltroIdRol || p_Filtro.FiltroIdRol == null)
+                                     select new UsuarioDto
+                                     {
+                                         Id = u.Id,
+                                         Username = u.Username,
+                                         IdRol = u.IdRol,                                                                                                                          
+                                         DetalleRol = new RolDto
+                                         {
+                                             Id = r.Id,
+                                             Descripcion = r.Descripcion
+                                         }
+                                     }).ToList();
+                    PaginadorDto datosPaginado = p_Filtro.DatosPaginado;
+                    var lstPaginada = DataPaginationUtils.GetPagedList<UsuarioDto>(ref datosPaginado, lstResult);
+                    objResult = new BaseDto<List<UsuarioDto>>(true, datosPaginado, lstPaginada);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                objResult = new BaseDto<List<UsuarioDto>>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                objResult = new BaseDto<List<UsuarioDto>>(true, ex);
+            }
+
+            return objResult;
+        }
         #endregion
 
         #endregion

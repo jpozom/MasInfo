@@ -29,5 +29,19 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Obj"></param>
         /// <returns></returns>
         BaseDto<bool> InsertarUsuario(UsuarioDto p_Obj);
+
+        /// <summary>
+        /// Metodo para modificar un Usuario en DB
+        /// </summary>
+        /// <param name="p_Obj"></param>
+        /// <returns></returns>
+        BaseDto<bool> UpdateUsuario(UsuarioDto p_Obj);
+
+        /// <summary>
+        /// Metodo para obtener una lista de usuarios mediante un determinado filtro de busqueda en la DB
+        /// </summary>
+        /// <param name="p_Filtro"></param>
+        /// <returns></returns>
+        BaseDto<List<UsuarioDto>> GetListaUsuariobyFiltro(UsuarioDto p_Filtro);
     }
 }

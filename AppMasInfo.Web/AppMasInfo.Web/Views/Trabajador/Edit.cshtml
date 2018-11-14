@@ -12,6 +12,8 @@
 
         $("#divStatus").hide();
 
+        $("#lstFuncion").hide();
+
         //evento que permite ocultar y mostrar la contraseña
         $(document).on("ready", function () {
             $(".show-hide-pass").on("click", function (e) {
@@ -42,6 +44,17 @@
                     $("#IdCargo .funcion_" + idCargoFuncion).show();
                 }
                 $("#IdCargo").val(0);
+            });
+
+            $("#IdRol").on("change", function () {
+                var idCambioRol = $(this).val();
+                $("#lstFuncion").hide();
+
+                if (idCambioRol != 5 && idCambioRol != 6) {
+                    $("#lstFuncion").show();
+                } else {
+                    $("#lstFuncion").hide();
+                }
             });
 
             //evento que controla el confirm de la contraseña y encripta la contraseña
@@ -85,8 +98,8 @@
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.Id)
-            @Html.HiddenFor(model => model.DatosUsuario.Id)
+            @Html.HiddenFor(model => model.IdUsuario)
+            @Html.HiddenFor(model => model.IdTrabajador)
 
             <fieldset>
                 <legend class="legend">Datos Personales del Usuario</legend>
@@ -127,21 +140,21 @@
             <fieldset>
                 <legend class="legend">Actualizaci&oacute;n datos para Inicio de Sesi&oacute;n</legend>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
-                        @Html.EditorFor(model => model.DatosUsuario.Username, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
                         @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
                     </div>
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.DatosUsuario.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div>
                         <div class="col-md-4">
                             <div class="input-group">
                                 @Html.EditorFor(model => model.Pass, new { htmlAttributes = new { @class = "form-control", placeholder = "Actualize Password", type = "password", id = "passwordInput" } })
                                 <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide"></span>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -153,7 +166,7 @@
                         <div class="col-md-4">
                             <div class="input-group">
                                 @Html.EditorFor(model => model.ConfirmPass, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirme Password", type = "password", id = "passwordTest" } })
-                                <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide"></span>                                                                
+                                <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide"></span>
                             </div>
                         </div>
                     </div>
@@ -171,7 +184,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.IdRol, " Asigne Rol", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
-                        @Html.DropDownListFor(model => model.DatosUsuario.IdRol,
+                        @Html.DropDownListFor(model => model.IdRol,
                                   new SelectList(Model.LstRol , "Id", "Descripcion"),
                                   "Selecciona", new { @class = "form-control"})
                         @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
@@ -179,9 +192,8 @@
                 </div>
             </fieldset>
 
-            <fieldset>
+            <fieldset id="lstFuncion">
                 <legend class="legend">Datos Profesionales del Usuario</legend>
-
                 <div class="form-group">
                     @Html.LabelFor(model => model.IdCargoFuncion, "Asigne Función", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
@@ -191,7 +203,6 @@
                         @Html.ValidationMessageFor(model => model.IdCargoFuncion, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.IdCargo, "Asigne Cargo", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -208,7 +219,6 @@
                         </select>
                     </div>
                 </div>
-
             </fieldset>
 
             <br />
