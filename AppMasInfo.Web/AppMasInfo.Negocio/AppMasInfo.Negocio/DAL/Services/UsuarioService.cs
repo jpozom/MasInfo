@@ -14,7 +14,7 @@ namespace AppMasInfo.Negocio.DAL.Services
     {
         #region propiedades privadas
         private static UsuarioService Instance = null;
-        private Database.masInfoWebEntities dbContext = null;
+        private Database.MasInfoWebEntities dbContext = null;
         #endregion
 
         //Permite el acceso global a dicha instancia mediante un método de clase.
@@ -39,7 +39,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new Database.masInfoWebEntities())
+                using (this.dbContext = new MasInfoWebEntities())
                 {
                     //El metodo .FirstOrDefault, retorna el primer objeto encontrado de acuerdo
                     //a un determinado filtro de búsqueda, y en caso contrario, retorna null
@@ -92,7 +92,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new Database.masInfoWebEntities())
+                using (this.dbContext = new Database.MasInfoWebEntities())
                 {
                     //El metodo .FirstOrDefault, retorna el primer objeto encontrado de acuerdo
                     //a un determinado filtro de búsqueda, y en caso contrario, retorna null
@@ -129,7 +129,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new masInfoWebEntities())
+                using (this.dbContext = new MasInfoWebEntities())
                 {
                     var usuarioDb = this.dbContext.Usuario.Add(
                         new Database.Usuario
@@ -171,7 +171,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new masInfoWebEntities())
+                using (this.dbContext = new MasInfoWebEntities())
                 {
                     var usuarioDb = this.dbContext.Usuario.FirstOrDefault(p => p.Id == p_Obj.Id);                   
 
@@ -215,7 +215,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new Database.masInfoWebEntities())
+                using (this.dbContext = new Database.MasInfoWebEntities())
                 {
                     var lstResult = (from u in this.dbContext.Usuario                                                                         
                                      join r in this.dbContext.Rol on u.IdRol equals r.Id

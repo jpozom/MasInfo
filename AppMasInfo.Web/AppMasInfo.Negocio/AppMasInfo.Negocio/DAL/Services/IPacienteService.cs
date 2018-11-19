@@ -14,7 +14,7 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// </summary>
         /// <param name="p_Filtro"></param>
         /// <returns></returns>
-        BaseDto<List<PacienteDto>> GetPacienteAll(PacienteDto p_Filtro);
+        BaseDto<List<PacienteDto>> GetListaPacienteAll(PacienteDto p_Filtro);
 
         /// <summary>
         /// Metodo para insertar un nuevo paciente en DB
@@ -36,6 +36,13 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Filtro">Filtro de datos</param>
         /// <returns>Usuario encontrado</returns>
         BaseDto<PacienteDto> GetPacienteById(PacienteDto p_Filtro);
+
+        /// <summary>
+        /// Metodo para obtener un paciente por un determinado Rut
+        /// </summary>
+        /// <param name="p_Filtro">Filtro de datos</param>
+        /// <returns>Usuario encontrado</returns>
+        BaseDto<PacienteDto> GetPacienteByRut(PacienteDto p_Filtro);
 
         /// <summary>
         /// Metodo para eliminar un paciente solo de forma logica del sistema y almacenando el usuario que lo realizo

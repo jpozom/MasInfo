@@ -15,9 +15,7 @@ namespace AppMasInfo.Web.Models
             this.LstTrabajador = new BaseDto<List<TrabajadorDto>>(new List<TrabajadorDto>());
         }
 
-        public BaseDto<List<TrabajadorDto>> LstTrabajador { get; set; }
-        
-        //public BaseDto<List<UsuarioDto>> lstUsuario { get; set; }
+        public BaseDto<List<TrabajadorDto>> LstTrabajador { get; set; }              
 
         public List<UsuarioDto> LstUsuario { get; set; }
        
@@ -57,17 +55,20 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string ApellidoMaterno { get; set; }
 
+        [Required(ErrorMessage = "Debe Ingresar una Contraseña")]
         public string Pass { get; set; }
 
         public string ConfirmPass { get; set; }
 
+        [Required(ErrorMessage = "Debe Ingresar un Nombre de Usuario")]
         public string Username { get; set; }
 
         [Display(Name = "Ingrese Email")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string Email { get; set; }
-       
+
+        [Required(ErrorMessage = "Debe Ingresar un Rol")]
         public int IdRol { get; set; }
         
         public int? IdCargoFuncion { get; set; }

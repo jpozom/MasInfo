@@ -17,7 +17,6 @@ namespace AppMasInfo.Negocio.DAL.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Tutor()
         {
-            this.Paciente = new HashSet<Paciente>();
             this.Telefono1 = new HashSet<Telefono>();
         }
     
@@ -35,10 +34,10 @@ namespace AppMasInfo.Negocio.DAL.Database
         public long IdUsuario { get; set; }
         public int IdEstado { get; set; }
         public string Email { get; set; }
+        public long IdPaciente { get; set; }
     
         public virtual Estado Estado { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Paciente> Paciente { get; set; }
+        public virtual Paciente Paciente { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Telefono> Telefono1 { get; set; }
         public virtual Usuario Usuario { get; set; }

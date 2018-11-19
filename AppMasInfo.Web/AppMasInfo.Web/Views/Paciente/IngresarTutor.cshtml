@@ -1,65 +1,14 @@
 ﻿@model AppMasInfo.Web.Models.PacienteCreateViewModel
 
 @{
-    ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    Layout = null;
 }
 <script src="~/Scripts/sha256.js"></script>
-@section Scripts{
-    <script type="text/javascript">
-
-         // popupDatosTutor
-        function popupDatosTutor() {
-            try {
-                BootstrapDialog.show({
-                    type: BootstrapDialog.TYPE_INFO,
-                    title: 'masInfo - Agregar Registro',
-                    message: $('<div></div>').load('@Url.Content("~/Paciente/IngresarTutor")'),
-                    size: BootstrapDialog.SIZE_WIDE,
-                    closeByBackdrop: false,
-                    buttons: [{
-                        label: 'Ingresar',
-                        cssClass: 'btn-primary',
-                        action: function (dialog) {
-                            $('#frmInsertarTutor input[type="submit"]').click();
-                        }
-                    }, {
-                        label: 'Cerrar',
-                        cssClass: 'btn-default',
-                        action: function (dialog) {
-                            dialog.close();
-                        }
-                    }]
-                });
-            }
-            catch (error) {
-                HideModalLoading();
-            }
-        }
-        // FIN popupDatosTutor
-
-        function PlantillaRut(Rut) {
-
-            // Despejar Puntos
-            var valor = Rut.value.replace('.', '');
-            // Despejar Guión
-            valor = valor.replace('-', '');
-            // Aislar Cuerpo y Dígito Verificador
-            cuerpo = valor.slice(0, -1);
-
-            dv = valor.slice(-1).toUpperCase();
-
-            // Formatear RUN
-            Rut.value = cuerpo + '-' + dv;
-
-            if (Rut.value === '-') {
-                Rut.value = '';
-            }
-        }
+    <script type="text/javascript">        
 
         $("#divStatus").hide();
-
-        $(function () {
+                
+        $(function () {    
 
             //evento que permite ocultar y mostrar la contraseña
             $(document).on("ready", function () {
@@ -110,7 +59,7 @@
             userSHA = value;
         }).keyup();
 
-       $(function () {
+        $(function () {
             var saveMessage = '@TempData["SaveOkMessage"]';
             if (saveMessage !== '') {
                 showMessageDialog(
@@ -131,84 +80,16 @@
         });
 
     </script>
-}
+
 
 <div class="panel panel-primary">
     <div class="panel-body">
-        <h4 class="m-b-30 m-t-0">Crear Paciente</h4>
+        <h4 class="m-b-30 m-t-0">Crear Tutor</h4>
 
-        @using (Html.BeginForm("Create", "Paciente", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("Create", "Paciente", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "frmInsertarTutor" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-            <div class="row">
-                <div class="col-sm-12 text-right">
-                    <input type="button" value="Agregar" class="btn btn-primary" onclick="popupDatosTutor()" />
-                    <br />
-                    <br />
-                </div>
-            </div>
-
-            <fieldset>
-                <legend>Datos del Paciente</legend>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Rut, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-4">
-                        @Html.EditorFor(model => model.Rut, new { htmlAttributes = new { @class = "form-control", oninput = "PlantillaRut(this)", @placeholder = "Ingrese Rut" } })
-                        @Html.ValidationMessageFor(model => model.Rut, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-4">
-                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese Nombre" } })
-                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ApellidoPaterno, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-4">
-                        @Html.EditorFor(model => model.ApellidoPaterno, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese Apellido Paterno" } })
-                        @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ApellidoMaterno, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-4">
-                        @Html.EditorFor(model => model.ApellidoMaterno, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese Apellido Materno" } })
-                        @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Edad, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-4">
-                        @Html.EditorFor(model => model.Edad, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese Edad" } })
-                        @Html.ValidationMessageFor(model => model.Edad, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-4">
-                        @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese Dirección" } })
-                        @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-4">
-                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese Telefono" } })
-                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </fieldset>
 
             <fieldset>
                 <legend class="legend">Datos Personales del Tutor</legend>
@@ -216,7 +97,7 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.RutTutor, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
-                        @Html.EditorFor(model => model.RutTutor, new { htmlAttributes = new { @class = "form-control", oninput = "PlantillaRut(this)", @placeholder = "Ingrese Rut" } })
+                        @Html.EditorFor(model => model.RutTutor, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.RutTutor, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -315,28 +196,16 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.IdRol, "Rol", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-4">
-                        @Html.DropDownListFor(model => model.IdRol,
-                                  new SelectList(Model.LstCRol , "Id", "Descripcion"),
-                                  "Selecciona Rol", new { @class = "form-control"})
-                        @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                @*<div class="form-group">
+                        @Html.LabelFor(model => model.IdRol, "Rol", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-4">
+                            @Html.DropDownListFor(model => model.IdRol,
+                                      new SelectList(Model.LstCRol , "Id", "Descripcion"),
+                                      "Selecciona Rol", new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
             </fieldset>
-
-            <br />
-
-            <div class="row">
-                <div class="form-group col-sm-12">
-                    <div class="col-md-12">
-                        <input type="submit" value="Guardar" class="btn btn-primary" /> &nbsp;
-                        <a href="@Url.Action("Index", "Paciente")" class="btn btn-default" role="button" aria-pressed="true">Volver</a>
-                    </div>
-                </div>
-            </div>
         }
     </div>
 </div>
-

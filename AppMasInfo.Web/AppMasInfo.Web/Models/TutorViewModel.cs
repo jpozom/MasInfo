@@ -8,44 +8,24 @@ using System.Web;
 
 namespace AppMasInfo.Web.Models
 {
-    public class PacienteViewModel
+    public class TutorViewModel
     {
-        public PacienteViewModel()
+        public TutorViewModel()
         {
-            this.LstPaciente = new BaseDto<List<PacienteDto>>(new List<PacienteDto>());
-        }
-        
-        public BaseDto<List<PacienteDto>> LstPaciente
-        {
-            get;
-            set;
-        }
-
-        public List<PacienteDto> lstPaciente
-        {
-            get;
-            set;
+            this.LstTutor = new BaseDto<List<TutorDto>>(new List<TutorDto>());
         }
 
         public BaseDto<List<TutorDto>> LstTutor
         {
             get;
             set;
-        }
-
-        public List<TutorDto> lstTutor
-        {
-            get;
-            set;
-        }
+        }        
     }
 
-    public class PacienteCreateViewModel
+    public class TutorCreateViewModel
     {
-        #region Pr0piedades Paciente
-
-        [Required(ErrorMessage = "Debe ingresar un Rut")]       
-        [Display(Name = "Rut")]        
+        [Required(ErrorMessage = "Debe ingresar un Rut")]
+        [Display(Name = "Rut")]
         public string Rut { get; set; }
 
         [Display(Name = "Nombre")]
@@ -63,11 +43,6 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string ApellidoMaterno { get; set; }
 
-        [Display(Name = "Edad")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Entero, ErrorMessage = Validacion.Mensajes.RegularExpression)]
-        public int Edad { get; set; }
-
         [Display(Name = "Dirección")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
@@ -78,73 +53,19 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Entero, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public int Telefono { get; set; }
 
-        public string FiltroRut { get; set; }
-        #endregion
-
-        #region Propiedades Tutor
-
-        [Required(ErrorMessage = "Debe ingresar un Rut")]
-        [Display(Name = "Rut")]
-        public string RutTutor { get; set; }
-
-        [Display(Name = "Nombre")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
-        public string NombreTutor { get; set; }
-
-        [Display(Name = "Apellido Paterno")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
-        public string ApellidoPaternoTutor { get; set; }
-
-        [Display(Name = "Apellido Materno")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
-        public string ApellidoMaternoTutor { get; set; }
-
-        [Display(Name = "Dirección")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
-        public string DireccionTutor { get; set; }
-
-        [Display(Name = "Telefono")]
+        [Display(Name = "Edad")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
         [RegularExpression(Validacion.Patterns.Entero, ErrorMessage = Validacion.Mensajes.RegularExpression)]
-        public int TelefonoTutor { get; set; }
-
-        [Display(Name = "Email")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
-        public string Email { get; set; }
+        public int Email { get; set; }
+                
+        public int IdEstado { get; set; }
 
         public long IdUsuario { get; set; }
 
         public long IdPaciente { get; set; }
-
-        [Display(Name = "Password")]
-        [Required(ErrorMessage = "Debe Ingresar una Contraseña")]
-        public string Pass { get; set; }
-
-        [Display(Name = "Confirme Password")]
-        public string ConfirmPass { get; set; }
-
-        [Display(Name = "Usuario")]
-        [Required(ErrorMessage = "Debe Ingresar un Nombre de Usuario")]
-        public string Username { get; set; }
-        
-        [Required(ErrorMessage = "Debe Ingresar un Rol")]
-        public int IdRol { get; set; }
-
-        public List<RolDto> LstCRol { get; set; }
-
-        #endregion
-
-        public int IdEstado { get; set; }
-           
-        public int? FiltroIdEstado { get; set; }
     }
 
-    public class PacienteEditViewModel
+    public class TutorEditViewModel
     {
         public long Id { get; set; }
 
@@ -188,29 +109,29 @@ namespace AppMasInfo.Web.Models
         public int IdEstado { get; set; }
     }
 
-    public class PacienteDetailViewModel
+    public class TutorDetailViewModel
     {
         public long Id { get; set; }
 
-        [Display(Name = "Rut")]        
+        [Display(Name = "Rut")]
         public string Rut { get; set; }
 
-        [Display(Name = "Nombre")]        
+        [Display(Name = "Nombre")]
         public string Nombre { get; set; }
 
-        [Display(Name = "Apellido Paterno")]        
+        [Display(Name = "Apellido Paterno")]
         public string ApellidoPaterno { get; set; }
 
-        [Display(Name = "Apellido Materno")]       
+        [Display(Name = "Apellido Materno")]
         public string ApellidoMaterno { get; set; }
 
-        [Display(Name = "Edad")]        
+        [Display(Name = "Edad")]
         public int Edad { get; set; }
 
-        [Display(Name = "Dirección")]        
+        [Display(Name = "Dirección")]
         public string Direccion { get; set; }
 
-        [Display(Name = "Telefono")]        
+        [Display(Name = "Telefono")]
         public int Telefono { get; set; }
 
         [Display(Name = "Fecha Inserción")]

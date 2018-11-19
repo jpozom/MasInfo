@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AppMasInfo.Negocio.DAL.Services
 {
-    class UbicacionService
+    public class UbicacionService
     {
     }
 }

@@ -13,10 +13,10 @@ namespace AppMasInfo.Negocio.DAL.Database
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class masInfoWebEntities : DbContext
+    public partial class MasInfoWebEntities : DbContext
     {
-        public masInfoWebEntities()
-            : base("name=masInfoWebEntities")
+        public MasInfoWebEntities()
+            : base("name=MasInfoWebEntities")
         {
         }
     

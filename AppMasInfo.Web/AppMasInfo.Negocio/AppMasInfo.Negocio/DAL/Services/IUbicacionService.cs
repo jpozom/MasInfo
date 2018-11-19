@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AppMasInfo.Negocio.DAL.Services
 {
-    interface IUbicacionService
+    public interface IUbicacionService
     {
     }
 }

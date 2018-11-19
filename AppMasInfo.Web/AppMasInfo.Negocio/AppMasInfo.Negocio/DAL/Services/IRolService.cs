@@ -14,5 +14,17 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// </summary>
         /// <returns></returns>
         BaseDto<List<RolDto>> GetListaRolAll();
+
+        /// <summary>
+        /// Metodo que devuelve solo una lista de roles Usuario/Trabajador
+        /// </summary>
+        /// <returns></returns>
+        BaseDto<List<RolDto>> GetListaRolTrabajador();
+
+        /// <summary>
+        /// Metodo que devuelve solo una lista de roles Usuario/Tutor
+        /// </summary>
+        /// <returns></returns>
+        BaseDto<List<RolDto>> GetListaRolTutor();
     }
 }

@@ -4,32 +4,32 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8dee316c96054367a36bd7ab4925a8ce" Name="Diagram1">
-        <EntityTypeShape EntityType="masInfoWebModel.Cargo" Width="1.5" PointX="0.5" PointY="3.75" />
-        <EntityTypeShape EntityType="masInfoWebModel.CargoFuncion" Width="1.5" PointX="1.25" PointY="16" />
-        <EntityTypeShape EntityType="masInfoWebModel.Estado" Width="1.5" PointX="1.875" PointY="8.25" />
-        <EntityTypeShape EntityType="masInfoWebModel.Paciente" Width="1.5" PointX="4.125" PointY="7.125" />
-        <EntityTypeShape EntityType="masInfoWebModel.PacienteUbicacion" Width="1.5" PointX="9.375" PointY="4.125" />
-        <EntityTypeShape EntityType="masInfoWebModel.Rol" Width="1.5" PointX="2.625" PointY="13.125" />
-        <EntityTypeShape EntityType="masInfoWebModel.Telefono" Width="1.5" PointX="9.375" PointY="8.125" />
-        <EntityTypeShape EntityType="masInfoWebModel.Trabajador" Width="1.5" PointX="7" PointY="0.5" />
-        <EntityTypeShape EntityType="masInfoWebModel.Tutor" Width="1.5" PointX="7.125" PointY="7.125" />
-        <EntityTypeShape EntityType="masInfoWebModel.Ubicacion" Width="1.5" PointX="4.875" PointY="4.625" />
-        <EntityTypeShape EntityType="masInfoWebModel.Usuario" Width="1.5" PointX="1.875" PointY="0.75" />
-        <AssociationConnector Association="masInfoWebModel.FK_Cargo_CargoFuncion" />
-        <AssociationConnector Association="masInfoWebModel.FK_Trabajador_Cargo" />
-        <AssociationConnector Association="masInfoWebModel.FK_Trabajador_CargoFuncion" />
-        <AssociationConnector Association="masInfoWebModel.FK_Paciente_Estado" />
-        <AssociationConnector Association="masInfoWebModel.FK_Trabajador_Estado" />
-        <AssociationConnector Association="masInfoWebModel.FK_Tutor_Estado" />
-        <AssociationConnector Association="masInfoWebModel.FK_Paciente_Tutor" />
-        <AssociationConnector Association="masInfoWebModel.FK_PacienteUbicacion_Paciente" />
-        <AssociationConnector Association="masInfoWebModel.FK_Telefono_Paciente" />
-        <AssociationConnector Association="masInfoWebModel.FK_PacienteUbicacion_Ubicacion" />
-        <AssociationConnector Association="masInfoWebModel.FK_Usuario_Rol" />
-        <AssociationConnector Association="masInfoWebModel.FK_Telefono_Tutor" />
-        <AssociationConnector Association="masInfoWebModel.FK_Trabajador_Usuario" />
-        <AssociationConnector Association="masInfoWebModel.FK_Tutor_Usuario" />
+      <Diagram DiagramId="92daa54b8f5946f49f53873a8ac9407a" Name="Diagram1">
+        <EntityTypeShape EntityType="MasInfoWebModel.Cargo" Width="1.5" PointX="3.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasInfoWebModel.CargoFuncion" Width="1.5" PointX="1.5" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasInfoWebModel.Estado" Width="1.5" PointX="0.75" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasInfoWebModel.Paciente" Width="1.5" PointX="3" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasInfoWebModel.PacienteUbicacion" Width="1.5" PointX="5.25" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasInfoWebModel.Rol" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasInfoWebModel.Telefono" Width="1.5" PointX="8.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasInfoWebModel.Trabajador" Width="1.5" PointX="6" PointY="12.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasInfoWebModel.Tutor" Width="1.5" PointX="5.25" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasInfoWebModel.Ubicacion" Width="1.5" PointX="3" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="MasInfoWebModel.Usuario" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Cargo_CargoFuncion" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Trabajador_Cargo" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Trabajador_CargoFuncion" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Paciente_Estado" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Trabajador_Estado" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Tutor_Estado" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_PacienteUbicacion_Paciente" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Telefono_Paciente" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Tutor_Paciente" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_PacienteUbicacion_Ubicacion" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Usuario_Rol" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Telefono_Tutor" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Trabajador_Usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Tutor_Usuario" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

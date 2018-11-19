@@ -67,8 +67,8 @@ namespace AppMasInfo.Web.Controllers
             TrabajadorViewModel viewModel = new TrabajadorViewModel();
 
             try
-            {              
-                var lstRoles = this.RolServiceModel.GetListaRolAll();
+            {
+                var lstRoles = this.RolServiceModel.GetListaRolTrabajador();
                 viewModel.LstRoles = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
                 var lstTrabajador = this.TrabajadorServiceModel.GetListaTrabajadorAll();
@@ -83,7 +83,7 @@ namespace AppMasInfo.Web.Controllers
 
                 if (usuarioListDbResponse.HasError)
                 {
-                    TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de Grupos de Trabajo. Por favor, inténtelo nuevamente";                    
+                    TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de Grupos de Trabajo. Por favor, inténtelo nuevamente";
                 }
 
                 var trabajadorFiltroObj = new TrabajadorDto(1, 10);
@@ -116,8 +116,8 @@ namespace AppMasInfo.Web.Controllers
             try
             {
                 var usuarioFiltroObj = new TrabajadorDto(p_ViewModel.FiltroPaginado.PaginaActual, p_ViewModel.FiltroPaginado.TamanoPagina);
-                usuarioFiltroObj.FiltroUsername = p_ViewModel.FiltroUsername;               
-                usuarioFiltroObj.FiltroIdRol = p_ViewModel.FiltroIdRol;           
+                usuarioFiltroObj.FiltroUsername = p_ViewModel.FiltroUsername;
+                usuarioFiltroObj.FiltroIdRol = p_ViewModel.FiltroIdRol;
 
                 var usuarioListDbResponse = TrabajadorServiceModel.GetListaTrabajadorbyFiltro(usuarioFiltroObj);
 
@@ -133,7 +133,7 @@ namespace AppMasInfo.Web.Controllers
             }
 
             return jsonResult;
-        }          
+        }
         #endregion
 
         #region Create
@@ -144,7 +144,7 @@ namespace AppMasInfo.Web.Controllers
 
             try
             {
-                var lstRoles = this.RolServiceModel.GetListaRolAll();
+                var lstRoles = this.RolServiceModel.GetListaRolTrabajador();
                 viewModel.LstCRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
                 var lstCargos = this.CargoServiceModel.GetListaCargoAll();
@@ -169,59 +169,70 @@ namespace AppMasInfo.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    UsuarioDto UsuarioNewDb = new UsuarioDto();
-                    UsuarioNewDb.Username = p_ViewModel.Username;
-                    UsuarioNewDb.Pass = GlobalMethods.EncryptPass(p_ViewModel.Pass);
-                    UsuarioNewDb.IdRol = p_ViewModel.IdRol;
-
-                    var objRespuesta = UsuarioServiceModel.InsertarUsuario(UsuarioNewDb);
-
-                    if (!objRespuesta.HasError)
-                    {
-                        TempData["SaveOkMessage"] = "Usuario ingresado correctamente";
-                    }
-                    else
-                    {
-                        TempData["ErrorMessage"] = "Intente nuevamente";
-                    }
-
                     var UsuarioFiltroObj = new UsuarioDto();
                     UsuarioFiltroObj.FiltroUsername = p_ViewModel.Username;
                     var usuarioDbResponse = UsuarioServiceModel.GetUsuarioByUsername(UsuarioFiltroObj);
 
                     if (!usuarioDbResponse.HasValue)
                     {
-                        TrabajadorDto TrabajadorNewDb = new TrabajadorDto();
-                        TrabajadorNewDb.Nombre = p_ViewModel.Nombre;
-                        TrabajadorNewDb.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
-                        TrabajadorNewDb.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
-                        TrabajadorNewDb.IdCargo = p_ViewModel.IdCargo == 0 ? null : p_ViewModel.IdCargo;//si viene un valor 0 que lo cambie a null
-                        TrabajadorNewDb.IdCargoFuncion = p_ViewModel.IdCargoFuncion;               //sino que envie el valor ingresado en la vista
-                        TrabajadorNewDb.UsrCreate = User.Identity.GetUserId();
-                        TrabajadorNewDb.FchCreate = DateTime.Now;
-                        TrabajadorNewDb.Email = p_ViewModel.Email;
-                        TrabajadorNewDb.IdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Habilitado;
-                        TrabajadorNewDb.IdUsuario = usuarioDbResponse.Value.Id;
+                        UsuarioDto UsuarioNewDb = new UsuarioDto();
+                        UsuarioNewDb.Username = p_ViewModel.Username;
+                        UsuarioNewDb.Pass = GlobalMethods.EncryptPass(p_ViewModel.Pass);
+                        UsuarioNewDb.IdRol = p_ViewModel.IdRol;
 
-                        var objTrabajadorResponse = this.TrabajadorServiceModel.InsertarTrabajador(TrabajadorNewDb);
+                        var objRespuesta = UsuarioServiceModel.InsertarUsuario(UsuarioNewDb);
 
-                        if (!objTrabajadorResponse.HasError)
+                        if (!objRespuesta.HasError)
                         {
-                            TempData["SaveOkMessage"] = "Trabajador ingresado correctamente";
-                            return RedirectToAction("Index");
+                            var UserFiltroObj = new UsuarioDto();
+                            UserFiltroObj.FiltroUsername = p_ViewModel.Username;
+                            var userDbResponse = UsuarioServiceModel.GetUsuarioByUsername(UserFiltroObj);
+
+                            if (userDbResponse.HasValue)
+                            {
+                                TrabajadorDto TrabajadorNewDb = new TrabajadorDto();
+                                TrabajadorNewDb.Nombre = p_ViewModel.Nombre;
+                                TrabajadorNewDb.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
+                                TrabajadorNewDb.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
+                                TrabajadorNewDb.IdCargo = p_ViewModel.IdCargo == 0 ? null : p_ViewModel.IdCargo;//si viene un valor 0 que lo cambie a null
+                                TrabajadorNewDb.IdCargoFuncion = p_ViewModel.IdCargoFuncion;               //sino que envie el valor ingresado en la vista
+                                TrabajadorNewDb.UsrCreate = User.Identity.GetUserId();
+                                TrabajadorNewDb.FchCreate = DateTime.Now;
+                                TrabajadorNewDb.Email = p_ViewModel.Email;
+                                TrabajadorNewDb.IdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Habilitado;
+                                TrabajadorNewDb.IdUsuario = userDbResponse.Value.Id;
+
+                                var objTrabajadorResponse = this.TrabajadorServiceModel.InsertarTrabajador(TrabajadorNewDb);
+
+                                if (!objTrabajadorResponse.HasError)
+                                {
+                                    TempData["SaveOkMessage"] = "Trabajador con sus Credenciales de Acceso Ingresado Correctamente";
+                                    return RedirectToAction("Index");
+                                }
+                                else
+                                {
+                                    TempData["ErrorMessage"] = "Intente nuevamente";
+                                }
+                            }
+                            else
+                            {
+                                TempData["ErrorMessage"] = "Intente Nuevamente";
+                            }
                         }
-                        else
-                        {
-                            TempData["ErrorMessage"] = "Intente nuevamente";
-                        }
+
                     }
                     else
                     {
-                        TempData["SaveOkMessage"] = "Usuario Existente";                        
+                        TempData["SaveOkMessage"] = "Usuario Existente";
                     }
+
+                    CargarDatosCreateTrabajador(p_ViewModel);
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ha ocurrido un Error, faltan datos a Ingresar. Por favor, inténtelo nuevamente";
                 }
 
-                CargarDatosCreatePaciente(p_ViewModel);
             }
             catch (Exception ex)
             {
@@ -231,9 +242,9 @@ namespace AppMasInfo.Web.Controllers
             return View(p_ViewModel);
         }
 
-        private void CargarDatosCreatePaciente(TrabajadorCreateViewModel p_ViewModel)
+        private void CargarDatosCreateTrabajador(TrabajadorCreateViewModel p_ViewModel)
         {
-            var lstRoles = this.RolServiceModel.GetListaRolAll();
+            var lstRoles = this.RolServiceModel.GetListaRolTrabajador();
             p_ViewModel.LstCRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
             var lstCargos = this.CargoServiceModel.GetListaCargoAll();
@@ -252,7 +263,7 @@ namespace AppMasInfo.Web.Controllers
 
             try
             {
-                var lstRoles = this.RolServiceModel.GetListaRolAll();
+                var lstRoles = this.RolServiceModel.GetListaRolTrabajador();
                 viewModel.LstRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
                 var lstCargos = this.CargoServiceModel.GetListaCargoAll();
@@ -280,8 +291,6 @@ namespace AppMasInfo.Web.Controllers
                     viewModel.Username = objResultadoDb.Value.DatosUsuario.Username;
                     viewModel.IdCargo = objResultadoDb.Value.IdCargo;
                     viewModel.IdCargoFuncion = objResultadoDb.Value.IdCargoFuncion;
-
-
                 }
 
                 if (objResultadoDb.HasError)
@@ -304,7 +313,7 @@ namespace AppMasInfo.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    UsuarioDto objUsuarioEdit = new UsuarioDto();                   
+                    UsuarioDto objUsuarioEdit = new UsuarioDto();
                     objUsuarioEdit.Pass = p_ViewModel.Pass == null ? "" : GlobalMethods.EncryptPass(p_ViewModel.Pass);
                     objUsuarioEdit.IdRol = p_ViewModel.IdRol;
                     objUsuarioEdit.Id = p_ViewModel.IdUsuario;
@@ -320,44 +329,46 @@ namespace AppMasInfo.Web.Controllers
                         TempData["ErrorMessage"] = "Intente nuevamente";
                     }
 
-                  
-                        TrabajadorDto objTrabajadorEdit = new TrabajadorDto();
-                        objTrabajadorEdit.Nombre = p_ViewModel.Nombre;
-                        objTrabajadorEdit.IdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Habilitado;
-                        objTrabajadorEdit.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
-                        objTrabajadorEdit.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
-                        objTrabajadorEdit.IdCargo = p_ViewModel.IdCargo == 0 ? null : p_ViewModel.IdCargo; ;
-                        objTrabajadorEdit.IdCargoFuncion = p_ViewModel.IdCargoFuncion;
-                        objTrabajadorEdit.UsrUpdate = User.Identity.GetUserId();
-                        objTrabajadorEdit.FchUpdate = DateTime.Now;                       
-                        objTrabajadorEdit.Email = p_ViewModel.Email;
-                        objTrabajadorEdit.Id = p_ViewModel.IdTrabajador;
 
-                        var objResultadoDb = TrabajadorServiceModel.UpdateTrabajador(objTrabajadorEdit);
+                    TrabajadorDto objTrabajadorEdit = new TrabajadorDto();
+                    objTrabajadorEdit.Nombre = p_ViewModel.Nombre;
+                    objTrabajadorEdit.IdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Habilitado;
+                    objTrabajadorEdit.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
+                    objTrabajadorEdit.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
+                    objTrabajadorEdit.IdCargo = p_ViewModel.IdCargo == 0 ? null : p_ViewModel.IdCargo; ;
+                    objTrabajadorEdit.IdCargoFuncion = p_ViewModel.IdCargoFuncion;
+                    objTrabajadorEdit.UsrUpdate = User.Identity.GetUserId();
+                    objTrabajadorEdit.FchUpdate = DateTime.Now;
+                    objTrabajadorEdit.Email = p_ViewModel.Email;
+                    objTrabajadorEdit.Id = p_ViewModel.IdTrabajador;
 
-                        if (objResultadoDb.HasValue)
-                        {
-                            TempData["SaveOkMessage"] = "Usuario Actualizado Correctamente";
-                            return RedirectToAction("Index");
-                        }
-                        else
-                        {
-                            TempData["ErrorMessage"] = "Ha ocurrido un error al actualizar el Usuario. Por favor, inténtelo nuevamente";
-                            this.CargarDatosEditView(ref p_ViewModel);
-                        }
+                    var objResultadoDb = TrabajadorServiceModel.UpdateTrabajador(objTrabajadorEdit);
 
-                        if (objResultadoDb.HasError)
-                            throw objResultadoDb.Error;
-                  
+                    if (objResultadoDb.HasValue)
+                    {
+                        TempData["SaveOkMessage"] = "Trabajador con sus Credenciales de Acceso Actualizado Correctamente";
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Ha ocurrido un error al actualizar el Trabajador. Por favor, inténtelo nuevamente";
+                        this.CargarDatosEditView(ref p_ViewModel);
+                    }
+
+                    if (objResultadoDb.HasError)
+                        throw objResultadoDb.Error;
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ha ocurrido un Error, faltan datos a Ingresar. Por favor, inténtelo nuevamente";
                 }
 
                 this.CargarDatosEditView(ref p_ViewModel);
-
             }
             catch (Exception ex)
             {
                 this.CargarDatosEditView(ref p_ViewModel);
-                TempData["ErrorMessage"] = "Ha ocurrido un error al actualizar el Usuario. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un error al actualizar el Trabajador. Por favor, inténtelo nuevamente";
             }
 
             return View(p_ViewModel);
@@ -365,7 +376,7 @@ namespace AppMasInfo.Web.Controllers
 
         private void CargarDatosEditView(ref TrabajadorEditViewModel p_ViewModel)
         {
-            var lstRoles = this.RolServiceModel.GetListaRolAll();
+            var lstRoles = this.RolServiceModel.GetListaRolTrabajador();
             p_ViewModel.LstRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
             var lstCargos = this.CargoServiceModel.GetListaCargoAll();
@@ -400,7 +411,7 @@ namespace AppMasInfo.Web.Controllers
                         new
                         {
                             status = "ok",
-                            message = "Usuario eliminado correctamente"
+                            message = "Usuario Eliminado Correctamente"
                         });
                 }
                 else
@@ -409,7 +420,7 @@ namespace AppMasInfo.Web.Controllers
                             new
                             {
                                 status = "error",
-                                message = "No puede eliminar al usuario"
+                                message = "No se Puede Eliminar al Trabajador"
                             });
                 }
             }

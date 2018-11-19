@@ -17,7 +17,8 @@ namespace AppMasInfo.Utils.Utils
             Enfermera = 2,
             Tecnico = 3,
             Auxiliar = 4,
-            Administrador = 5
+            Administrador = 5,
+            Tutor = 6
         }
 
         /// <summary>

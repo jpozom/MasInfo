@@ -15,8 +15,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public string ApellidoPaterno { get; set; }
         public string ApellidoMaterno { get; set; }
         public int Edad { get; set; }
-        public string Direccion { get; set; }
-        public long? IdTutor { get; set; }
+        public string Direccion { get; set; }        
         public Nullable<System.DateTime> FchCreate { get; set; }
         public string UsrCreate { get; set; }
         public Nullable<System.DateTime> FchUpdate { get; set; }
@@ -26,6 +25,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
 
         public int? FiltroIdEstado { get; set; }
         public long? FiltroId { get; set; }
+        public string FiltroRut { get; set; }
         public EstadoDto DetalleEstado { get; set; }
 
     }

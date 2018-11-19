@@ -24,6 +24,30 @@ namespace AppMasInfo.Web.Controllers
                 return PacienteService.GetInstance();
             }
         }
+
+        private IUsuarioService UsuarioServiceModel
+        {
+            get
+            {
+                return UsuarioService.GetInstance();
+            }
+        }
+
+        private IRolService RolServiceModel
+        {
+            get
+            {
+                return RolService.GetInstance();
+            }
+        }
+
+        private ITutorService TutorServiceModel
+        {
+            get
+            {
+                return TutorService.GetInstance();
+            }
+        }
         #endregion
 
         #region metodos publicos
@@ -40,7 +64,7 @@ namespace AppMasInfo.Web.Controllers
                 var pacienteFiltroObj = new PacienteDto();
                 pacienteFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
                 //se envia el objeto al servicio
-                var pacienteListDbResponse = this.PacienteServiceModel.GetPacienteAll(pacienteFiltroObj);
+                var pacienteListDbResponse = this.PacienteServiceModel.GetListaPacienteAll(pacienteFiltroObj);
 
                 //se devuelve la consulta
                 viewModel.lstPaciente = pacienteListDbResponse.HasValue ? pacienteListDbResponse.Value : new List<PacienteDto>();
@@ -64,7 +88,20 @@ namespace AppMasInfo.Web.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            PacienteCreateViewModel viewModel = new PacienteCreateViewModel();
+
+            try
+            {
+                var lstRoles = this.RolServiceModel.GetListaRolTutor();
+                viewModel.LstCRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener listas solicitadas", ex);
+            }
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -77,47 +114,136 @@ namespace AppMasInfo.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
-
-                    PacienteDto objPacienteCreate = new PacienteDto();
-                    objPacienteCreate.Rut = p_ViewModel.Rut;
-                    objPacienteCreate.Nombre = p_ViewModel.Nombre;
-                    objPacienteCreate.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
-                    objPacienteCreate.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
-                    objPacienteCreate.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
-                    objPacienteCreate.Edad = p_ViewModel.Edad;
-                    objPacienteCreate.UsrCreate = User.Identity.GetUserId();
-                    objPacienteCreate.FchCreate = DateTime.Now;
-                    objPacienteCreate.Direccion = p_ViewModel.Direccion;
-                    objPacienteCreate.Telefono = p_ViewModel.Telefono;
-                    objPacienteCreate.IdTutor = p_ViewModel.IdTutor;
-
-                    var objResultadoDb = PacienteServiceModel.CreatePaciente(objPacienteCreate);
-
-                    if (objResultadoDb.HasValue)
+                    bool isRutOk = true;
+                    if (!string.IsNullOrEmpty(p_ViewModel.Rut))
                     {
-                        TempData["SaveOkMessage"] = "Usuario ingresado correctamente";
-                        return RedirectToAction("Index");
+                        isRutOk = GlobalMethods.ValidarRut(p_ViewModel.Rut);
+                    }
+
+                    if (isRutOk)
+                    {
+                        PacienteDto objPacienteCreate = new PacienteDto();
+                        objPacienteCreate.Rut = p_ViewModel.Rut;
+                        objPacienteCreate.Nombre = p_ViewModel.Nombre;
+                        objPacienteCreate.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
+                        objPacienteCreate.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
+                        objPacienteCreate.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
+                        objPacienteCreate.Edad = p_ViewModel.Edad;
+                        objPacienteCreate.UsrCreate = User.Identity.GetUserId();
+                        objPacienteCreate.FchCreate = DateTime.Now;
+                        objPacienteCreate.Direccion = p_ViewModel.Direccion;
+                        objPacienteCreate.Telefono = p_ViewModel.Telefono;
+
+                        var objResultadoDb = PacienteServiceModel.CreatePaciente(objPacienteCreate);
+
+                        if (objResultadoDb.HasValue)
+                        {
+                            var UsuarioFiltroObj = new UsuarioDto();
+                            UsuarioFiltroObj.FiltroUsername = p_ViewModel.Username;
+                            var usuarioDbResponse = UsuarioServiceModel.GetUsuarioByUsername(UsuarioFiltroObj);
+
+                            if (!usuarioDbResponse.HasValue)
+                            {
+                                UsuarioDto UsuarioNewDb = new UsuarioDto();
+                                UsuarioNewDb.Username = p_ViewModel.Username;
+                                UsuarioNewDb.Pass = GlobalMethods.EncryptPass(p_ViewModel.Pass);
+                                UsuarioNewDb.IdRol = p_ViewModel.IdRol;
+
+                                var objRespuesta = UsuarioServiceModel.InsertarUsuario(UsuarioNewDb);
+
+                                if (!objRespuesta.HasError)
+                                {
+                                    if (!string.IsNullOrEmpty(p_ViewModel.RutTutor))
+                                    {
+                                        isRutOk = GlobalMethods.ValidarRut(p_ViewModel.RutTutor);
+                                    }
+
+                                    if (isRutOk)
+                                    {
+                                        var UserFiltroObj = new UsuarioDto();
+                                        UserFiltroObj.FiltroUsername = p_ViewModel.Username;
+                                        var userDbResponse = UsuarioServiceModel.GetUsuarioByUsername(UserFiltroObj);
+
+                                        var pacienteFiltroObj = new PacienteDto();
+                                        pacienteFiltroObj.FiltroRut = p_ViewModel.Rut;
+                                        pacienteFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
+                                        var pacienteDbResponse = PacienteServiceModel.GetPacienteByRut(pacienteFiltroObj);
+
+                                        if (userDbResponse.HasValue)
+                                        {
+                                            if (pacienteDbResponse.HasValue)
+                                            {
+                                                TutorDto objTutorCreate = new TutorDto();
+                                                objTutorCreate.Rut = p_ViewModel.RutTutor;
+                                                objTutorCreate.Nombre = p_ViewModel.NombreTutor;
+                                                objTutorCreate.IdEstado = (int)EnumUtils.EstadoEnum.Tutor_Habilitado;
+                                                objTutorCreate.ApellidoPaterno = p_ViewModel.ApellidoPaternoTutor;
+                                                objTutorCreate.ApellidoMaterno = p_ViewModel.ApellidoMaternoTutor;
+                                                objTutorCreate.UsrCreate = User.Identity.GetUserId();
+                                                objTutorCreate.FchCreate = DateTime.Now;
+                                                objTutorCreate.Direccion = p_ViewModel.DireccionTutor;
+                                                objTutorCreate.Telefono = p_ViewModel.TelefonoTutor;
+                                                objTutorCreate.Email = p_ViewModel.Email;
+                                                objTutorCreate.IdUsuario = userDbResponse.Value.Id;
+                                                objTutorCreate.IdPaciente = pacienteDbResponse.Value.Id;
+
+                                                var objResultado = TutorServiceModel.InsertarTutor(objTutorCreate);
+
+                                                if (objResultado.HasValue)
+                                                {
+                                                    TempData["SaveOkMessage"] = "Registro Ingresado Correctamente";
+                                                    return RedirectToAction("Index");
+                                                }
+                                                else
+                                                {
+                                                    TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Registro. Por favor, inténtelo nuevamente";
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        TempData["ErrorMessage"] = "El RUT ingresado no es Válido, Intentelo Nuevamente";
+                                    }
+                                }
+                                else
+                                {
+                                    TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Registro. Por favor, inténtelo nuevamente";
+                                }
+                            }
+                            else
+                            {
+                                TempData["SaveOkMessage"] = "Usuario Existente";
+                            }
+                        }
+                        else
+                        {
+                            TempData["ErrorMessage"] = "Ha ocurrido un Error, faltan datos a Ingresar. Por favor, inténtelo nuevamente";
+                        }
                     }
                     else
                     {
-                        TempData["ErrorMessage"] = "Ha ocurrido un error al crear el usuario. Por favor, inténtelo nuevamente";
+                        TempData["ErrorMessage"] = "El RUT ingresado no es Válido, Intentelo Nuevamente";
                     }
-
-                    if (objResultadoDb.HasError)
-                        throw objResultadoDb.Error;
-
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Ha ocurrido un error al crear el usuario. Por favor, inténtelo nuevamente";
+                    TempData["ErrorMessage"] = "Ha ocurrido un Error, faltan datos a Ingresar. Por favor, inténtelo nuevamente";
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al crear el usuario. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Paciente. Por favor, inténtelo nuevamente";
             }
 
+            CargarDatosCreatePaciente(p_ViewModel);
+
             return View(p_ViewModel);
+        }
+        private void CargarDatosCreatePaciente(PacienteCreateViewModel p_ViewModel)
+        {
+            var lstRoles = this.RolServiceModel.GetListaRolTutor();
+            p_ViewModel.LstCRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
         }
         #endregion
 
@@ -183,7 +309,6 @@ namespace AppMasInfo.Web.Controllers
                     objPacienteEdit.FchUpdate = DateTime.Now;
                     objPacienteEdit.Direccion = p_ViewModel.Direccion;
                     objPacienteEdit.Telefono = p_ViewModel.Telefono;
-                    objPacienteEdit.IdTutor = p_ViewModel.IdTutor;
                     objPacienteEdit.Id = p_ViewModel.Id;
 
                     var objResultadoDb = PacienteServiceModel.UpdatePaciente(objPacienteEdit);
@@ -193,7 +318,6 @@ namespace AppMasInfo.Web.Controllers
                         TempData["SaveOkMessage"] = "Paciente actualizado correctamente";
                         return RedirectToAction("Index");
                     }
-
 
                     if (objResultadoDb.HasError)
                         throw objResultadoDb.Error;
@@ -300,6 +424,17 @@ namespace AppMasInfo.Web.Controllers
 
             return View(viewModel);
         }
+        #endregion
+
+        #region IngresarDatosTutor
+        [HttpGet]
+        public ActionResult IngresarTutor()
+        {
+            PacienteCreateViewModel viewModel = new PacienteCreateViewModel();
+
+            return View(viewModel);
+        }
+
         #endregion
 
         #endregion

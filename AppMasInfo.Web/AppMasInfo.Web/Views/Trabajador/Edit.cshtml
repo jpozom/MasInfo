@@ -88,6 +88,26 @@
             userSHA = value;
         }).keyup();
 
+        $(function () {
+            var saveMessage = '@TempData["SaveOkMessage"]';
+            if (saveMessage !== '') {
+                showMessageDialog(
+                    BootstrapDialog.TYPE_SUCCESS,
+                    'Información',
+                    saveMessage
+                );
+            }
+
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage !== '') {
+                showMessageDialog(
+                   BootstrapDialog.TYPE_DANGER,
+                   'Error',
+                   errorMessage
+               );
+            }
+        });
+
     </script>
 }
 <div class="panel panel-primary">
