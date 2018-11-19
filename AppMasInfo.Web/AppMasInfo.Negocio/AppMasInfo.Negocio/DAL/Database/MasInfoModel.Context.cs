@@ -36,5 +36,6 @@ namespace AppMasInfo.Negocio.DAL.Database
         public virtual DbSet<Tutor> Tutor { get; set; }
         public virtual DbSet<Ubicacion> Ubicacion { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<TipoTelefono> TipoTelefono { get; set; }
     }
 }

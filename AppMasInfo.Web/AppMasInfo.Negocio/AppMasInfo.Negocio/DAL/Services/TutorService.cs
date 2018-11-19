@@ -38,21 +38,21 @@ namespace AppMasInfo.Negocio.DAL.Services
                 using (this.dbContext = new Database.MasInfoWebEntities())
                 {
                     var tutorDb = (from t in this.dbContext.Tutor
-                                      where t.IdEstado == p_Filtro.FiltroIdEstado
-                                      select new TutorDto
-                                      {
-                                          Id = t.Id,
-                                          Rut = t.Rut,
-                                          Nombre = t.Nombre,
-                                          ApellidoPaterno = t.ApellidoPaterno,
-                                          ApellidoMaterno = t.ApellidoMaterno,                             
-                                          Direccion = t.Direccion,                                   
-                                          Telefono = t.Telefono,
-                                          IdUsuario = t.IdUsuario,
-                                          IdEstado = t.IdEstado,
-                                          Email = t.Email,
-                                          IdPaciente = t.IdPaciente
-                                      }).ToList();
+                                   where t.IdEstado == p_Filtro.FiltroIdEstado
+                                   select new TutorDto
+                                   {
+                                       Id = t.Id,
+                                       Rut = t.Rut,
+                                       Nombre = t.Nombre,
+                                       ApellidoPaterno = t.ApellidoPaterno,
+                                       ApellidoMaterno = t.ApellidoMaterno,
+                                       Direccion = t.Direccion,
+                                       Telefono = t.Telefono,
+                                       IdUsuario = t.IdUsuario,
+                                       IdEstado = t.IdEstado,
+                                       Email = t.Email,
+                                       IdPaciente = t.IdPaciente
+                                   }).ToList();
 
                     objResult = new BaseDto<List<TutorDto>>(tutorDb);
                 }
@@ -85,7 +85,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                             Rut = p_Obj.Rut,
                             Nombre = p_Obj.Nombre,
                             ApellidoPaterno = p_Obj.ApellidoPaterno,
-                            ApellidoMaterno = p_Obj.ApellidoMaterno,                            
+                            ApellidoMaterno = p_Obj.ApellidoMaterno,
                             Direccion = p_Obj.Direccion,
                             FchCreate = p_Obj.FchCreate,
                             UsrCreate = p_Obj.UsrCreate,
@@ -112,6 +112,56 @@ namespace AppMasInfo.Negocio.DAL.Services
             }
 
             return result;
+        }
+        #endregion
+
+        #region GetTutorByRut
+        public BaseDto<TutorDto> GetTutorByRut(TutorDto p_Filtro)
+        {
+            BaseDto<TutorDto> objResult = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities())
+                {
+                    var tutorDb = (from p in this.dbContext.Tutor
+                                   join es in this.dbContext.Estado on p.IdEstado equals es.Id
+                                   where p.Rut == p_Filtro.FiltroRut
+                                   select new TutorDto
+                                   {
+                                       Id = p.Id,
+                                       Rut = p.Rut,
+                                       Nombre = p.Nombre,
+                                       ApellidoPaterno = p.ApellidoPaterno,
+                                       ApellidoMaterno = p.ApellidoMaterno,
+                                       Direccion = p.Direccion,
+                                       FchCreate = p.FchCreate,
+                                       UsrCreate = p.UsrCreate,
+                                       FchUpdate = p.FchUpdate,
+                                       UsrUpdate = p.UsrUpdate,
+                                       Telefono = p.Telefono,
+                                       IdEstado = p.IdEstado,
+                                       DetalleEstado = new EstadoDto
+                                       {
+                                           Id = es.Id,
+                                           Descripcion = es.Descripcion,
+                                           Tabla = es.Tabla
+                                       }
+                                   }).FirstOrDefault();
+
+                    objResult = new BaseDto<TutorDto>(tutorDb);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                objResult = new BaseDto<TutorDto>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                objResult = new BaseDto<TutorDto>(true, ex);
+            }
+
+            return objResult;
         }
         #endregion
     }

@@ -206,7 +206,7 @@ namespace AppMasInfo.Negocio.DAL.Services
         }
         #endregion
 
-        #region GetPacienteById
+        #region GetPacienteByRut
         public BaseDto<PacienteDto> GetPacienteByRut(PacienteDto p_Filtro)
         {
             BaseDto<PacienteDto> objResult = null;

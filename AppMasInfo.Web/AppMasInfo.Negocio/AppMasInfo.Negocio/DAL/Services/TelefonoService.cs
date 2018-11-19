@@ -41,7 +41,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                         new Database.Telefono
                         {
                             NumeroTelefono = p_Obj.NumeroTelefono,
-                            Tipo = p_Obj.Tipo,
+                            IdTipoTelefono = p_Obj.IdTipoTelefono,
                             IdPaciente = p_Obj.IdPaciente,
                             IdTutor = p_Obj.IdTutor                            
                         });

@@ -30,6 +30,8 @@
         <AssociationConnector Association="MasInfoWebModel.FK_Telefono_Tutor" ManuallyRouted="false" />
         <AssociationConnector Association="MasInfoWebModel.FK_Trabajador_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="MasInfoWebModel.FK_Tutor_Usuario" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="MasInfoWebModel.TipoTelefono" Width="1.5" PointX="0.75" PointY="0.875" />
+        <AssociationConnector Association="MasInfoWebModel.FK_Telefono_TipoTelefono" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

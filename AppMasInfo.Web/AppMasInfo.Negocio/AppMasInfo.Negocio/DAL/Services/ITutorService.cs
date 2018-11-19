@@ -16,5 +16,12 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Obj"></param>
         /// <returns></returns>
         BaseDto<bool> InsertarTutor(TutorDto p_Obj);
+
+        /// <summary>
+        /// Metodo para obtener un tutor por un determinado Rut
+        /// </summary>
+        /// <param name="p_Filtro">Filtro de datos</param>
+        /// <returns>Usuario encontrado</returns>
+        BaseDto<TutorDto> GetTutorByRut(TutorDto p_Filtro);
     }
 }

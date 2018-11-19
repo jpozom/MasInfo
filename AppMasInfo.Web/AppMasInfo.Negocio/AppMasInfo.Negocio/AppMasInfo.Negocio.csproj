@@ -81,6 +81,9 @@
     <Compile Include="DAL\Database\Telefono.cs">
       <DependentUpon>MasInfoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAL\Database\TipoTelefono.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAL\Database\Trabajador.cs">
       <DependentUpon>MasInfoModel.tt</DependentUpon>
     </Compile>
@@ -104,6 +107,7 @@
     <Compile Include="DAL\Entities\PaginadorDto.cs" />
     <Compile Include="DAL\Entities\RolDto.cs" />
     <Compile Include="DAL\Entities\TelefonoDto.cs" />
+    <Compile Include="DAL\Entities\TipoTelefonoDto.cs" />
     <Compile Include="DAL\Entities\TrabajadorDto.cs" />
     <Compile Include="DAL\Entities\TutorDto.cs" />
     <Compile Include="DAL\Entities\UbicacionDto.cs" />
@@ -118,6 +122,7 @@
     <Compile Include="DAL\Services\IPacienteUbicacionService.cs" />
     <Compile Include="DAL\Services\IRolService.cs" />
     <Compile Include="DAL\Services\ITelefonoService.cs" />
+    <Compile Include="DAL\Services\ITipoTelefonoService.cs" />
     <Compile Include="DAL\Services\ITutorService.cs" />
     <Compile Include="DAL\Services\IUbicacionService.cs" />
     <Compile Include="DAL\Services\ITrabajadorService.cs" />
@@ -126,6 +131,7 @@
     <Compile Include="DAL\Services\PacienteUbicacionService.cs" />
     <Compile Include="DAL\Services\RolService.cs" />
     <Compile Include="DAL\Services\TelefonoService.cs" />
+    <Compile Include="DAL\Services\TipoTelefonoService.cs" />
     <Compile Include="DAL\Services\TutorService.cs" />
     <Compile Include="DAL\Services\UbicacionService.cs" />
     <Compile Include="DAL\Services\TrabajadorService.cs" />

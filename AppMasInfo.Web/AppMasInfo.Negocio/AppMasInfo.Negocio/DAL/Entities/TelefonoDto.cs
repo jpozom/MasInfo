@@ -11,7 +11,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
     {
         public int Id { get; set; }
         public string NumeroTelefono { get; set; }
-        public string Tipo { get; set; }
+        public int IdTipoTelefono { get; set; }
         public long IdTutor { get; set; }
         public long IdPaciente { get; set; }
     }

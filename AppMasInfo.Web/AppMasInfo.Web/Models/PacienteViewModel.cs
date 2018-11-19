@@ -42,7 +42,7 @@ namespace AppMasInfo.Web.Models
 
     public class PacienteCreateViewModel
     {
-        #region Pr0piedades Paciente
+        #region Propiedades Paciente
 
         [Required(ErrorMessage = "Debe ingresar un Rut")]       
         [Display(Name = "Rut")]        
@@ -73,12 +73,14 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string Direccion { get; set; }
 
-        [Display(Name = "Telefono")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Entero, ErrorMessage = Validacion.Mensajes.RegularExpression)]
+        [Display(Name = "Teléfono")]
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]       
         public int Telefono { get; set; }
 
         public string FiltroRut { get; set; }
+
+        [Display(Name = "Tipo Teléfono")]
+        public string TipoTelefono { get; set; }
         #endregion
 
         #region Propiedades Tutor

@@ -12,17 +12,18 @@ namespace AppMasInfo.Negocio.DAL.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class Telefono
+    public partial class TipoTelefono
     {
-        public int Id { get; set; }
-        public string NumeroTelefono { get; set; }
-        public string Tipo { get; set; }
-        public long IdTutor { get; set; }
-        public long IdPaciente { get; set; }
-        public int IdTipoTelefono { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TipoTelefono()
+        {
+            this.Telefono = new HashSet<Telefono>();
+        }
     
-        public virtual Paciente Paciente { get; set; }
-        public virtual Tutor Tutor { get; set; }
-        public virtual TipoTelefono TipoTelefono { get; set; }
+        public int IdTipoTelefono { get; set; }
+        public string Descripcion { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Telefono> Telefono { get; set; }
     }
 }
