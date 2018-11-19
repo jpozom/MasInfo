@@ -14,19 +14,12 @@ namespace AppMasInfo.Negocio.DAL.Database
     
     public partial class Tutor
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Tutor()
-        {
-            this.Telefono1 = new HashSet<Telefono>();
-        }
-    
         public long Id { get; set; }
         public string Rut { get; set; }
         public string Nombre { get; set; }
         public string ApellidoPaterno { get; set; }
         public string ApellidoMaterno { get; set; }
         public string Direccion { get; set; }
-        public int Telefono { get; set; }
         public Nullable<System.DateTime> FchCreate { get; set; }
         public string UsrCreate { get; set; }
         public Nullable<System.DateTime> FchUpdate { get; set; }
@@ -38,8 +31,6 @@ namespace AppMasInfo.Negocio.DAL.Database
     
         public virtual Estado Estado { get; set; }
         public virtual Paciente Paciente { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Telefono> Telefono1 { get; set; }
         public virtual Usuario Usuario { get; set; }
     }
 }

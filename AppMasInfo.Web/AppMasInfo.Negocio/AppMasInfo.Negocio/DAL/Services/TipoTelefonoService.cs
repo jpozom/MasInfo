@@ -13,7 +13,7 @@ namespace AppMasInfo.Negocio.DAL.Services
     {
         #region propiedades privadas
         private static TipoTelefonoService Instance = null;
-        private Database.MasInfoWebEntities dbContext = null;
+        private Database.MasInfoWebEntities_02 dbContext = null;
         #endregion
 
         #region singleton
@@ -35,7 +35,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new Database.MasInfoWebEntities())
+                using (this.dbContext = new Database.MasInfoWebEntities_02())
                 {
                     var tipoTelefonoResult = (from t in this.dbContext.TipoTelefono
                                      select new TipoTelefonoDto

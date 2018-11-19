@@ -48,6 +48,22 @@ namespace AppMasInfo.Web.Controllers
                 return TutorService.GetInstance();
             }
         }
+
+        private ITelefonoService TelefonoServiceModel
+        {
+            get
+            {
+                return TelefonoService.GetInstance();
+            }
+        }
+
+        private ITipoTelefonoService TIpoTelefonoServiceModel
+        {
+            get
+            {
+                return TipoTelefonoService.GetInstance();
+            }
+        }
         #endregion
 
         #region metodos publicos
@@ -95,6 +111,9 @@ namespace AppMasInfo.Web.Controllers
                 var lstRoles = this.RolServiceModel.GetListaRolTutor();
                 viewModel.LstCRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
 
+                var lstTopoTelefono = this.TIpoTelefonoServiceModel.GetListaTipoTelefonoAll();
+                viewModel.LstTipoTelefono = lstTopoTelefono.HasValue ? lstTopoTelefono.Value : new List<TipoTelefonoDto>();
+
             }
             catch (Exception ex)
             {
@@ -139,7 +158,7 @@ namespace AppMasInfo.Web.Controllers
                             objPacienteCreate.UsrCreate = User.Identity.GetUserId();
                             objPacienteCreate.FchCreate = DateTime.Now;
                             objPacienteCreate.Direccion = p_ViewModel.Direccion;
-                            objPacienteCreate.Telefono = p_ViewModel.Telefono;
+                            objPacienteCreate.NumeroTelefono = p_ViewModel.Telefono;
 
                             var objResultadoDb = PacienteServiceModel.CreatePaciente(objPacienteCreate);
 
@@ -171,10 +190,10 @@ namespace AppMasInfo.Web.Controllers
                                             UserFiltroObj.FiltroUsername = p_ViewModel.Username;
                                             var userDbResponse = UsuarioServiceModel.GetUsuarioByUsername(UserFiltroObj);
 
-                                            var pacienteFiltroObj = new PacienteDto();
-                                            pacienteFiltroObj.FiltroRut = p_ViewModel.Rut;
-                                            pacienteFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
-                                            var pacienteDbResponse = PacienteServiceModel.GetPacienteByRut(pacienteFiltroObj);
+                                            var paciFiltroObj = new PacienteDto();
+                                            paciFiltroObj.FiltroRut = p_ViewModel.Rut;
+                                            paciFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
+                                            var paciDbResponse = PacienteServiceModel.GetPacienteByRut(paciFiltroObj);
 
                                             var tutorFiltroObj = new TutorDto();
                                             tutorFiltroObj.FiltroRut = p_ViewModel.RutTutor;
@@ -183,7 +202,7 @@ namespace AppMasInfo.Web.Controllers
 
                                             if (userDbResponse.HasValue)
                                             {
-                                                if (pacienteDbResponse.HasValue)
+                                                if (paciDbResponse.HasValue)
                                                 {
                                                     if (!tutorDbResponse.HasValue)
                                                     {
@@ -196,26 +215,50 @@ namespace AppMasInfo.Web.Controllers
                                                         objTutorCreate.UsrCreate = User.Identity.GetUserId();
                                                         objTutorCreate.FchCreate = DateTime.Now;
                                                         objTutorCreate.Direccion = p_ViewModel.DireccionTutor;
-                                                        objTutorCreate.Telefono = p_ViewModel.TelefonoTutor;
                                                         objTutorCreate.Email = p_ViewModel.Email;
                                                         objTutorCreate.IdUsuario = userDbResponse.Value.Id;
-                                                        objTutorCreate.IdPaciente = pacienteDbResponse.Value.Id;
+                                                        objTutorCreate.IdPaciente = paciDbResponse.Value.Id;
 
                                                         var objResultado = TutorServiceModel.InsertarTutor(objTutorCreate);
 
                                                         if (objResultado.HasValue)
                                                         {
-                                                            TempData["SaveOkMessage"] = "Registro Ingresado Correctamente";
-                                                            return RedirectToAction("Index");
+                                                            var UserTelefonoFiltroObj = new UsuarioDto();
+                                                            UserTelefonoFiltroObj.FiltroUsername = p_ViewModel.Username;
+                                                            var userTelefonoDbResponse = UsuarioServiceModel.GetUsuarioByUsername(UserTelefonoFiltroObj);
+
+                                                            if (userTelefonoDbResponse.HasValue)
+                                                            {
+                                                                TelefonoDto objtelefonoInsert = new TelefonoDto();
+                                                                objtelefonoInsert.NumeroTelefono = p_ViewModel.TelefonoTutor;
+                                                                objtelefonoInsert.IdTipoTelefono = p_ViewModel.IdTipoTelefono;
+                                                                objtelefonoInsert.IdUsuario = userTelefonoDbResponse.Value.Id;
+
+                                                                var objResutTelefono = TelefonoServiceModel.InsertarTelefono(objtelefonoInsert);
+
+                                                                if (objResutTelefono.HasValue)
+                                                                {
+                                                                    TempData["SaveOkMessage"] = "Registro Ingresado Correctamente";
+                                                                    return RedirectToAction("Index");
+                                                                }
+                                                                else
+                                                                {
+                                                                    TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Registro. Por favor, inténtelo nuevamente";
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Registro. Por favor, inténtelo nuevamente";
+                                                            }
                                                         }
                                                         else
                                                         {
-                                                            TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Registro. Por favor, inténtelo nuevamente";
+                                                            TempData["ErrorMessage"] = "El Rut de este Tutor ya existe en nuestros registros, Intentelo Nuevamente";
                                                         }
                                                     }
                                                     else
                                                     {
-                                                        TempData["ErrorMessage"] = "El Rut de este Tutor ya existe en nuestros registros, Intentelo Nuevamente";
+                                                        TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Registro. Por favor, inténtelo nuevamente";
                                                     }
                                                 }
                                                 else
@@ -258,7 +301,9 @@ namespace AppMasInfo.Web.Controllers
                 {
                     TempData["ErrorMessage"] = "Ha ocurrido un Error, faltan datos a Ingresar. Por favor, inténtelo nuevamente";
                 }
+
             }
+
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Paciente. Por favor, inténtelo nuevamente";
@@ -272,6 +317,9 @@ namespace AppMasInfo.Web.Controllers
         {
             var lstRoles = this.RolServiceModel.GetListaRolTutor();
             p_ViewModel.LstCRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
+
+            var lstTipoTelefono = this.TIpoTelefonoServiceModel.GetListaTipoTelefonoAll();
+            p_ViewModel.LstTipoTelefono = lstTipoTelefono.HasValue ? lstTipoTelefono.Value : new List<TipoTelefonoDto>();
         }
         #endregion
 
@@ -300,7 +348,7 @@ namespace AppMasInfo.Web.Controllers
                     viewModel.ApellidoMaterno = objResultadoDb.Value.ApellidoMaterno;
                     viewModel.Edad = objResultadoDb.Value.Edad;
                     viewModel.Direccion = objResultadoDb.Value.Direccion;
-                    viewModel.Telefono = objResultadoDb.Value.Telefono;
+                    viewModel.Telefono = objResultadoDb.Value.NumeroTelefono;
                 }
 
                 if (objResultadoDb.HasError)
@@ -336,7 +384,7 @@ namespace AppMasInfo.Web.Controllers
                     objPacienteEdit.UsrUpdate = User.Identity.GetUserId();
                     objPacienteEdit.FchUpdate = DateTime.Now;
                     objPacienteEdit.Direccion = p_ViewModel.Direccion;
-                    objPacienteEdit.Telefono = p_ViewModel.Telefono;
+                    objPacienteEdit.NumeroTelefono = p_ViewModel.Telefono;
                     objPacienteEdit.Id = p_ViewModel.Id;
 
                     var objResultadoDb = PacienteServiceModel.UpdatePaciente(objPacienteEdit);
@@ -435,7 +483,7 @@ namespace AppMasInfo.Web.Controllers
                         ApellidoPaterno = objRespuestaDb.Value.ApellidoPaterno,
                         ApellidoMaterno = objRespuestaDb.Value.ApellidoMaterno,
                         Edad = objRespuestaDb.Value.Edad,
-                        Telefono = objRespuestaDb.Value.Telefono,
+                        Telefono = objRespuestaDb.Value.NumeroTelefono,
                         Direccion = objRespuestaDb.Value.Direccion,
                         UsrCreate = objRespuestaDb.Value.UsrCreate,
                         UsrUpdate = objRespuestaDb.Value.UsrUpdate

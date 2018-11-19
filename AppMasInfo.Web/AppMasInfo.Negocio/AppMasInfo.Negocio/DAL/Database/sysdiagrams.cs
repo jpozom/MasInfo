@@ -12,14 +12,12 @@ namespace AppMasInfo.Negocio.DAL.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class Telefono
+    public partial class sysdiagrams
     {
-        public int Id { get; set; }
-        public string NumeroTelefono { get; set; }
-        public int IdTipoTelefono { get; set; }
-        public long IdUsuario { get; set; }
-    
-        public virtual TipoTelefono TipoTelefono { get; set; }
-        public virtual Usuario Usuario { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

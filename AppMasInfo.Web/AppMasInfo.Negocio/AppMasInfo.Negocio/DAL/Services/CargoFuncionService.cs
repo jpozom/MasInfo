@@ -12,7 +12,7 @@ namespace AppMasInfo.Negocio.DAL.Services
     {
         #region propiedades privadas
         private static CargoFuncionService Instance = null;
-        private Database.MasInfoWebEntities dbContext = null;
+        private Database.MasInfoWebEntities_02 dbContext = null;
         #endregion
 
         #region singleton
@@ -34,7 +34,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new Database.MasInfoWebEntities())
+                using (this.dbContext = new Database.MasInfoWebEntities_02())
                 {
                     var objResult = (from cf in this.dbContext.CargoFuncion
                                      select new CargoFuncionDto

@@ -14,8 +14,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public string Nombre { get; set; }
         public string ApellidoPaterno { get; set; }
         public string ApellidoMaterno { get; set; }
-        public string Direccion { get; set; }
-        public int Telefono { get; set; }
+        public string Direccion { get; set; }        
         public Nullable<System.DateTime> FchCreate { get; set; }
         public string UsrCreate { get; set; }
         public Nullable<System.DateTime> FchUpdate { get; set; }
@@ -23,7 +22,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public long IdUsuario { get; set; }
         public int IdEstado { get; set; }
         public string Email { get; set; }
-        public long IdPaciente { get; set; }
+        public long IdPaciente { get; set; }       
 
         public int? FiltroIdEstado { get; set; }
         public string FiltroRut { get; set; }

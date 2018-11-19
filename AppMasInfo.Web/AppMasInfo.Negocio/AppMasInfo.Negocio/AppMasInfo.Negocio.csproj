@@ -78,6 +78,9 @@
     <Compile Include="DAL\Database\Rol.cs">
       <DependentUpon>MasInfoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAL\Database\sysdiagrams.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAL\Database\Telefono.cs">
       <DependentUpon>MasInfoModel.tt</DependentUpon>
     </Compile>
@@ -140,11 +143,11 @@
     <Compile Include="Utils\DataPaginationUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <EntityDeploy Include="DAL\Database\MasInfoModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>MasInfoModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App.Config" />
     <None Include="DAL\Database\MasInfoModel.edmx.diagram">
       <DependentUpon>MasInfoModel.edmx</DependentUpon>
     </None>

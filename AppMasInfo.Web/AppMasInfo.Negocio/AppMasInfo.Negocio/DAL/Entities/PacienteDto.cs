@@ -21,7 +21,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public Nullable<System.DateTime> FchUpdate { get; set; }
         public string UsrUpdate { get; set; }
         public int IdEstado { get; set; }
-        public int Telefono { get; set; }        
+        public string NumeroTelefono { get; set; }
 
         public int? FiltroIdEstado { get; set; }
         public long? FiltroId { get; set; }

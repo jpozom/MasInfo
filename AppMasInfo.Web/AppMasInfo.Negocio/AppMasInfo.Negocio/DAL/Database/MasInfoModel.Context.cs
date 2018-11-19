@@ -13,10 +13,10 @@ namespace AppMasInfo.Negocio.DAL.Database
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class MasInfoWebEntities : DbContext
+    public partial class MasInfoWebEntities_02 : DbContext
     {
-        public MasInfoWebEntities()
-            : base("name=MasInfoWebEntities")
+        public MasInfoWebEntities_02()
+            : base("name=MasInfoWebEntities_02")
         {
         }
     
@@ -31,11 +31,12 @@ namespace AppMasInfo.Negocio.DAL.Database
         public virtual DbSet<Paciente> Paciente { get; set; }
         public virtual DbSet<PacienteUbicacion> PacienteUbicacion { get; set; }
         public virtual DbSet<Rol> Rol { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Telefono> Telefono { get; set; }
+        public virtual DbSet<TipoTelefono> TipoTelefono { get; set; }
         public virtual DbSet<Trabajador> Trabajador { get; set; }
         public virtual DbSet<Tutor> Tutor { get; set; }
         public virtual DbSet<Ubicacion> Ubicacion { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
-        public virtual DbSet<TipoTelefono> TipoTelefono { get; set; }
     }
 }

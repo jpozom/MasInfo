@@ -34,6 +34,15 @@ namespace AppMasInfo.Utils.Utils
             Paciente_Deshabilitado = 6           
         }
 
-
+        /// <summary>
+        /// Enum con todos los tipos de telefonos de la tabla TipoTelefono existentes en DB
+        /// </summary>
+        public enum TipoTelefonoEnum
+        {
+            Celular_Personal = 1,
+            Celular_Trabajo = 2,
+            Fijo_Casa = 3,
+            Fijo_Trabajo = 4         
+        }
     }
 }

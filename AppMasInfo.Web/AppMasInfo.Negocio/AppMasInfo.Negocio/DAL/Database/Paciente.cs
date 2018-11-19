@@ -18,7 +18,6 @@ namespace AppMasInfo.Negocio.DAL.Database
         public Paciente()
         {
             this.PacienteUbicacion = new HashSet<PacienteUbicacion>();
-            this.Telefono1 = new HashSet<Telefono>();
             this.Tutor = new HashSet<Tutor>();
         }
     
@@ -34,13 +33,11 @@ namespace AppMasInfo.Negocio.DAL.Database
         public Nullable<System.DateTime> FchUpdate { get; set; }
         public string UsrUpdate { get; set; }
         public int IdEstado { get; set; }
-        public int Telefono { get; set; }
+        public string NumeroTelefono { get; set; }
     
         public virtual Estado Estado { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PacienteUbicacion> PacienteUbicacion { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Telefono> Telefono1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tutor> Tutor { get; set; }
     }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MasInfoWebModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MasInfoWebModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Cargo">
           <Key>
             <PropertyRef Name="Id" />
@@ -44,7 +44,7 @@
           <Property Name="FchUpdate" Type="datetime" />
           <Property Name="UsrUpdate" Type="varchar" MaxLength="50" />
           <Property Name="IdEstado" Type="int" Nullable="false" />
-          <Property Name="Telefono" Type="int" Nullable="false" />
+          <Property Name="NumeroTelefono" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="PacienteUbicacion">
           <Key>
@@ -64,15 +64,24 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Descripcion" Type="varchar" MaxLength="30" Nullable="false" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <EntityType Name="Telefono">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NumeroTelefono" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="IdTutor" Type="bigint" Nullable="false" />
-          <Property Name="IdPaciente" Type="bigint" Nullable="false" />
           <Property Name="IdTipoTelefono" Type="int" Nullable="false" />
+          <Property Name="IdUsuario" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="TipoTelefono">
           <Key>
@@ -109,7 +118,6 @@
           <Property Name="ApellidoPaterno" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ApellidoMaterno" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="Direccion" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Telefono" Type="int" Nullable="false" />
           <Property Name="FchCreate" Type="datetime" />
           <Property Name="UsrCreate" Type="varchar" MaxLength="50" />
           <Property Name="FchUpdate" Type="datetime" />
@@ -183,18 +191,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Telefono_Paciente">
-          <End Role="Paciente" Type="Self.Paciente" Multiplicity="1" />
-          <End Role="Telefono" Type="Self.Telefono" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Paciente">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Telefono">
-              <PropertyRef Name="IdPaciente" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Telefono_TipoTelefono">
           <End Role="TipoTelefono" Type="Self.TipoTelefono" Multiplicity="1" />
           <End Role="Telefono" Type="Self.Telefono" Multiplicity="*" />
@@ -207,15 +203,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Telefono_Tutor">
-          <End Role="Tutor" Type="Self.Tutor" Multiplicity="1" />
+        <Association Name="FK_Telefono_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
           <End Role="Telefono" Type="Self.Telefono" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Tutor">
+            <Principal Role="Usuario">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Telefono">
-              <PropertyRef Name="IdTutor" />
+              <PropertyRef Name="IdUsuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -322,6 +318,7 @@
           <EntitySet Name="Paciente" EntityType="Self.Paciente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PacienteUbicacion" EntityType="Self.PacienteUbicacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rol" EntityType="Self.Rol" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Telefono" EntityType="Self.Telefono" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoTelefono" EntityType="Self.TipoTelefono" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Trabajador" EntityType="Self.Trabajador" Schema="dbo" store:Type="Tables" />
@@ -344,16 +341,12 @@
             <End Role="Ubicacion" EntitySet="Ubicacion" />
             <End Role="PacienteUbicacion" EntitySet="PacienteUbicacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_Telefono_Paciente" Association="Self.FK_Telefono_Paciente">
-            <End Role="Paciente" EntitySet="Paciente" />
-            <End Role="Telefono" EntitySet="Telefono" />
-          </AssociationSet>
           <AssociationSet Name="FK_Telefono_TipoTelefono" Association="Self.FK_Telefono_TipoTelefono">
             <End Role="TipoTelefono" EntitySet="TipoTelefono" />
             <End Role="Telefono" EntitySet="Telefono" />
           </AssociationSet>
-          <AssociationSet Name="FK_Telefono_Tutor" Association="Self.FK_Telefono_Tutor">
-            <End Role="Tutor" EntitySet="Tutor" />
+          <AssociationSet Name="FK_Telefono_Usuario" Association="Self.FK_Telefono_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Telefono" EntitySet="Telefono" />
           </AssociationSet>
           <AssociationSet Name="FK_Trabajador_Cargo" Association="Self.FK_Trabajador_Cargo">
@@ -389,7 +382,8 @@
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MasInfoWebModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -439,10 +433,9 @@
           <Property Name="FchUpdate" Type="DateTime" Precision="3" />
           <Property Name="UsrUpdate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IdEstado" Type="Int32" Nullable="false" />
-          <Property Name="Telefono" Type="Int32" Nullable="false" />
+          <Property Name="NumeroTelefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Estado" Relationship="Self.FK_Paciente_Estado" FromRole="Paciente" ToRole="Estado" />
           <NavigationProperty Name="PacienteUbicacion" Relationship="Self.FK_PacienteUbicacion_Paciente" FromRole="Paciente" ToRole="PacienteUbicacion" />
-          <NavigationProperty Name="Telefono1" Relationship="Self.FK_Telefono_Paciente" FromRole="Paciente" ToRole="Telefono" />
           <NavigationProperty Name="Tutor" Relationship="Self.FK_Tutor_Paciente" FromRole="Paciente" ToRole="Tutor" />
         </EntityType>
         <EntityType Name="PacienteUbicacion">
@@ -466,19 +459,34 @@
           <Property Name="Descripcion" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Usuario_Rol" FromRole="Rol" ToRole="Usuario" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
         <EntityType Name="Telefono">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NumeroTelefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Tipo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="IdTutor" Type="Int64" Nullable="false" />
-          <Property Name="IdPaciente" Type="Int64" Nullable="false" />
-          <NavigationProperty Name="Paciente" Relationship="Self.FK_Telefono_Paciente" FromRole="Telefono" ToRole="Paciente" />
-          <NavigationProperty Name="Tutor" Relationship="Self.FK_Telefono_Tutor" FromRole="Telefono" ToRole="Tutor" />
           <Property Name="IdTipoTelefono" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="TipoTelefono" Relationship="MasInfoWebModel.FK_Telefono_TipoTelefono" FromRole="Telefono" ToRole="TipoTelefono" />
+          <Property Name="IdUsuario" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="TipoTelefono" Relationship="Self.FK_Telefono_TipoTelefono" FromRole="Telefono" ToRole="TipoTelefono" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Telefono_Usuario" FromRole="Telefono" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="TipoTelefono">
+          <Key>
+            <PropertyRef Name="IdTipoTelefono" />
+          </Key>
+          <Property Name="IdTipoTelefono" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Telefono" Relationship="Self.FK_Telefono_TipoTelefono" FromRole="TipoTelefono" ToRole="Telefono" />
         </EntityType>
         <EntityType Name="Trabajador">
           <Key>
@@ -512,7 +520,6 @@
           <Property Name="ApellidoPaterno" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ApellidoMaterno" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Direccion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Telefono" Type="Int32" Nullable="false" />
           <Property Name="FchCreate" Type="DateTime" Precision="3" />
           <Property Name="UsrCreate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FchUpdate" Type="DateTime" Precision="3" />
@@ -523,7 +530,6 @@
           <Property Name="IdPaciente" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Estado" Relationship="Self.FK_Tutor_Estado" FromRole="Tutor" ToRole="Estado" />
           <NavigationProperty Name="Paciente" Relationship="Self.FK_Tutor_Paciente" FromRole="Tutor" ToRole="Paciente" />
-          <NavigationProperty Name="Telefono1" Relationship="Self.FK_Telefono_Tutor" FromRole="Tutor" ToRole="Telefono" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Tutor_Usuario" FromRole="Tutor" ToRole="Usuario" />
         </EntityType>
         <EntityType Name="Ubicacion">
@@ -543,6 +549,7 @@
           <Property Name="Pass" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IdRol" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Rol" Relationship="Self.FK_Usuario_Rol" FromRole="Usuario" ToRole="Rol" />
+          <NavigationProperty Name="Telefono" Relationship="Self.FK_Telefono_Usuario" FromRole="Usuario" ToRole="Telefono" />
           <NavigationProperty Name="Trabajador" Relationship="Self.FK_Trabajador_Usuario" FromRole="Usuario" ToRole="Trabajador" />
           <NavigationProperty Name="Tutor" Relationship="Self.FK_Tutor_Usuario" FromRole="Usuario" ToRole="Tutor" />
         </EntityType>
@@ -630,18 +637,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Telefono_Paciente">
-          <End Role="Paciente" Type="Self.Paciente" Multiplicity="1" />
-          <End Role="Telefono" Type="Self.Telefono" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Paciente">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Telefono">
-              <PropertyRef Name="IdPaciente" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Tutor_Paciente">
           <End Role="Paciente" Type="Self.Paciente" Multiplicity="1" />
           <End Role="Tutor" Type="Self.Tutor" Multiplicity="*" />
@@ -678,15 +673,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Telefono_Tutor">
-          <End Role="Tutor" Type="Self.Tutor" Multiplicity="1" />
+        <Association Name="FK_Telefono_TipoTelefono">
+          <End Role="TipoTelefono" Type="Self.TipoTelefono" Multiplicity="1" />
           <End Role="Telefono" Type="Self.Telefono" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Tutor">
+            <Principal Role="TipoTelefono">
+              <PropertyRef Name="IdTipoTelefono" />
+            </Principal>
+            <Dependent Role="Telefono">
+              <PropertyRef Name="IdTipoTelefono" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Telefono_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="Telefono" Type="Self.Telefono" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Telefono">
-              <PropertyRef Name="IdTutor" />
+              <PropertyRef Name="IdUsuario" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -714,14 +721,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="MasInfoWebEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="MasInfoWebEntities_02" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Cargo" EntityType="Self.Cargo" />
           <EntitySet Name="CargoFuncion" EntityType="Self.CargoFuncion" />
           <EntitySet Name="Estado" EntityType="Self.Estado" />
           <EntitySet Name="Paciente" EntityType="Self.Paciente" />
           <EntitySet Name="PacienteUbicacion" EntityType="Self.PacienteUbicacion" />
           <EntitySet Name="Rol" EntityType="Self.Rol" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Telefono" EntityType="Self.Telefono" />
+          <EntitySet Name="TipoTelefono" EntityType="Self.TipoTelefono" />
           <EntitySet Name="Trabajador" EntityType="Self.Trabajador" />
           <EntitySet Name="Tutor" EntityType="Self.Tutor" />
           <EntitySet Name="Ubicacion" EntityType="Self.Ubicacion" />
@@ -754,10 +763,6 @@
             <End Role="Paciente" EntitySet="Paciente" />
             <End Role="PacienteUbicacion" EntitySet="PacienteUbicacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_Telefono_Paciente" Association="Self.FK_Telefono_Paciente">
-            <End Role="Paciente" EntitySet="Paciente" />
-            <End Role="Telefono" EntitySet="Telefono" />
-          </AssociationSet>
           <AssociationSet Name="FK_Tutor_Paciente" Association="Self.FK_Tutor_Paciente">
             <End Role="Paciente" EntitySet="Paciente" />
             <End Role="Tutor" EntitySet="Tutor" />
@@ -770,8 +775,12 @@
             <End Role="Rol" EntitySet="Rol" />
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
-          <AssociationSet Name="FK_Telefono_Tutor" Association="Self.FK_Telefono_Tutor">
-            <End Role="Tutor" EntitySet="Tutor" />
+          <AssociationSet Name="FK_Telefono_TipoTelefono" Association="Self.FK_Telefono_TipoTelefono">
+            <End Role="TipoTelefono" EntitySet="TipoTelefono" />
+            <End Role="Telefono" EntitySet="Telefono" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Telefono_Usuario" Association="Self.FK_Telefono_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Telefono" EntitySet="Telefono" />
           </AssociationSet>
           <AssociationSet Name="FK_Trabajador_Usuario" Association="Self.FK_Trabajador_Usuario">
@@ -782,38 +791,13 @@
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Tutor" EntitySet="Tutor" />
           </AssociationSet>
-          <EntitySet Name="TipoTelefono" EntityType="MasInfoWebModel.TipoTelefono" />
-          <AssociationSet Name="FK_Telefono_TipoTelefono" Association="MasInfoWebModel.FK_Telefono_TipoTelefono">
-            <End Role="TipoTelefono" EntitySet="TipoTelefono" />
-            <End Role="Telefono" EntitySet="Telefono" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="TipoTelefono">
-          <Key>
-            <PropertyRef Name="IdTipoTelefono" />
-          </Key>
-          <Property Name="IdTipoTelefono" Type="Int32" Nullable="false" />
-          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Telefono" Relationship="MasInfoWebModel.FK_Telefono_TipoTelefono" FromRole="TipoTelefono" ToRole="Telefono" />
-        </EntityType>
-        <Association Name="FK_Telefono_TipoTelefono">
-          <End Type="MasInfoWebModel.TipoTelefono" Role="TipoTelefono" Multiplicity="1" />
-          <End Type="MasInfoWebModel.Telefono" Role="Telefono" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TipoTelefono">
-              <PropertyRef Name="IdTipoTelefono" />
-            </Principal>
-            <Dependent Role="Telefono">
-              <PropertyRef Name="IdTipoTelefono" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MasInfoWebModelStoreContainer" CdmEntityContainer="MasInfoWebEntities">
+        <EntityContainerMapping StorageEntityContainer="MasInfoWebModelStoreContainer" CdmEntityContainer="MasInfoWebEntities_02">
           <EntitySetMapping Name="Cargo">
             <EntityTypeMapping TypeName="MasInfoWebModel.Cargo">
               <MappingFragment StoreEntitySet="Cargo">
@@ -855,7 +839,7 @@
                 <ScalarProperty Name="FchUpdate" ColumnName="FchUpdate" />
                 <ScalarProperty Name="UsrUpdate" ColumnName="UsrUpdate" />
                 <ScalarProperty Name="IdEstado" ColumnName="IdEstado" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="NumeroTelefono" ColumnName="NumeroTelefono" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -879,14 +863,32 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="MasInfoWebModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Telefono">
             <EntityTypeMapping TypeName="MasInfoWebModel.Telefono">
               <MappingFragment StoreEntitySet="Telefono">
-                <ScalarProperty Name="IdTipoTelefono" ColumnName="IdTipoTelefono" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="NumeroTelefono" ColumnName="NumeroTelefono" />
-                <ScalarProperty Name="IdTutor" ColumnName="IdTutor" />
-                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
+                <ScalarProperty Name="IdTipoTelefono" ColumnName="IdTipoTelefono" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoTelefono">
+            <EntityTypeMapping TypeName="MasInfoWebModel.TipoTelefono">
+              <MappingFragment StoreEntitySet="TipoTelefono">
+                <ScalarProperty Name="IdTipoTelefono" ColumnName="IdTipoTelefono" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -918,7 +920,6 @@
                 <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
                 <ScalarProperty Name="ApellidoMaterno" ColumnName="ApellidoMaterno" />
                 <ScalarProperty Name="Direccion" ColumnName="Direccion" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
                 <ScalarProperty Name="FchCreate" ColumnName="FchCreate" />
                 <ScalarProperty Name="UsrCreate" ColumnName="UsrCreate" />
                 <ScalarProperty Name="FchUpdate" ColumnName="FchUpdate" />
@@ -945,14 +946,6 @@
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Pass" ColumnName="Pass" />
                 <ScalarProperty Name="IdRol" ColumnName="IdRol" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="TipoTelefono">
-            <EntityTypeMapping TypeName="MasInfoWebModel.TipoTelefono">
-              <MappingFragment StoreEntitySet="TipoTelefono">
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="IdTipoTelefono" ColumnName="IdTipoTelefono" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

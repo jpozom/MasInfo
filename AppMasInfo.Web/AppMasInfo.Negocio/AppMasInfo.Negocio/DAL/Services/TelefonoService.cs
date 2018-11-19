@@ -13,7 +13,7 @@ namespace AppMasInfo.Negocio.DAL.Services
     {
         #region propiedades privadas
         private static TelefonoService Instance = null;
-        private Database.MasInfoWebEntities dbContext = null;
+        private Database.MasInfoWebEntities_02 dbContext = null;
         #endregion
 
         #region singleton
@@ -35,15 +35,14 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new MasInfoWebEntities())
+                using (this.dbContext = new MasInfoWebEntities_02())
                 {
                     var telefonoDb = this.dbContext.Telefono.Add(
                         new Database.Telefono
                         {
                             NumeroTelefono = p_Obj.NumeroTelefono,
-                            IdTipoTelefono = p_Obj.IdTipoTelefono,
-                            IdPaciente = p_Obj.IdPaciente,
-                            IdTutor = p_Obj.IdTutor                            
+                            IdTipoTelefono = p_Obj.IdTipoTelefono,                           
+                            IdUsuario = p_Obj.IdUsuario                            
                         });
 
                     // Guardamos los cambios en base de datos

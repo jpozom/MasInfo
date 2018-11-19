@@ -17,6 +17,7 @@ namespace AppMasInfo.Negocio.DAL.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Usuario()
         {
+            this.Telefono = new HashSet<Telefono>();
             this.Trabajador = new HashSet<Trabajador>();
             this.Tutor = new HashSet<Tutor>();
         }
@@ -27,6 +28,8 @@ namespace AppMasInfo.Negocio.DAL.Database
         public int IdRol { get; set; }
     
         public virtual Rol Rol { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Telefono> Telefono { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Trabajador> Trabajador { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

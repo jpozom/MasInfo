@@ -75,12 +75,9 @@ namespace AppMasInfo.Web.Models
 
         [Display(Name = "Teléfono")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]       
-        public int Telefono { get; set; }
+        public string Telefono { get; set; }
 
-        public string FiltroRut { get; set; }
-
-        [Display(Name = "Tipo Teléfono")]
-        public string TipoTelefono { get; set; }
+        public string FiltroRut { get; set; }       
         #endregion
 
         #region Propiedades Tutor
@@ -112,7 +109,7 @@ namespace AppMasInfo.Web.Models
         [Display(Name = "Telefono")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
         [RegularExpression(Validacion.Patterns.Entero, ErrorMessage = Validacion.Mensajes.RegularExpression)]
-        public int TelefonoTutor { get; set; }
+        public string TelefonoTutor { get; set; }
 
         [Display(Name = "Email")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
@@ -122,6 +119,8 @@ namespace AppMasInfo.Web.Models
         public long IdUsuario { get; set; }
 
         public long IdPaciente { get; set; }
+
+        public long IdTutor { get; set; }
 
         [Display(Name = "Password")]
         [Required(ErrorMessage = "Debe Ingresar una Contraseña")]
@@ -138,6 +137,10 @@ namespace AppMasInfo.Web.Models
         public int IdRol { get; set; }
 
         public List<RolDto> LstCRol { get; set; }
+
+        public List<TipoTelefonoDto> LstTipoTelefono { get; set; }
+
+        public int IdTipoTelefono { get; set; }
 
         #endregion
 
@@ -183,7 +186,7 @@ namespace AppMasInfo.Web.Models
         [Display(Name = "Telefono")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
-        public int Telefono { get; set; }
+        public string Telefono { get; set; }
 
         public long? IdTutor { get; set; }
 
@@ -213,7 +216,7 @@ namespace AppMasInfo.Web.Models
         public string Direccion { get; set; }
 
         [Display(Name = "Telefono")]        
-        public int Telefono { get; set; }
+        public string Telefono { get; set; }
 
         [Display(Name = "Fecha Inserción")]
         public Nullable<System.DateTime> FchCreate { get; set; }

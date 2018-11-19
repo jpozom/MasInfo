@@ -15,7 +15,7 @@ namespace AppMasInfo.Negocio.DAL.Services
     {
         #region propiedades privadas
         private static TrabajadorService Instance = null;
-        private Database.MasInfoWebEntities dbContext = null;
+        private Database.MasInfoWebEntities_02 dbContext = null;
         #endregion
 
         //Permite el acceso global a dicha instancia a traves de este metodo.
@@ -40,7 +40,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new MasInfoWebEntities())
+                using (this.dbContext = new MasInfoWebEntities_02())
                 {
                     var trabajadorDb = this.dbContext.Trabajador.Add(
                         new Database.Trabajador
@@ -84,7 +84,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new MasInfoWebEntities())
+                using (this.dbContext = new MasInfoWebEntities_02())
                 {
                     var trabajadorDb = this.dbContext.Trabajador.FirstOrDefault(p => p.Id == p_Obj.Id);                    
 
@@ -128,7 +128,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new Database.MasInfoWebEntities())
+                using (this.dbContext = new Database.MasInfoWebEntities_02())
                 {
                     var lstResult = (from usr in this.dbContext.Trabajador
                                      select new TrabajadorDto
@@ -166,7 +166,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new Database.MasInfoWebEntities())
+                using (this.dbContext = new Database.MasInfoWebEntities_02())
                 {
                     var lstResult = (from t in this.dbContext.Trabajador
                                      join es in this.dbContext.Estado on t.IdEstado equals es.Id
@@ -234,7 +234,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new MasInfoWebEntities())
+                using (this.dbContext = new MasInfoWebEntities_02())
                 {//left join al conjunto A sobre B se almacena en un campo temporal
                     var trabajadorDb = (from t in this.dbContext.Trabajador 
                                         join es in this.dbContext.Estado on t.IdEstado equals es.Id
@@ -315,7 +315,7 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             try
             {
-                using (this.dbContext = new MasInfoWebEntities())
+                using (this.dbContext = new MasInfoWebEntities_02())
                 {
                     //Obtener el objeto origen desde base de datos
                     //El metodo .FirstOrDefault, retorna el primer objeto encontrado de acuerdo
