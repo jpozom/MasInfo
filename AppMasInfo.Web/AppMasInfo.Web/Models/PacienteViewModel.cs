@@ -236,6 +236,16 @@ namespace AppMasInfo.Web.Models
     {
         public long Id { get; set; }
 
+        public int IdTelefono { get; set; }
+
+        public int IdTipoTelefono { get; set; }
+
+        public int IdRol { get; set; }
+
+        public long IdUsuario { get; set; }
+
+        public string NumeroTelefono { get; set; }
+
         [Display(Name = "Rut")]        
         public string Rut { get; set; }
 

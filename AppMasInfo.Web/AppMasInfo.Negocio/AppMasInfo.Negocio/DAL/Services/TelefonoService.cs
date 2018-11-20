@@ -137,5 +137,47 @@ namespace AppMasInfo.Negocio.DAL.Services
             return resultObj;
         }
         #endregion
+
+        #region Delete
+        public BaseDto<bool> Delete(TelefonoDto p_Obj)
+        {
+            BaseDto<bool> result = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    //Obtener el objeto origen desde base de datos
+                    //El metodo .FirstOrDefault, retorna el primer objeto encontrado de acuerdo
+                    // a un determinado filtro de búsqueda, y en caso contrario, retorna null
+                    var objOrigenDb = this.dbContext.Telefono.FirstOrDefault(c => c.Id == p_Obj.Id);
+
+                    if (objOrigenDb != null)
+                    {
+                        objOrigenDb.NumeroTelefono = p_Obj.NumeroTelefono;
+                        objOrigenDb.IdUsuario = p_Obj.IdUsuario;
+                        objOrigenDb.IdTipoTelefono = p_Obj.IdTipoTelefono;
+                        objOrigenDb.Id = p_Obj.Id;
+
+                        this.dbContext.SaveChanges();
+                        result = new BaseDto<bool>(true);
+                    }
+                    else
+                    {
+                        throw new Exception("Telefono no encontrado en base de datos");
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                result = new BaseDto<bool>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                result = new BaseDto<bool>(true, ex);
+            }
+            return result;
+        }
+        #endregion
     }
 }

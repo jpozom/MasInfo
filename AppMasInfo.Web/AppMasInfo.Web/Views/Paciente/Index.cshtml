@@ -209,9 +209,7 @@
                                                         <td>@item.IdPaciente</td>
                                                         <td>@item.Direccion</td>
                                                         <td>
-                                                            <a href="javascript:viewDetailItem(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>
-                                                            <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
-                                                            <a href="@Url.Action("Edit", "Paciente", new { p_Id = item.Id })"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;
+                                                            <a href="javascript:viewDetailItem(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>                                                            
                                                         </td>
                                                     </tr>
                                                 }

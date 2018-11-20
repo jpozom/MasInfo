@@ -469,7 +469,7 @@ namespace AppMasInfo.Web.Controllers
                                 {
                                     isRutOk = GlobalMethods.ValidarRut(p_ViewModel.RutTutor);
                                 }
-                                
+
                                 if (isRutOk)
                                 {
                                     TutorDto objTutorUpdate = new TutorDto();
@@ -565,31 +565,79 @@ namespace AppMasInfo.Web.Controllers
 
             try
             {
-                PacienteDto pacienteDelete = new PacienteDto();
-                pacienteDelete.Id = p_ViewModel.Id;
-                pacienteDelete.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Deshabilitado;
-                pacienteDelete.FchUpdate = DateTime.Now;
-                pacienteDelete.UsrUpdate = User.Identity.GetUserId();
+                TelefonoDto telefonoDelete = new TelefonoDto();
+                telefonoDelete.Id = p_ViewModel.IdTelefono;
+                telefonoDelete.IdTipoTelefono = p_ViewModel.IdTipoTelefono;
+                telefonoDelete.IdUsuario = p_ViewModel.IdUsuario;
+                telefonoDelete.NumeroTelefono = p_ViewModel.NumeroTelefono;
 
-                var objRespuesta = this.PacienteServiceModel.Delete(pacienteDelete);
+                var objtelefonoDB = this.TelefonoServiceModel.Delete(telefonoDelete);
 
-                if (!objRespuesta.HasError)
+                if (!objtelefonoDB.HasError)
                 {
-                    jsonResult = JsonConvert.SerializeObject(
-                        new
+                    TutorDto tutorDelete = new TutorDto();
+                    tutorDelete.Id = p_ViewModel.Id;
+                    tutorDelete.IdUsuario = p_ViewModel.IdUsuario;
+                    tutorDelete.IdEstado = (int)EnumUtils.EstadoEnum.Tutor_Deshabilitado;
+                    tutorDelete.FchUpdate = DateTime.Now;
+                    tutorDelete.UsrUpdate = User.Identity.GetUserId();
+
+                    var objRespuestaDB = this.TutorServiceModel.Delete(tutorDelete);
+
+                    if (!objRespuestaDB.HasError)
+                    {
+                        UsuarioDto userDelete = new UsuarioDto();
+                        userDelete.Id = p_ViewModel.IdUsuario;
+
+                        var objRespUser = this.UsuarioServiceModel.Delete(userDelete);
+
+                        if (!objRespUser.HasError)
                         {
-                            status = "ok",
-                            message = "Usuario eliminado correctamente"
-                        });
+                            PacienteDto pacienteDelete = new PacienteDto();
+                            pacienteDelete.Id = p_ViewModel.Id;
+                            pacienteDelete.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Deshabilitado;
+                            pacienteDelete.FchUpdate = DateTime.Now;
+                            pacienteDelete.UsrUpdate = User.Identity.GetUserId();
+
+                            var objRespuesta = this.PacienteServiceModel.Delete(pacienteDelete);
+
+                            if (!objRespuesta.HasError)
+                            {
+                                jsonResult = JsonConvert.SerializeObject(
+                                    new
+                                    {
+                                        status = "ok",
+                                        message = "Registro eliminado correctamente"
+                                    });
+                            }
+                            else
+                            {
+                                jsonResult = JsonConvert.SerializeObject(
+                                        new
+                                        {
+                                            status = "error",
+                                            message = "No puede eliminar al Tutor"
+                                        });
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        jsonResult = JsonConvert.SerializeObject(
+                                    new
+                                    {
+                                        status = "error",
+                                        message = "No se puede eliminar el registro"
+                                    });
+                    }
                 }
                 else
                 {
-                    jsonResult = JsonConvert.SerializeObject(
-                            new
-                            {
-                                status = "error",
-                                message = "No puede eliminar al usuario"
-                            });
+
                 }
             }
             catch (Exception ex)
@@ -645,17 +693,6 @@ namespace AppMasInfo.Web.Controllers
 
             return View(viewModel);
         }
-        #endregion
-
-        #region IngresarDatosTutor
-        [HttpGet]
-        public ActionResult IngresarTutor()
-        {
-            PacienteCreateViewModel viewModel = new PacienteCreateViewModel();
-
-            return View(viewModel);
-        }
-
         #endregion
 
         #endregion

@@ -206,6 +206,47 @@ namespace AppMasInfo.Negocio.DAL.Services
         }
         #endregion
 
+        #region Delete
+        public BaseDto<bool> Delete(TutorDto p_Obj)
+        {
+            BaseDto<bool> result = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    //Obtener el objeto origen desde base de datos
+                    //El metodo .FirstOrDefault, retorna el primer objeto encontrado de acuerdo
+                    // a un determinado filtro de búsqueda, y en caso contrario, retorna null
+                    var objOrigenDb = this.dbContext.Tutor.FirstOrDefault(c => c.Id == p_Obj.Id);
+
+                    if (objOrigenDb != null)
+                    {
+                        objOrigenDb.FchUpdate = p_Obj.FchUpdate;
+                        objOrigenDb.UsrUpdate = p_Obj.UsrUpdate;
+                        objOrigenDb.IdEstado = p_Obj.IdEstado;
+
+                        this.dbContext.SaveChanges();
+                        result = new BaseDto<bool>(true);
+                    }
+                    else
+                    {
+                        throw new Exception("Tutor no encontrado en base de datos");
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                result = new BaseDto<bool>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                result = new BaseDto<bool>(true, ex);
+            }
+            return result;
+        }
+        #endregion
+
         #region GetTutorById
         public BaseDto<TutorDto> GetTutorById(TutorDto p_Filtro)
         {

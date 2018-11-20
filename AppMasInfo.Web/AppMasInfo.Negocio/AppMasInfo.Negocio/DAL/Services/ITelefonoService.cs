@@ -31,5 +31,12 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Obj"></param>
         /// <returns></returns>
         BaseDto<bool> UpdateTelefono(TelefonoDto p_Obj);
+
+        // <summary>
+        /// Metodo para eliminar los registros almacenados en la tabla Telefono
+        /// </summary>
+        /// <param name="p_Obj"></param>
+        /// <returns></returns>
+        BaseDto<bool> Delete(TelefonoDto p_Obj);
     }
 }
