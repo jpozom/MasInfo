@@ -17,5 +17,12 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Obj"></param>
         /// <returns></returns>
         BaseDto<bool> InsertarTelefono(TelefonoDto p_Obj);
+
+        /// <summary>
+        /// Metodo para obtener los datos de los telefonos asociados a ese Id por un determinado filtro de busqueda 
+        /// </summary>
+        /// <param name="p_Filtro">Filtro de datos</param>
+        /// <returns>Usuario encontrado</returns>
+        BaseDto<TelefonoDto> GetTelefonoByIdUsuario(TelefonoDto p_Filtro);
     }
 }

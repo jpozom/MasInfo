@@ -26,7 +26,13 @@ namespace AppMasInfo.Negocio.DAL.Entities
 
         public int? FiltroIdEstado { get; set; }
         public string FiltroRut { get; set; }
+        public long? FiltroIdPaciente { get; set; }
+        public long? FiltroId { get; set; }
+        public long? FiltroIdUsuario { get; set; }
 
         public EstadoDto DetalleEstado { get; set; }
+        public UsuarioDto DatosUsuario { get; set; }
+        public RolDto DetalleRol { get; set; }
+        public TelefonoDto DetalleTelefono { get; set; }
     }
 }

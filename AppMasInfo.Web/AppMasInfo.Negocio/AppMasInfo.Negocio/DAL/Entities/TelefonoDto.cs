@@ -13,5 +13,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public string NumeroTelefono { get; set; }
         public int IdTipoTelefono { get; set; }
         public long IdUsuario { get; set; }
+
+        public long? FiltroIdUsuario { get; set; }
     }
 }

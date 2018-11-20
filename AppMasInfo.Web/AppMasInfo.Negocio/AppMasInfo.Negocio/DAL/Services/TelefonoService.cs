@@ -63,5 +63,41 @@ namespace AppMasInfo.Negocio.DAL.Services
             return result;
         }
         #endregion
+
+        #region GetTelefonoByIdUsuario
+        public BaseDto<TelefonoDto> GetTelefonoByIdUsuario(TelefonoDto p_Filtro)
+        {
+            BaseDto<TelefonoDto> objResult = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    var telefonoDb = (from tel in this.dbContext.Telefono
+                                   join u in this.dbContext.Usuario on tel.IdUsuario equals u.Id
+                                   where tel.IdUsuario == p_Filtro.FiltroIdUsuario
+                                   select new TelefonoDto
+                                   {
+                                       Id = tel.Id,
+                                       IdTipoTelefono = tel.IdTipoTelefono,
+                                       NumeroTelefono = tel.NumeroTelefono,
+                                       IdUsuario = tel.IdUsuario                                       
+                                   }).FirstOrDefault();
+
+                    objResult = new BaseDto<TelefonoDto>(telefonoDb);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                objResult = new BaseDto<TelefonoDto>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                objResult = new BaseDto<TelefonoDto>(true, ex);
+            }
+
+            return objResult;
+        }
+        #endregion
     }
 }
