@@ -1,5 +1,6 @@
 ﻿using AppMasInfo.Negocio.DAL.Database;
 using AppMasInfo.Negocio.DAL.Entities;
+using AppMasInfo.Negocio.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -294,6 +295,74 @@ namespace AppMasInfo.Negocio.DAL.Services
             {
                 result = new BaseDto<bool>(true, ex);
             }
+            return result;
+        }
+        #endregion
+
+        #region GetListaPacienteByFitro
+        public BaseDto<List<PacienteDto>> GetListaPacienteByFitro(PacienteDto p_Filtro)
+        {
+            BaseDto<List<PacienteDto>> result = null;
+            var lstResultado = new List<PacienteDto>();
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    if (p_Filtro.FiltroNombre != null || p_Filtro.FiltroRut != null)
+                    {
+                        lstResultado = (from p in this.dbContext.Paciente
+                                        where (p.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null) &&
+                                              (p.Nombre.Contains(p_Filtro.FiltroNombre) || string.IsNullOrEmpty(p_Filtro.FiltroNombre) &&
+                                              (p.Rut == p_Filtro.FiltroRut))
+                                        select new PacienteDto
+                                        {
+                                            Id = p.Id,
+                                            Nombre = p.Nombre,
+                                            ApellidoPaterno = p.ApellidoPaterno,
+                                            ApellidoMaterno = p.ApellidoMaterno,
+                                            Direccion = p.Direccion,
+                                            Edad = p.Edad,
+                                            Rut = p.Rut,
+                                            FchCreate = p.FchCreate,
+                                            FchUpdate = p.FchUpdate,
+                                            IdEstado = p.IdEstado
+                                        }).ToList();
+                    }
+                    else
+                    {
+                        lstResultado = (from p in this.dbContext.Paciente
+                                        where (p.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null)
+                                        select new PacienteDto
+                                        {
+                                            Id = p.Id,
+                                            Nombre = p.Nombre,
+                                            ApellidoPaterno = p.ApellidoPaterno,
+                                            ApellidoMaterno = p.ApellidoMaterno,
+                                            Direccion = p.Direccion,
+                                            Edad = p.Edad,
+                                            Rut = p.Rut,
+                                            FchCreate = p.FchCreate,
+                                            FchUpdate = p.FchUpdate,
+                                            IdEstado = p.IdEstado                                            
+                                        }).ToList();
+                    }
+
+
+                    PaginadorDto datosPaginado = p_Filtro.DatosPaginado;
+                    var lstPaginada = DataPaginationUtils.GetPagedList<PacienteDto>(ref datosPaginado, lstResultado);
+                    result = new BaseDto<List<PacienteDto>>(true, datosPaginado, lstPaginada);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                result = new BaseDto<List<PacienteDto>>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                result = new BaseDto<List<PacienteDto>>(true, new Exception("Error al intentar obtener los pacientes", ex));
+            }
+
             return result;
         }
         #endregion

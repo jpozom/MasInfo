@@ -179,6 +179,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PacienteController.cs" />
+    <Compile Include="Controllers\SeleccionPacienteController.cs" />
     <Compile Include="Controllers\TrabajadorController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -186,6 +187,7 @@
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\PacienteViewModel.cs" />
+    <Compile Include="Models\SeleccionPacienteViewModel.cs" />
     <Compile Include="Models\TablePagerViewModel.cs" />
     <Compile Include="Models\TrabajadorViewModel.cs" />
     <Compile Include="Models\TutorViewModel.cs" />
@@ -1759,6 +1761,7 @@
     <Content Include="Views\Shared\_LayoutHome.cshtml" />
     <Content Include="Views\Shared\_MenuPartial.cshtml" />
     <Content Include="Views\Shared\_TablePagerPartial.cshtml" />
+    <Content Include="Views\SeleccionPaciente\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

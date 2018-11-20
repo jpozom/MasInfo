@@ -7,8 +7,18 @@ using System.Threading.Tasks;
 
 namespace AppMasInfo.Negocio.DAL.Entities
 {
-    public class PacienteDto
+    public class PacienteDto : ObjectDto
     {
+        #region Metodos privados
+        public PacienteDto() : base()
+        {
+        }
+
+        public PacienteDto(int PaginaActual, int TamanoPagina) : base(PaginaActual, TamanoPagina)
+        {
+        }
+        #endregion
+
         public long Id { get; set; }
         public string Rut { get; set; }
         public string Nombre { get; set; }
@@ -27,6 +37,8 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public long? FiltroId { get; set; }
         public string FiltroRut { get; set; }
         public EstadoDto DetalleEstado { get; set; }
+
+        public string FiltroNombre { get; set; }
 
     }
 }
