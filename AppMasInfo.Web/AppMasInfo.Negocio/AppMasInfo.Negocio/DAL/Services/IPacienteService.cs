@@ -50,5 +50,14 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Obj"></param>
         /// <returns></returns>
         BaseDto<bool> Delete(PacienteDto p_Obj);
+
+        /// <summary>
+        /// Metodo que filtra la busqueda de los pacientes
+        /// </summary>
+        /// <param name="p_Filtro"></param>
+        /// <returns></returns>
+        BaseDto<List<PacienteDto>> GetListaPacienteByFitro(PacienteDto p_Filtro);
+
+
     }
 }

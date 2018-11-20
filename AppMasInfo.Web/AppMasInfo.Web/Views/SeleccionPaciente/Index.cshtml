@@ -1,0 +1,224 @@
+﻿@model AppMasInfo.Web.Models.SeleccionPacienteViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+@section Scripts{
+    <script type="text/javascript">
+                var filtroBusqueda = function() {
+                var objRequestData = new Object();
+                objRequestData.FiltroRut = $('#FiltroRut').find('option:selected').val();
+                objRequestData.FiltroNombre = $('#FiltroNombre').val();
+                objRequestData.FiltroPaginado = new Object();
+                objRequestData.FiltroPaginado.PaginaActual = parseInt($('#PaginaActual').val());
+                objRequestData.FiltroPaginado.TamanoPagina = parseInt($('#TamanoPagina').find('option:selected').val());
+
+                $.ajax({
+                    url: '@Url.Action("Index", "SeleccionPaciente")',
+                    method: 'POST',
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify(objRequestData),
+                    beforeSend: function () {
+                        showModalLoading();
+                    },
+                    success: function (data) {
+                        if (data != null) {
+                            var tableBody = $('#lstDatos tbody');
+                            var tableBodyData = '';
+
+                               $(data.Value).each(function (index, item) {
+
+                                   tableBodyData += `<tr>` +
+                                    `<td>${item.Id}</td>` +
+                                    `<td>${item.Nombre}</td>` +
+                                    `<td>${item.ApellidoPaterno}</td>` +
+                                    `<td>${item.Edad}</td>` +
+                                    `<td>${item.NumeroTelefono}</td>` +
+                                    `<td>${item.Direccion}</td>` +
+                                    `<td>` +
+                                        `<a href="javascript:viewDetailItem(${item.Id})"><i title="Seleccionar" class="glyphicon glyphicon-info-sign"></i></a>` +
+                                    `</td >` +
+                                    `</tr>`;
+                            });
+
+                            if (tableBodyData == '') {
+                                tableBodyData = '<tr><td colspan="2">No existen datos</tr>'
+                            }
+
+                            tableBody.html(tableBodyData);
+                            updatePaginador(data.DatosPaginado);
+                        }
+                        else {
+                            showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                                'Error',
+                                'Error al intentar realizar . Por favor, inténtelo nuevamente');
+                        }
+
+                        hideModalLoading();
+                    },
+                    error: function (jqXHR, status, error) {
+                        showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                            'Error',
+                            'Ha ocurrido un error al intentar realizar la petición. Por favor, inténtelo nuevamente');
+                        if (jqXHR.status == parseInt('@((int)System.Net.HttpStatusCode.BadRequest)')) {
+                            var modelStateErrors = jqXHR.responseJSON;
+                            for (var i = 0; i < modelStateErrors.length; i++) {
+                                $(`span[data-valmsg-for="${modelStateErrors[i].key}"]`).text(modelStateErrors[i].errors[0]);
+                            }
+                        }
+                    },
+                    complete: function () {
+                        hideModalLoading();
+                    }
+                });
+        }
+
+        $(function () {
+            var saveMessage = '@TempData["SaveOkMessage"]';
+            if (saveMessage != '') {
+                showMessageDialog(
+                    BootstrapDialog.TYPE_SUCCESS,
+                    'Información',
+                    saveMessage
+                );
+            }
+
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage != '') {
+                ShowMessageDialog(
+                   BootstrapDialog.TYPE_DANGER,
+                   'Error',
+                   errorMessage
+               );
+            }
+
+            // Enlazamos los controles del paginador a nuestra función
+            // de búsqueda de datos de la página actual
+            bindPagerControlToEvents(filtroBusqueda);
+        });
+
+        function viewDetailItem(id) {
+            console.log("entro");
+            var urlDetallePaciente = '@Url.Content("~/SeleccionPaciente/Detail")?p_id=' + id;
+            dialogInstanceArchivo = BootstrapDialog.show({
+                title: 'MAsInfoWeb - Detalle Paciente',
+                message: $('<div></div>').load(urlDetallePaciente),
+                size: BootstrapDialog.SIZE_WIDE,
+                buttons: [{
+                    label: 'Cerrar',
+                    action: function (dialogRef) {
+                        dialogRef.close();
+                    }
+                }]
+            });
+        }
+
+        function limpiar() {
+            $('#FiltroNombre').val('');
+            $('#FiltroRut').val('');
+        }
+
+        function myFunction() {
+            location.reload();
+        }
+      
+
+    </script>
+}
+
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <h5 class="m-b-30 m-t-0">Selecci&oacute;n de pacientes</h5>
+        <fieldset>
+            <legend>Filtro de b&uacute;squeda</legend>
+
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label class="control-label col-md-12" for="FiltroRut">Rut</label>
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(model => model.FiltroRut,
+                                             new SelectList(Model.lstPaciente, "Id", "Rut"),
+                                             "Seleccione Rut", new { @class = "form-control" })
+
+                    </div>
+                </div>            
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label class="control-label col-md-12" for="FiltroNombre">Nombre Paciente</label>
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(model => model.FiltroNombre, new { @class = "form-control" })
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <div class="col-md-12 text-right">
+                        <button type="button" class="btn btn-primary" onclick="filtroBusqueda()">
+                            <i class="glyphicon glyphicon-search"></i>
+                            Buscar
+                        </button> &nbsp;
+                        <button type="button" class="btn btn-default" onclick="limpiar()">
+                            <i class="glyphicon glyphicon-remove"></i>
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+        <br />
+
+        <fieldset>
+            <legend>Lista de datos</legend>
+            <div class="row">
+                <table id="lstDatos" class="table table-hover" role="grid" aria-describedby="datatable_info">
+                    <thead>
+                        <tr>
+                            <th><h6 align="left">Id</h6></th>
+                            <th><h6 align="left">Rut</h6></th>
+                            <th><h6 align="left">Nombre</h6></th>
+                            <th><h6 align="left">Apellido Paterno</h6></th>
+                            <th><h6 align="left">Edad</h6></th>
+                            <th><h6 align="left">Telefono</h6></th>
+                            <th><h6 align="left">Direccion</h6></th>
+                            <th><h6 align="left">Seleccionar</h6></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.lstPaciente.Count() > 0)
+                        {
+                            foreach (var item in Model.lstPaciente)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Rut</td>
+                                    <td>@item.Nombre</td>
+                                    <td>@item.ApellidoPaterno</td>
+                                    <td>@item.Edad</td>
+                                    <td>@item.NumeroTelefono</td>
+                                    <td>@item.Direccion</td>
+                                    <td>
+                                        <a href="javascript:viewDetailItem(@item.Id)"><i title="Seleccionar" class="glyphicon glyphicon-info-sign"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="8">No existen datos</td></tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+
+        </fieldset>
+
+    </div>
+</div>
