@@ -24,5 +24,12 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Filtro">Filtro de datos</param>
         /// <returns>Usuario encontrado</returns>
         BaseDto<TelefonoDto> GetTelefonoByIdUsuario(TelefonoDto p_Filtro);
+
+        /// <summary>
+        /// Metodo para editar datos de la tabla Telefonos en DB
+        /// </summary>
+        /// <param name="p_Obj"></param>
+        /// <returns></returns>
+        BaseDto<bool> UpdateTelefono(TelefonoDto p_Obj);
     }
 }

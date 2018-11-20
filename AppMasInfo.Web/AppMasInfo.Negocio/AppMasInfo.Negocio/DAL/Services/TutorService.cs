@@ -179,6 +179,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                         tutorDb.ApellidoPaterno = p_Obj.ApellidoPaterno;
                         tutorDb.ApellidoMaterno = p_Obj.ApellidoMaterno;
                         tutorDb.Rut = p_Obj.Rut;
+                        tutorDb.Email = p_Obj.Email;
                         tutorDb.Direccion = p_Obj.Direccion;
                         tutorDb.FchUpdate = p_Obj.FchUpdate;
                         tutorDb.UsrUpdate = p_Obj.UsrUpdate;

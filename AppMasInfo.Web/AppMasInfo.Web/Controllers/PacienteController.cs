@@ -87,12 +87,26 @@ namespace AppMasInfo.Web.Controllers
 
                 if (pacienteListDbResponse.HasError)
                 {
-                    TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de Grupos de Trabajo. Por favor, inténtelo nuevamente";
+                    TempData["ErrorMessage"] = "Ha ocurrido un Error al Obtener la Lista de Pacientes en DB. Por favor, Inténtelo Nuevamente";
+                }
+
+                //se crea un objeto
+                var tutorFiltroObj = new TutorDto();
+                tutorFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Tutor_Habilitado;
+                //se envia el objeto al servicio
+                var tutorListDbResponse = this.TutorServiceModel.GetTutorAll(tutorFiltroObj);
+
+                //se devuelve la consulta
+                viewModel.lstTutor = tutorListDbResponse.HasValue ? tutorListDbResponse.Value : new List<TutorDto>();
+
+                if (pacienteListDbResponse.HasError)
+                {
+                    TempData["ErrorMessage"] = "Ha ocurrido un Error al Obtener la Lista de Tutores en DB. Por favor, Inténtelo Nuevamente";
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de pacientes. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener registros de DB. Por favor, inténtelo nuevamente";
             }
 
             return View(viewModel);
@@ -391,6 +405,7 @@ namespace AppMasInfo.Web.Controllers
                     viewModel.TelefonoTutor = objResultTelefonoDb.Value.NumeroTelefono;
                     viewModel.IdTipoTelefono = objResultTelefonoDb.Value.IdTipoTelefono;
                     viewModel.IdUsuario = objResultTelefonoDb.Value.IdUsuario;
+                    viewModel.IdTelefono = objResultTelefonoDb.Value.Id;
                 }
 
                 if (objResultadoDb.HasError)
@@ -398,7 +413,7 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos del usuario. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente";
 
                 return RedirectToAction("Index");
             }
@@ -424,58 +439,121 @@ namespace AppMasInfo.Web.Controllers
 
                     if (isRutOk)
                     {
-                        var pacFiltroObj = new PacienteDto();
-                        pacFiltroObj.FiltroRut = p_ViewModel.Rut;
-                        pacFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
-                        var pacDbResponse = PacienteServiceModel.GetPacienteByRut(pacFiltroObj);
+                        PacienteDto objPacienteEdit = new PacienteDto();
+                        objPacienteEdit.Rut = p_ViewModel.Rut;
+                        objPacienteEdit.Nombre = p_ViewModel.Nombre;
+                        objPacienteEdit.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
+                        objPacienteEdit.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
+                        objPacienteEdit.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
+                        objPacienteEdit.Edad = p_ViewModel.Edad;
+                        objPacienteEdit.UsrUpdate = User.Identity.GetUserId();
+                        objPacienteEdit.FchUpdate = DateTime.Now;
+                        objPacienteEdit.Direccion = p_ViewModel.Direccion;
+                        objPacienteEdit.NumeroTelefono = p_ViewModel.Telefono;
+                        objPacienteEdit.Id = p_ViewModel.Id;
 
-                        if (!pacDbResponse.HasValue)
+                        var objResultadoDb = PacienteServiceModel.UpdatePaciente(objPacienteEdit);
+
+                        if (objResultadoDb.HasValue)
                         {
-                            PacienteDto objPacienteEdit = new PacienteDto();
-                            objPacienteEdit.Rut = p_ViewModel.Rut;
-                            objPacienteEdit.Nombre = p_ViewModel.Nombre;
-                            objPacienteEdit.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
-                            objPacienteEdit.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
-                            objPacienteEdit.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
-                            objPacienteEdit.Edad = p_ViewModel.Edad;
-                            objPacienteEdit.UsrUpdate = User.Identity.GetUserId();
-                            objPacienteEdit.FchUpdate = DateTime.Now;
-                            objPacienteEdit.Direccion = p_ViewModel.Direccion;
-                            objPacienteEdit.NumeroTelefono = p_ViewModel.Telefono;
-                            objPacienteEdit.Id = p_ViewModel.Id;
+                            UsuarioDto objUsuarioEdit = new UsuarioDto();
+                            objUsuarioEdit.Pass = p_ViewModel.Pass == null ? "" : GlobalMethods.EncryptPass(p_ViewModel.Pass);
+                            objUsuarioEdit.IdRol = p_ViewModel.IdRol;
+                            objUsuarioEdit.Id = p_ViewModel.IdUsuario;
 
-                            var objResultadoDb = PacienteServiceModel.UpdatePaciente(objPacienteEdit);
+                            var objRespuesta = UsuarioServiceModel.UpdateUsuario(objUsuarioEdit);
 
-                            if (objResultadoDb.HasValue)
+                            if (!objRespuesta.HasError)
                             {
-                                TempData["SaveOkMessage"] = "Paciente actualizado correctamente";
-                                return RedirectToAction("Index");
-                            }
+                                if (!string.IsNullOrEmpty(p_ViewModel.RutTutor))
+                                {
+                                    isRutOk = GlobalMethods.ValidarRut(p_ViewModel.RutTutor);
+                                }
+                                
+                                if (isRutOk)
+                                {
+                                    TutorDto objTutorUpdate = new TutorDto();
+                                    objTutorUpdate.Rut = p_ViewModel.RutTutor;
+                                    objTutorUpdate.Nombre = p_ViewModel.NombreTutor;
+                                    objTutorUpdate.IdEstado = (int)EnumUtils.EstadoEnum.Tutor_Habilitado;
+                                    objTutorUpdate.ApellidoPaterno = p_ViewModel.ApellidoPaternoTutor;
+                                    objTutorUpdate.ApellidoMaterno = p_ViewModel.ApellidoMaternoTutor;
+                                    objTutorUpdate.UsrUpdate = User.Identity.GetUserId();
+                                    objTutorUpdate.FchUpdate = DateTime.Now;
+                                    objTutorUpdate.Direccion = p_ViewModel.DireccionTutor;
+                                    objTutorUpdate.Email = p_ViewModel.Email;
+                                    objTutorUpdate.Id = p_ViewModel.IdTutor;
+                                    objTutorUpdate.IdPaciente = p_ViewModel.Id;
 
-                            if (objResultadoDb.HasError)
-                                throw objResultadoDb.Error;
+                                    var objResultado = TutorServiceModel.UpdateTutor(objTutorUpdate);
+
+                                    if (objResultado.HasValue)
+                                    {
+                                        TelefonoDto objtelefonoUpdate = new TelefonoDto();
+                                        objtelefonoUpdate.NumeroTelefono = p_ViewModel.TelefonoTutor;
+                                        objtelefonoUpdate.IdTipoTelefono = p_ViewModel.IdTipoTelefono;
+                                        objtelefonoUpdate.IdUsuario = p_ViewModel.IdUsuario;
+                                        objtelefonoUpdate.Id = p_ViewModel.IdTelefono;
+
+                                        var objResutTelefono = TelefonoServiceModel.UpdateTelefono(objtelefonoUpdate);
+
+                                        if (objResutTelefono.HasValue)
+                                        {
+                                            TempData["SaveOkMessage"] = "Registro Actualiazado Correctamente";
+                                            return RedirectToAction("Index");
+                                        }
+                                        else
+                                        {
+                                            TempData["ErrorMessage"] = "Ha ocurrido un Error al Actualizar el Registro. Por favor, Inténtelo Nuevamente";
+                                        }
+                                    }
+                                    else
+                                    {
+                                        TempData["ErrorMessage"] = "Ha ocurrido un Error al Obtener Datos del Registro. Por favor, Inténtelo Nuevamente";
+                                    }
+                                }
+                                else
+                                {
+                                    TempData["ErrorMessage"] = "El RUT ingresado no es Válido, Intentelo Nuevamente";
+                                }
+                            }
+                            else
+                            {
+                                TempData["ErrorMessage"] = "Ha ocurrido un Error al Obtener Datos del Registro. Por favor, Inténtelo Nuevamente";
+                            }
                         }
                         else
                         {
-
+                            TempData["ErrorMessage"] = "Ha ocurrido un Error al Obtener Datos del Registro. Por favor, Inténtelo Nuevamente";
                         }
                     }
                     else
                     {
-
+                        TempData["ErrorMessage"] = "El RUT ingresado no es Válido, Inténtelo Nuevamente";
                     }
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Ha ocurrido un error al actualizar el paciente. Por favor, inténtelo nuevamente";
+                    TempData["ErrorMessage"] = "Ha ocurrido un Error al Actualizar el Registro. Por favor, Inténtelo Nuevamente";
                 }
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al actualizar el paciente. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un Error al Actualizar el Registro. Por favor, Inténtelo Nuevamente";
             }
 
+            this.CargarDatosEditView(ref p_ViewModel);
+
             return View(p_ViewModel);
+        }
+
+        private void CargarDatosEditView(ref PacienteEditViewModel p_ViewModel)
+        {
+            var lstRoles = this.RolServiceModel.GetListaRolTutor();
+            p_ViewModel.LstCRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
+
+            var lstTipoTelefono = this.TIpoTelefonoServiceModel.GetListaTipoTelefonoAll();
+            p_ViewModel.LstTipoTelefono = lstTipoTelefono.HasValue ? lstTipoTelefono.Value : new List<TipoTelefonoDto>();
         }
         #endregion
 

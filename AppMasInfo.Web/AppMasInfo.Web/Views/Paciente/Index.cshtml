@@ -7,11 +7,11 @@
 
 @section Scripts{
     <script type="text/javascript">
-       
+
          var viewDetailItem = function (id) {
             var urlDetallePaciente = '@Url.Content("~/Paciente/Detail")?p_id=' + id;
             dialogInstanceArchivo = BootstrapDialog.show({
-                title: 'masInfo - Detalle Usuario',
+                title: 'masInfo - Detalle Paciente',
                 message: $('<div></div>').load(urlDetallePaciente),
                 size: BootstrapDialog.SIZE_WIDE,
                 buttons: [{
@@ -108,7 +108,6 @@
         <h5 class="m-b-30 m-t-0">Mantenedor Pacientes</h5>
 
         <br />
-
         <fieldset>
             <legend>Lista de datos</legend>
             <div class="row">
@@ -119,67 +118,117 @@
                         </a>
                     </div>
                 </div>
-                <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
-                    <thead>
-                        <tr>
-                            <th><h6 align="left">Id</h6></th>
-                            <th><h6 align="left">Rut</h6></th>
-                            <th><h6 align="left">Nombre</h6></th>
-                            <th><h6 align="left">Apellido Paterno</h6></th>
-                            <th><h6 align="left">Edad</h6></th>
-                            <th><h6 align="left">Telefono</h6></th>
-                            <th><h6 align="left">Direccion</h6></th>
-                            <th><h6 align="left">Acci&oacute;n</h6></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.lstPaciente.Count() > 0)
-                        {
-                            foreach (var item in Model.lstPaciente)
-                            {
-                                <tr>
-                                    <td>@item.Id</td>
-                                    <td>@item.Rut</td>
-                                    <td>@item.Nombre</td>
-                                    <td>@item.ApellidoPaterno</td>
-                                    <td>@item.Edad</td>
-                                    <td>@item.NumeroTelefono</td>
-                                    <td>@item.Direccion</td>
-                                    <td>
-                                        <a href="javascript:viewDetailItem(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>
-                                        <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
-                                        <a href="@Url.Action("Edit", "Paciente", new { p_Id = item.Id })"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;
-                                    </td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr><td colspan="8">No existen datos</td></tr>
-                        }
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <ul class="nav nav-tabs navtab-bg">
+                            <li class="active">
+                                <a href="#Paciente" data-toggle="tab" aria-expanded="true">
+                                    <span class="visible-xs"><i class="fa fa-home"></i></span>
+                                    <span class="hidden-xs">Lista Pacientes</span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="#Tutor" data-toggle="tab" aria-expanded="true">
+                                    <span class="visible-xs"><i class="fa fa-home"></i></span>
+                                    <span class="hidden-xs">Lista Tutores</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" style="border: none !important;">
+                            <div class="tab-pane active" id="Paciente">
+                                <div class="table-responsive">
+                                    <table id="tblPacientes" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th><h6 align="left">Id</h6></th>
+                                                <th><h6 align="left">Rut</h6></th>
+                                                <th><h6 align="left">Nombre</h6></th>
+                                                <th><h6 align="left">Apellido Paterno</h6></th>
+                                                <th><h6 align="left">Edad</h6></th>
+                                                <th><h6 align="left">Telefono</h6></th>
+                                                <th><h6 align="left">Direccion</h6></th>
+                                                <th><h6 align="left">Acci&oacute;n</h6></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.lstPaciente.Count() > 0)
+                                            {
+                                                foreach (var item in Model.lstPaciente)
+                                                {
+                                                    <tr>
+                                                        <td>@item.Id</td>
+                                                        <td>@item.Rut</td>
+                                                        <td>@item.Nombre</td>
+                                                        <td>@item.ApellidoPaterno</td>
+                                                        <td>@item.Edad</td>
+                                                        <td>@item.NumeroTelefono</td>
+                                                        <td>@item.Direccion</td>
+                                                        <td>
+                                                            <a href="javascript:viewDetailItem(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>
+                                                            <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
+                                                            <a href="@Url.Action("Edit", "Paciente", new { p_Id = item.Id })"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr><td colspan="8">No existen datos</td></tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="Tutor">
+                                <div class="table-responsive">
+                                    <table id="tblTutor" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th><h6 align="left">Id</h6></th>
+                                                <th><h6 align="left">Rut</h6></th>
+                                                <th><h6 align="left">Nombre</h6></th>
+                                                <th><h6 align="left">Apellido Paterno</h6></th>
+                                                <th><h6 align="left">Email</h6></th>
+                                                <th><h6 align="left">Id Paciente</h6></th>
+                                                <th><h6 align="left">Direccion</h6></th>
+                                                <th><h6 align="left">Acci&oacute;n</h6></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.lstTutor.Count() > 0)
+                                            {
+                                                foreach (var item in Model.lstTutor)
+                                                {
+                                                    <tr>
+                                                        <td>@item.Id</td>
+                                                        <td>@item.Rut</td>
+                                                        <td>@item.Nombre</td>
+                                                        <td>@item.ApellidoPaterno</td>
+                                                        <td>@item.Email</td>
+                                                        <td>@item.IdPaciente</td>
+                                                        <td>@item.Direccion</td>
+                                                        <td>
+                                                            <a href="javascript:viewDetailItem(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>
+                                                            <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
+                                                            <a href="@Url.Action("Edit", "Paciente", new { p_Id = item.Id })"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr><td colspan="8">No existen datos</td></tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </fieldset>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="Eliminar" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Eliminar Registro</h4>
-            </div>
-            <div class="modal-body">
-                <p>Desea Eliminar este Registro</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
     </div>
 </div>

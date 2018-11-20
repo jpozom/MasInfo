@@ -99,5 +99,43 @@ namespace AppMasInfo.Negocio.DAL.Services
             return objResult;
         }
         #endregion
+
+        #region UpdateTelefono
+        public BaseDto<bool> UpdateTelefono(TelefonoDto p_Obj)
+        {
+            BaseDto<bool> resultObj = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    var telefonoDb = this.dbContext.Telefono.FirstOrDefault(us => us.Id == p_Obj.Id);
+
+                    if (telefonoDb != null)
+                    {
+                        telefonoDb.NumeroTelefono = p_Obj.NumeroTelefono;                       
+                        telefonoDb.IdTipoTelefono = p_Obj.IdTipoTelefono;
+
+                        this.dbContext.SaveChanges();
+                        resultObj = new BaseDto<bool>(true);
+                    }
+                    else
+                    {
+                        throw new Exception("Datos de la tabla Telefono no encontrado en base de datos");
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                resultObj = new BaseDto<bool>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                resultObj = new BaseDto<bool>(true, ex);
+            }
+
+            return resultObj;
+        }
+        #endregion
     }
 }
