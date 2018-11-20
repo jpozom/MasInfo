@@ -301,9 +301,7 @@ namespace AppMasInfo.Web.Controllers
                 {
                     TempData["ErrorMessage"] = "Ha ocurrido un Error, faltan datos a Ingresar. Por favor, inténtelo nuevamente";
                 }
-
             }
-
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Paciente. Por favor, inténtelo nuevamente";
@@ -333,6 +331,13 @@ namespace AppMasInfo.Web.Controllers
             {
                 TempData.Clear();
 
+                var lstRoles = this.RolServiceModel.GetListaRolTutor();
+                viewModel.LstCRol = lstRoles.HasValue ? lstRoles.Value : new List<RolDto>();
+
+                var lstTopoTelefono = this.TIpoTelefonoServiceModel.GetListaTipoTelefonoAll();
+                viewModel.LstTipoTelefono = lstTopoTelefono.HasValue ? lstTopoTelefono.Value : new List<TipoTelefonoDto>();
+
+
                 var filtroPaciente = new PacienteDto();
                 filtroPaciente.FiltroId = p_Id;
                 filtroPaciente.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
@@ -349,6 +354,43 @@ namespace AppMasInfo.Web.Controllers
                     viewModel.Edad = objResultadoDb.Value.Edad;
                     viewModel.Direccion = objResultadoDb.Value.Direccion;
                     viewModel.Telefono = objResultadoDb.Value.NumeroTelefono;
+                }
+
+                if (objResultadoDb.HasError)
+                    throw objResultadoDb.Error;
+
+                var filtroTutor = new TutorDto();
+                filtroTutor.FiltroIdPaciente = p_Id;
+                filtroTutor.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Tutor_Habilitado;
+
+                var objResultTutorDb = this.TutorServiceModel.GetTutorByPaciente(filtroTutor);
+
+                if (objResultTutorDb.HasValue)
+                {
+                    viewModel.IdTutor = objResultTutorDb.Value.Id;
+                    viewModel.RutTutor = objResultTutorDb.Value.Rut;
+                    viewModel.NombreTutor = objResultTutorDb.Value.Nombre;
+                    viewModel.ApellidoPaternoTutor = objResultTutorDb.Value.ApellidoPaterno;
+                    viewModel.ApellidoMaternoTutor = objResultTutorDb.Value.ApellidoMaterno;
+                    viewModel.DireccionTutor = objResultTutorDb.Value.Direccion;
+                    viewModel.Email = objResultTutorDb.Value.Email;
+                    viewModel.Username = objResultTutorDb.Value.DatosUsuario.Username;
+                    viewModel.IdRol = objResultTutorDb.Value.DetalleRol.Id;
+                }
+
+                if (objResultadoDb.HasError)
+                    throw objResultadoDb.Error;
+
+                var filtroTelefono = new TelefonoDto();
+                filtroTelefono.FiltroIdUsuario = objResultTutorDb.Value.DatosUsuario.Id;
+
+                var objResultTelefonoDb = this.TelefonoServiceModel.GetTelefonoByIdUsuario(filtroTelefono);
+
+                if (objResultTelefonoDb.HasValue)
+                {
+                    viewModel.TelefonoTutor = objResultTelefonoDb.Value.NumeroTelefono;
+                    viewModel.IdTipoTelefono = objResultTelefonoDb.Value.IdTipoTelefono;
+                    viewModel.IdUsuario = objResultTelefonoDb.Value.IdUsuario;
                 }
 
                 if (objResultadoDb.HasError)
@@ -374,29 +416,54 @@ namespace AppMasInfo.Web.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    PacienteDto objPacienteEdit = new PacienteDto();
-                    objPacienteEdit.Rut = p_ViewModel.Rut;
-                    objPacienteEdit.Nombre = p_ViewModel.Nombre;
-                    objPacienteEdit.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
-                    objPacienteEdit.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
-                    objPacienteEdit.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
-                    objPacienteEdit.Edad = p_ViewModel.Edad;
-                    objPacienteEdit.UsrUpdate = User.Identity.GetUserId();
-                    objPacienteEdit.FchUpdate = DateTime.Now;
-                    objPacienteEdit.Direccion = p_ViewModel.Direccion;
-                    objPacienteEdit.NumeroTelefono = p_ViewModel.Telefono;
-                    objPacienteEdit.Id = p_ViewModel.Id;
-
-                    var objResultadoDb = PacienteServiceModel.UpdatePaciente(objPacienteEdit);
-
-                    if (objResultadoDb.HasValue)
+                    bool isRutOk = true;
+                    if (!string.IsNullOrEmpty(p_ViewModel.Rut))
                     {
-                        TempData["SaveOkMessage"] = "Paciente actualizado correctamente";
-                        return RedirectToAction("Index");
+                        isRutOk = GlobalMethods.ValidarRut(p_ViewModel.Rut);
                     }
 
-                    if (objResultadoDb.HasError)
-                        throw objResultadoDb.Error;
+                    if (isRutOk)
+                    {
+                        var pacFiltroObj = new PacienteDto();
+                        pacFiltroObj.FiltroRut = p_ViewModel.Rut;
+                        pacFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
+                        var pacDbResponse = PacienteServiceModel.GetPacienteByRut(pacFiltroObj);
+
+                        if (!pacDbResponse.HasValue)
+                        {
+                            PacienteDto objPacienteEdit = new PacienteDto();
+                            objPacienteEdit.Rut = p_ViewModel.Rut;
+                            objPacienteEdit.Nombre = p_ViewModel.Nombre;
+                            objPacienteEdit.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
+                            objPacienteEdit.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
+                            objPacienteEdit.ApellidoMaterno = p_ViewModel.ApellidoMaterno;
+                            objPacienteEdit.Edad = p_ViewModel.Edad;
+                            objPacienteEdit.UsrUpdate = User.Identity.GetUserId();
+                            objPacienteEdit.FchUpdate = DateTime.Now;
+                            objPacienteEdit.Direccion = p_ViewModel.Direccion;
+                            objPacienteEdit.NumeroTelefono = p_ViewModel.Telefono;
+                            objPacienteEdit.Id = p_ViewModel.Id;
+
+                            var objResultadoDb = PacienteServiceModel.UpdatePaciente(objPacienteEdit);
+
+                            if (objResultadoDb.HasValue)
+                            {
+                                TempData["SaveOkMessage"] = "Paciente actualizado correctamente";
+                                return RedirectToAction("Index");
+                            }
+
+                            if (objResultadoDb.HasError)
+                                throw objResultadoDb.Error;
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    else
+                    {
+
+                    }
                 }
                 else
                 {

@@ -19,6 +19,7 @@ namespace AppMasInfo.Negocio.DAL.Database
         {
             this.PacienteUbicacion = new HashSet<PacienteUbicacion>();
             this.Tutor = new HashSet<Tutor>();
+            this.EquipoPaciente = new HashSet<EquipoPaciente>();
         }
     
         public long Id { get; set; }
@@ -40,5 +41,7 @@ namespace AppMasInfo.Negocio.DAL.Database
         public virtual ICollection<PacienteUbicacion> PacienteUbicacion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tutor> Tutor { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EquipoPaciente> EquipoPaciente { get; set; }
     }
 }

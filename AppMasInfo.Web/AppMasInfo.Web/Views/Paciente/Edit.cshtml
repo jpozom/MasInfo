@@ -5,6 +5,106 @@
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
 
+<script src="~/Scripts/sha256.js"></script>
+@section Scripts{
+    <script type="text/javascript">         
+
+        function PlantillaRut(Rut) {
+
+            // Despejar Puntos
+            var valor = Rut.value.replace('.', '');
+            // Despejar Guión
+            valor = valor.replace('-', '');
+            // Aislar Cuerpo y Dígito Verificador
+            cuerpo = valor.slice(0, -1);
+
+            dv = valor.slice(-1).toUpperCase();
+
+            // Formatear RUN
+            Rut.value = cuerpo + '-' + dv;
+
+            if (Rut.value === '-') {
+                Rut.value = '';
+            }
+        }
+
+        $("#divStatus").hide();
+
+        $(function () {
+
+            //evento que permite ocultar y mostrar la contraseña
+            $(document).on("ready", function () {
+                $(".show-hide-pass").on("click", function (e) {
+                    e.preventDefault();
+
+                    var current = $(this).attr("action");
+
+                    if (current == "hide") {
+                        $(this).prev().attr("type", "text");
+                        $(this).removeClass("glyphicon-eye-open").addClass("glyphicon-eye-close").attr("action", "show");
+                    }
+
+                    if (current == "show") {
+                        $(this).prev().attr("type", "password");
+                        $(this).removeClass("glyphicon-eye-close").addClass("glyphicon-eye-open").attr("action", "hide");
+                    }
+                })
+
+            })
+
+            //evento que controla el confirm de la contraseña y encripta la contraseña
+            $("#passwordTest").on("change", function () {
+                if (userSHA == storedSHA) {
+                    $("#status").html("<span class=\"label label-success\">Status:</span> Las contraseñas coinciden.");
+
+                } else {
+                    $("#status").html("<span class=\"label label-danger\">Status:</span> Las contraseñas <b>No</b> coinciden. Inténtelo nuevamente.");
+                }
+                $("#divStatus").show();
+
+            });
+
+        });
+
+        var storedSHA;
+        var userSHA;
+
+        $("#passwordInput").keyup(function () {
+            var value = $(this).val();
+            $("#storedSHA").text("SHA256 Hash for Password: " + sha256_digest(value));
+            storedSHA = value;
+        }).keyup();
+
+        $("#passwordTest").keyup(function () {
+            var value = $(this).val();
+            $("#currentSHA").text("SHA256 Hash for Second Password: " + sha256_digest(value));
+            userSHA = value;
+        }).keyup();
+
+       $(function () {
+            var saveMessage = '@TempData["SaveOkMessage"]';
+            if (saveMessage !== '') {
+                showMessageDialog(
+                    BootstrapDialog.TYPE_SUCCESS,
+                    'Información',
+                    saveMessage
+                );
+            }
+
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage !== '') {
+                showMessageDialog(
+                   BootstrapDialog.TYPE_DANGER,
+                   'Error',
+                   errorMessage
+               );
+            }
+        });
+
+    </script>
+}
+
+
 <div class="panel panel-primary">
     <div class="panel-body">
         <h4 class="m-b-30 m-t-0">Editar Paciente</h4>
@@ -14,9 +114,11 @@
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.IdTutor)
+            @Html.HiddenFor(model => model.IdUsuario)
 
             <fieldset>
-                <legend>Datos del Usuario</legend>
+                <legend>Datos del Paciente</legend>
 
 
                 <div class="form-group">
@@ -74,7 +176,132 @@
                         @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                                
+
+            </fieldset>
+
+            <fieldset>
+                <legend class="legend">Datos Personales del Tutor</legend>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RutTutor, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.RutTutor, new { htmlAttributes = new { @class = "form-control", oninput = "PlantillaRut(this)", @placeholder = "Ingrese Rut" } })
+                        @Html.ValidationMessageFor(model => model.RutTutor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NombreTutor, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.NombreTutor, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NombreTutor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApellidoPaternoTutor, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.ApellidoPaternoTutor, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ApellidoPaternoTutor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApellidoMaternoTutor, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.ApellidoMaternoTutor, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ApellidoMaternoTutor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DireccionTutor, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.DireccionTutor, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DireccionTutor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.TelefonoTutor, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.TelefonoTutor, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TelefonoTutor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdTipoTelefono, "Tipo Teléfono", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.IdTipoTelefono,
+                                  new SelectList(Model.LstTipoTelefono , "IdTipoTelefono", "Descripcion"),
+                                  "Selecciona Tipo", new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.IdTipoTelefono, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend class="legend">Datos para Inicio de Sesi&oacute;n</legend>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese Nombre de Usuario", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.Pass, new { htmlAttributes = new { @class = "form-control", type = "password", placeholder = "Ingrese Contraseña", id = "passwordInput" } })
+                                <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide"></span>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.Pass, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ConfirmPass, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.ConfirmPass, new { htmlAttributes = new { @class = "form-control", type = "password", placeholder = "Confirme Contraseña", id = "passwordTest" } })
+                                <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2"></label>
+                    <div class="col-md-6">
+                        <div class="alert alert-info" id="divStatus">
+                            <p id="status"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdRol, "Rol", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.IdRol,
+                                  new SelectList(Model.LstCRol , "Id", "Descripcion"),
+                                  "Selecciona Rol", new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.IdRol, "", new { @class = "text-danger" })
+                    </div>
+                </div>
             </fieldset>
 
             <br />

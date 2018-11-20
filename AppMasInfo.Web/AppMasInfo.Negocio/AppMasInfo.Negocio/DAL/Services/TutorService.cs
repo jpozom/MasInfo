@@ -46,7 +46,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        Nombre = t.Nombre,
                                        ApellidoPaterno = t.ApellidoPaterno,
                                        ApellidoMaterno = t.ApellidoMaterno,
-                                       Direccion = t.Direccion,                                      
+                                       Direccion = t.Direccion,
                                        IdUsuario = t.IdUsuario,
                                        IdEstado = t.IdEstado,
                                        Email = t.Email,
@@ -87,7 +87,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                             ApellidoMaterno = p_Obj.ApellidoMaterno,
                             Direccion = p_Obj.Direccion,
                             FchCreate = p_Obj.FchCreate,
-                            UsrCreate = p_Obj.UsrCreate,                            
+                            UsrCreate = p_Obj.UsrCreate,
                             Email = p_Obj.Email,
                             IdEstado = p_Obj.IdEstado,
                             IdPaciente = p_Obj.IdPaciente,
@@ -136,7 +136,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        FchCreate = p.FchCreate,
                                        UsrCreate = p.UsrCreate,
                                        FchUpdate = p.FchUpdate,
-                                       UsrUpdate = p.UsrUpdate,                                      
+                                       UsrUpdate = p.UsrUpdate,
                                        IdEstado = p.IdEstado,
                                        DetalleEstado = new EstadoDto
                                        {
@@ -144,6 +144,179 @@ namespace AppMasInfo.Negocio.DAL.Services
                                            Descripcion = es.Descripcion,
                                            Tabla = es.Tabla
                                        }
+                                   }).FirstOrDefault();
+
+                    objResult = new BaseDto<TutorDto>(tutorDb);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                objResult = new BaseDto<TutorDto>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                objResult = new BaseDto<TutorDto>(true, ex);
+            }
+
+            return objResult;
+        }
+        #endregion
+
+        #region UpdateTutor
+        public BaseDto<bool> UpdateTutor(TutorDto p_Obj)
+        {
+            BaseDto<bool> resultObj = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    var tutorDb = this.dbContext.Tutor.FirstOrDefault(us => us.Id == p_Obj.Id);
+
+                    if (tutorDb != null)
+                    {
+                        tutorDb.Nombre = p_Obj.Nombre;
+                        tutorDb.ApellidoPaterno = p_Obj.ApellidoPaterno;
+                        tutorDb.ApellidoMaterno = p_Obj.ApellidoMaterno;
+                        tutorDb.Rut = p_Obj.Rut;
+                        tutorDb.Direccion = p_Obj.Direccion;
+                        tutorDb.FchUpdate = p_Obj.FchUpdate;
+                        tutorDb.UsrUpdate = p_Obj.UsrUpdate;
+
+                        this.dbContext.SaveChanges();
+                        resultObj = new BaseDto<bool>(true);
+                    }
+                    else
+                    {
+                        throw new Exception("Tutor no encontrado en base de datos");
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                resultObj = new BaseDto<bool>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                resultObj = new BaseDto<bool>(true, ex);
+            }
+
+            return resultObj;
+        }
+        #endregion
+
+        #region GetTutorById
+        public BaseDto<TutorDto> GetTutorById(TutorDto p_Filtro)
+        {
+            BaseDto<TutorDto> objResult = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {//left join al conjunto A sobre B se almacena en un campo temporal
+                    var tutorDb = (from t in this.dbContext.Tutor
+                                   join es in this.dbContext.Estado on t.IdEstado equals es.Id
+                                   join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
+                                   join r in this.dbContext.Rol on u.IdRol equals r.Id                                   
+                                   where t.Id == p_Filtro.FiltroId
+                                   select new TutorDto
+                                   {
+                                       Id = t.Id,
+                                       Nombre = t.Nombre,
+                                       ApellidoPaterno = t.ApellidoPaterno,
+                                       ApellidoMaterno = t.ApellidoMaterno,
+                                       FchCreate = t.FchCreate,
+                                       UsrCreate = t.UsrCreate,
+                                       FchUpdate = t.FchUpdate,
+                                       UsrUpdate = t.UsrUpdate,
+                                       Email = t.Email,
+                                       IdUsuario = t.IdUsuario,
+                                       IdEstado = t.IdEstado,
+                                       IdPaciente = t.IdPaciente,
+                                       DetalleEstado = new EstadoDto
+                                       {
+                                           Id = es.Id,
+                                           Descripcion = es.Descripcion,
+                                           Tabla = es.Tabla
+                                       },
+                                       DatosUsuario = new UsuarioDto
+                                       {
+                                           Id = u.Id,
+                                           Pass = u.Pass,
+                                           Username = u.Username,
+                                           IdRol = u.IdRol
+                                       },
+                                       DetalleRol = new RolDto
+                                       {
+                                           Id = r.Id,
+                                           Descripcion = r.Descripcion
+                                       }
+                                   }).FirstOrDefault();
+
+                    objResult = new BaseDto<TutorDto>(tutorDb);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                objResult = new BaseDto<TutorDto>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                objResult = new BaseDto<TutorDto>(true, ex);
+            }
+
+            return objResult;
+        }
+        #endregion
+
+        #region GetTutorByPaciente
+        public BaseDto<TutorDto> GetTutorByPaciente(TutorDto p_Filtro)
+        {
+            BaseDto<TutorDto> objResult = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {//left join al conjunto A sobre B se almacena en un campo temporal
+                    var tutorDb = (from t in this.dbContext.Tutor
+                                   join es in this.dbContext.Estado on t.IdEstado equals es.Id
+                                   join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
+                                   join r in this.dbContext.Rol on u.IdRol equals r.Id                                      
+                                   where t.IdPaciente == p_Filtro.FiltroIdPaciente
+                                   select new TutorDto
+                                   {
+                                       Id = t.Id,
+                                       Nombre = t.Nombre,
+                                       Rut = t.Rut,
+                                       ApellidoPaterno = t.ApellidoPaterno,
+                                       ApellidoMaterno = t.ApellidoMaterno,
+                                       Direccion = t.Direccion,
+                                       FchCreate = t.FchCreate,
+                                       UsrCreate = t.UsrCreate,
+                                       FchUpdate = t.FchUpdate,
+                                       UsrUpdate = t.UsrUpdate,
+                                       Email = t.Email,
+                                       IdUsuario = t.IdUsuario,
+                                       IdEstado = t.IdEstado,
+                                       IdPaciente = t.IdPaciente,
+                                       DetalleEstado = new EstadoDto
+                                       {
+                                           Id = es.Id,
+                                           Descripcion = es.Descripcion,
+                                           Tabla = es.Tabla
+                                       },
+                                       DatosUsuario = new UsuarioDto
+                                       {
+                                           Id = u.Id,
+                                           Pass = u.Pass,
+                                           Username = u.Username,
+                                           IdRol = u.IdRol
+                                       },
+                                       DetalleRol = new RolDto
+                                       {
+                                           Id = r.Id,
+                                           Descripcion = r.Descripcion
+                                       }                                      
                                    }).FirstOrDefault();
 
                     objResult = new BaseDto<TutorDto>(tutorDb);

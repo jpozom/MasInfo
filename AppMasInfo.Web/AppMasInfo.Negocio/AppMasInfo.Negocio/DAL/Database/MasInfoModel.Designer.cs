@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\develop\MasInfoWeb\AppMasInfo.Web\AppMasInfo.Negocio\AppMasInfo.Negocio\DAL\Database\MasInfoModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\develop\MasInfo\AppMasInfo.Web\AppMasInfo.Negocio\AppMasInfo.Negocio\DAL\Database\MasInfoModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

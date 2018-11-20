@@ -153,9 +153,10 @@ namespace AppMasInfo.Web.Models
     {
         public long Id { get; set; }
 
+        #region Propiedades Paciente
+
+        [Required(ErrorMessage = "Debe ingresar un Rut")]
         [Display(Name = "Rut")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string Rut { get; set; }
 
         [Display(Name = "Nombre")]
@@ -183,14 +184,78 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string Direccion { get; set; }
 
-        [Display(Name = "Telefono")]
+        [Display(Name = "Teléfono")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string Telefono { get; set; }
 
-        public long? IdTutor { get; set; }
+        public string FiltroRut { get; set; }
+        #endregion
 
-        public int IdEstado { get; set; }
+        #region Propiedades Tutor
+
+        public long IdTutor { get; set; }
+
+        [Required(ErrorMessage = "Debe ingresar un Rut")]
+        [Display(Name = "Rut")]
+        public string RutTutor { get; set; }
+
+        [Display(Name = "Nombre")]
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
+        [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
+        public string NombreTutor { get; set; }
+
+        [Display(Name = "Apellido Paterno")]
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
+        [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
+        public string ApellidoPaternoTutor { get; set; }
+
+        [Display(Name = "Apellido Materno")]
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
+        [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
+        public string ApellidoMaternoTutor { get; set; }
+
+        [Display(Name = "Dirección")]
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
+        [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
+        public string DireccionTutor { get; set; }
+
+        [Display(Name = "Telefono")]
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
+        [RegularExpression(Validacion.Patterns.Entero, ErrorMessage = Validacion.Mensajes.RegularExpression)]
+        public string TelefonoTutor { get; set; }
+
+        [Display(Name = "Email")]
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
+        [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
+        public string Email { get; set; }
+
+        public long IdUsuario { get; set; }
+
+        public long IdPaciente { get; set; }
+       
+        [Display(Name = "Password")]
+        [Required(ErrorMessage = "Debe Ingresar una Contraseña")]
+        public string Pass { get; set; }
+
+        [Display(Name = "Confirme Password")]
+        public string ConfirmPass { get; set; }
+
+        [Display(Name = "Usuario")]
+        [Required(ErrorMessage = "Debe Ingresar un Nombre de Usuario")]
+        public string Username { get; set; }
+
+        [Required(ErrorMessage = "Debe Ingresar un Rol")]
+        public int IdRol { get; set; }
+
+        public List<RolDto> LstCRol { get; set; }
+
+        public List<TipoTelefonoDto> LstTipoTelefono { get; set; }
+
+        public long? FiltroIdUsuario { get; set; }
+
+        public int IdTipoTelefono { get; set; }
+
+        #endregion
     }
 
     public class PacienteDetailViewModel
