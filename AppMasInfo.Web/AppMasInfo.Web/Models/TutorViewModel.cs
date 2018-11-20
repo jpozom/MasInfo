@@ -111,45 +111,92 @@ namespace AppMasInfo.Web.Models
 
     public class TutorDetailViewModel
     {
-        public long Id { get; set; }
+        public long IdTutor { get; set; }
+
+        public int IdTelefono { get; set; }
+
+        public int IdTipoTelefono { get; set; }
+
+        public int IdRol { get; set; }
+
+        public long IdUsuario { get; set; }
+
+        public long IdPaciente { get; set; }
+
+        public string NumeroTelefono { get; set; }
+
+        public string DescripcionTelefono { get; set; }
 
         [Display(Name = "Rut")]
-        public string Rut { get; set; }
+        public string RutPaciente { get; set; }
+
+        [Display(Name = "Rut")]
+        public string RutTutor { get; set; }
 
         [Display(Name = "Nombre")]
-        public string Nombre { get; set; }
+        public string NombrePaciente { get; set; }
+
+        [Display(Name = "Nombre")]
+        public string NombreTutor { get; set; }
 
         [Display(Name = "Apellido Paterno")]
-        public string ApellidoPaterno { get; set; }
+        public string ApellidoPaternoPaciente { get; set; }
+
+        [Display(Name = "Apellido Paterno")]
+        public string ApellidoPaternoTutor { get; set; }
 
         [Display(Name = "Apellido Materno")]
-        public string ApellidoMaterno { get; set; }
+        public string ApellidoMaternoPaciente { get; set; }
+
+        [Display(Name = "Apellido Materno")]
+        public string ApellidoMaternoTutor { get; set; }
 
         [Display(Name = "Edad")]
         public int Edad { get; set; }
 
         [Display(Name = "Dirección")]
-        public string Direccion { get; set; }
+        public string DireccionPaciente { get; set; }
+
+        [Display(Name = "Dirección")]
+        public string DireccionTutor { get; set; }
+
+        [Display(Name = "Username")]
+        public string Username { get; set; }
 
         [Display(Name = "Telefono")]
-        public int Telefono { get; set; }
+        public string TelefonoTutor { get; set; }
 
         [Display(Name = "Fecha Inserción")]
-        public Nullable<System.DateTime> FchCreate { get; set; }
+        public Nullable<System.DateTime> FchCreatePaciente { get; set; }
+
+        [Display(Name = "Fecha Inserción")]
+        public Nullable<System.DateTime> FchCreateTutor { get; set; }
 
         [Display(Name = "Usuario Inserción")]
-        public string UsrCreate { get; set; }
+        public string UsrCreatePaciente { get; set; }
+
+        [Display(Name = "Usuario Inserción")]
+        public string UsrCreateTutor { get; set; }
 
         [Display(Name = "Fecha Actualización")]
-        public Nullable<System.DateTime> FchUpdate { get; set; }
+        public Nullable<System.DateTime> FchUpdatePaciente { get; set; }
+
+        [Display(Name = "Fecha Actualización")]
+        public Nullable<System.DateTime> FchUpdateTutor { get; set; }
 
         [Display(Name = "Usuario Actualización")]
-        public string UsrUpdate { get; set; }
+        public string UsrUpdatePaciente { get; set; }
 
-        public long? IdTutor { get; set; }
+        [Display(Name = "Usuario Actualización")]
+        public string UsrUpdateTutor { get; set; }
 
-        public int IdEstado { get; set; }
+        public int IdEstado { get; set; }       
 
         public EstadoDto DetalleEstado { get; set; }
+        public UsuarioDto DatosUsuario { get; set; }
+        public RolDto DetalleRol { get; set; }
+        public TelefonoDto DetalleTelefono { get; set; }
+        public PacienteDto DetallePaciente { get; set; }
+        public TipoTelefonoDto DetalleTipoTelefono { get; set; }
     }
 }

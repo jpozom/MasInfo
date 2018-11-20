@@ -250,7 +250,6 @@ namespace AppMasInfo.Negocio.DAL.Services
         }
         #endregion
 
-
         #region Delete
         public BaseDto<bool> Delete(UsuarioDto p_Obj)
         {
@@ -292,6 +291,7 @@ namespace AppMasInfo.Negocio.DAL.Services
             return result;
         }
         #endregion
+       
         #endregion
     }
 }

@@ -23,6 +23,21 @@
             });
         };
 
+        var viewDetailItemTutor = function (id) {
+            var urlDetalleTutor = '@Url.Content("~/Paciente/DetailTutor")?p_id=' + id;
+            dialogInstanceArchivo = BootstrapDialog.show({
+                title: 'masInfo - Detalle Tutor',
+                message: $('<div></div>').load(urlDetalleTutor),
+                size: BootstrapDialog.SIZE_WIDE,
+                buttons: [{
+                    label: 'Cerrar',
+                    action: function (dialogRef) {
+                        dialogRef.close();
+                    }
+                }]
+            });
+        };
+
         var deleteItem = function (id) {
             confirmationDialog(
                 'Eliminar Paciente',
@@ -165,7 +180,7 @@
                                                         <td>@item.Direccion</td>
                                                         <td>
                                                             <a href="javascript:viewDetailItem(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>
-                                                            <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
+                                                            @*<a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>*@
                                                             <a href="@Url.Action("Edit", "Paciente", new { p_Id = item.Id })"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;
                                                         </td>
                                                     </tr>
@@ -209,7 +224,8 @@
                                                         <td>@item.IdPaciente</td>
                                                         <td>@item.Direccion</td>
                                                         <td>
-                                                            <a href="javascript:viewDetailItem(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>                                                            
+                                                            <a href="javascript:viewDetailItemTutor(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>    
+                                                            <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
                                                         </td>
                                                     </tr>
                                                 }

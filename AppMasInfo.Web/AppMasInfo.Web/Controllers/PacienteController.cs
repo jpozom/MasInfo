@@ -559,16 +559,16 @@ namespace AppMasInfo.Web.Controllers
 
         #region Delete
         [HttpPost]
-        public string Delete(PacienteDetailViewModel p_ViewModel)
+        public string Delete(TutorDetailViewModel p_ViewModel)
         {
             String jsonResult = String.Empty;
 
             try
             {
                 TelefonoDto telefonoDelete = new TelefonoDto();
-                telefonoDelete.Id = p_ViewModel.IdTelefono;
+                telefonoDelete.Id = p_ViewModel.DetalleTelefono.Id;
                 telefonoDelete.IdTipoTelefono = p_ViewModel.IdTipoTelefono;
-                telefonoDelete.IdUsuario = p_ViewModel.IdUsuario;
+                telefonoDelete.IdUsuario = p_ViewModel.DatosUsuario.Id;
                 telefonoDelete.NumeroTelefono = p_ViewModel.NumeroTelefono;
 
                 var objtelefonoDB = this.TelefonoServiceModel.Delete(telefonoDelete);
@@ -576,7 +576,7 @@ namespace AppMasInfo.Web.Controllers
                 if (!objtelefonoDB.HasError)
                 {
                     TutorDto tutorDelete = new TutorDto();
-                    tutorDelete.Id = p_ViewModel.Id;
+                    tutorDelete.Id = p_ViewModel.IdTutor;
                     tutorDelete.IdUsuario = p_ViewModel.IdUsuario;
                     tutorDelete.IdEstado = (int)EnumUtils.EstadoEnum.Tutor_Deshabilitado;
                     tutorDelete.FchUpdate = DateTime.Now;
@@ -594,7 +594,7 @@ namespace AppMasInfo.Web.Controllers
                         if (!objRespUser.HasError)
                         {
                             PacienteDto pacienteDelete = new PacienteDto();
-                            pacienteDelete.Id = p_ViewModel.Id;
+                            pacienteDelete.Id = p_ViewModel.IdPaciente;
                             pacienteDelete.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Deshabilitado;
                             pacienteDelete.FchUpdate = DateTime.Now;
                             pacienteDelete.UsrUpdate = User.Identity.GetUserId();
@@ -657,35 +657,108 @@ namespace AppMasInfo.Web.Controllers
 
             try
             {
-                PacienteDto filtroPaciente = new PacienteDto();
-                filtroPaciente.FiltroId = p_Id;
+                TutorDto filtroTutor = new TutorDto();
+                filtroTutor.FiltroId = p_Id;
 
-                var objRespuestaDb = PacienteServiceModel.GetPacienteById(filtroPaciente);
+                var objRespuestaDb = TutorServiceModel.GetTutorById(filtroTutor);
 
                 if (objRespuestaDb.HasValue)
                 {
                     viewModel = new PacienteDetailViewModel
                     {
+                        IdUsuario = objRespuestaDb.Value.DatosUsuario.Id,
+                        IdTelefono = objRespuestaDb.Value.DetalleTelefono.Id,                        
                         DetalleEstado = objRespuestaDb.Value.DetalleEstado,
-                        FchCreate = objRespuestaDb.Value.FchCreate,
-                        FchUpdate = objRespuestaDb.Value.FchUpdate,
-                        Rut = objRespuestaDb.Value.Rut,
-                        Id = objRespuestaDb.Value.Id,
+                        FchCreatePaciente = objRespuestaDb.Value.DetallePaciente.FchCreate,
+                        FchUpdatePaciente = objRespuestaDb.Value.DetallePaciente.FchUpdate,
+                        FchCreateTutor = objRespuestaDb.Value.FchCreate,
+                        FchUpdateTutor = objRespuestaDb.Value.FchUpdate,
+                        RutPaciente = objRespuestaDb.Value.DetallePaciente.Rut,
+                        RutTutor = objRespuestaDb.Value.Rut,
+                        IdTutor = objRespuestaDb.Value.Id,
                         IdEstado = objRespuestaDb.Value.IdEstado,
-                        Nombre = objRespuestaDb.Value.Nombre,
-                        ApellidoPaterno = objRespuestaDb.Value.ApellidoPaterno,
-                        ApellidoMaterno = objRespuestaDb.Value.ApellidoMaterno,
-                        Edad = objRespuestaDb.Value.Edad,
-                        Telefono = objRespuestaDb.Value.NumeroTelefono,
-                        Direccion = objRespuestaDb.Value.Direccion,
-                        UsrCreate = objRespuestaDb.Value.UsrCreate,
-                        UsrUpdate = objRespuestaDb.Value.UsrUpdate
+                        NombrePaciente = objRespuestaDb.Value.DetallePaciente.Nombre,
+                        NombreTutor = objRespuestaDb.Value.Nombre,
+                        ApellidoPaternoPaciente = objRespuestaDb.Value.DetallePaciente.ApellidoPaterno,
+                        ApellidoPaternoTutor = objRespuestaDb.Value.ApellidoPaterno,
+                        ApellidoMaternoPaciente = objRespuestaDb.Value.DetallePaciente.ApellidoMaterno,
+                        ApellidoMaternoTutor = objRespuestaDb.Value.ApellidoMaterno,
+                        Edad = objRespuestaDb.Value.DetallePaciente.Edad,
+                        NumeroTelefono = objRespuestaDb.Value.DetallePaciente.NumeroTelefono,
+                        TelefonoTutor = objRespuestaDb.Value.DetalleTelefono.NumeroTelefono,
+                        DireccionTutor = objRespuestaDb.Value.Direccion,
+                        DireccionPaciente = objRespuestaDb.Value.DetallePaciente.Direccion,
+                        UsrCreatePaciente = objRespuestaDb.Value.DetallePaciente.UsrCreate,
+                        UsrUpdatePaciente = objRespuestaDb.Value.DetallePaciente.UsrUpdate,
+                        UsrCreateTutor = objRespuestaDb.Value.UsrCreate,
+                        UsrUpdateTutor = objRespuestaDb.Value.UsrUpdate
                     };
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente";
+                }
+
+                if (objRespuestaDb.HasError)
+                    throw objRespuestaDb.Error;                
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return View(viewModel);
+        }
+        #endregion
+
+        #region DetailTutor
+        [HttpGet]
+        public ActionResult DetailTutor(long p_Id)
+        {
+            TutorDetailViewModel viewModel = new TutorDetailViewModel();
+
+            try
+            {
+                TutorDto filtroTutor = new TutorDto();
+                filtroTutor.FiltroId = p_Id;
+
+                var objRespuestaDb = TutorServiceModel.GetTutorById(filtroTutor);
+
+                if (objRespuestaDb.HasValue)
+                {
+                    viewModel = new TutorDetailViewModel
+                    {
+                        IdUsuario = objRespuestaDb.Value.DatosUsuario.Id,
+                        IdTelefono = objRespuestaDb.Value.DetalleTelefono.Id,
+                        IdTipoTelefono = objRespuestaDb.Value.DetalleTelefono.IdTipoTelefono,
+                        DetalleTipoTelefono = objRespuestaDb.Value.DetalleTipoTelefono,
+                        IdPaciente = objRespuestaDb.Value.DetallePaciente.Id,
+                        DetalleEstado = objRespuestaDb.Value.DetalleEstado,                        
+                        FchCreateTutor = objRespuestaDb.Value.FchCreate,
+                        FchUpdateTutor = objRespuestaDb.Value.FchUpdate,
+                        DatosUsuario = objRespuestaDb.Value.DatosUsuario,
+                        RutTutor = objRespuestaDb.Value.Rut,
+                        IdTutor = objRespuestaDb.Value.Id,
+                        IdEstado = objRespuestaDb.Value.IdEstado,                       
+                        NombreTutor = objRespuestaDb.Value.Nombre,                        
+                        ApellidoPaternoTutor = objRespuestaDb.Value.ApellidoPaterno,                        
+                        ApellidoMaternoTutor = objRespuestaDb.Value.ApellidoMaterno,
+                        DetalleTelefono = objRespuestaDb.Value.DetalleTelefono,
+                        DireccionTutor = objRespuestaDb.Value.Direccion,                                              
+                        UsrCreateTutor = objRespuestaDb.Value.UsrCreate,
+                        UsrUpdateTutor = objRespuestaDb.Value.UsrUpdate
+                    };
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente";
                 }
 
                 if (objRespuestaDb.HasError)
                     throw objRespuestaDb.Error;
             }
+
             catch (Exception ex)
             {
                 throw ex;

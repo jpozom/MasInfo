@@ -259,11 +259,15 @@ namespace AppMasInfo.Negocio.DAL.Services
                     var tutorDb = (from t in this.dbContext.Tutor
                                    join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                    join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
-                                   join r in this.dbContext.Rol on u.IdRol equals r.Id                                   
+                                   join r in this.dbContext.Rol on u.IdRol equals r.Id  
+                                   join tel in this.dbContext.Telefono on u.Id equals tel.IdUsuario
+                                   join p in this.dbContext.Paciente on t.IdPaciente equals p.Id
+                                   join tt in this.dbContext.TipoTelefono on tel.IdTipoTelefono equals tt.IdTipoTelefono
                                    where t.Id == p_Filtro.FiltroId
                                    select new TutorDto
                                    {
                                        Id = t.Id,
+                                       Rut = t.Rut,
                                        Nombre = t.Nombre,
                                        ApellidoPaterno = t.ApellidoPaterno,
                                        ApellidoMaterno = t.ApellidoMaterno,
@@ -275,6 +279,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        IdUsuario = t.IdUsuario,
                                        IdEstado = t.IdEstado,
                                        IdPaciente = t.IdPaciente,
+                                       Direccion = t.Direccion,
                                        DetalleEstado = new EstadoDto
                                        {
                                            Id = es.Id,
@@ -292,7 +297,33 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        {
                                            Id = r.Id,
                                            Descripcion = r.Descripcion
-                                       }
+                                       },
+                                       DetalleTelefono = new TelefonoDto
+                                       {
+                                           Id = tel.Id,
+                                           NumeroTelefono = tel.NumeroTelefono,
+                                           IdTipoTelefono = tel.IdTipoTelefono,
+                                           IdUsuario = tel.IdUsuario
+                                       },
+                                       DetallePaciente = new PacienteDto
+                                       {
+                                           Id = p.Id,
+                                           Nombre = p.Nombre,
+                                           ApellidoPaterno = p.ApellidoPaterno,
+                                           ApellidoMaterno = p.ApellidoMaterno,
+                                           Edad = p.Edad,
+                                           Rut = p.Rut,
+                                           Direccion = p.Direccion,
+                                           FchCreate = p.FchCreate,
+                                           UsrCreate = p.UsrCreate,
+                                           FchUpdate = p.FchUpdate,
+                                           NumeroTelefono = p.NumeroTelefono
+                                       },
+                                       DetalleTipoTelefono = new TipoTelefonoDto
+                                       {
+                                           IdTipoTelefono = tt.IdTipoTelefono,
+                                           Descripcion = tt.Descripcion                                           
+                                       },
                                    }).FirstOrDefault();
 
                     objResult = new BaseDto<TutorDto>(tutorDb);
