@@ -309,12 +309,12 @@ namespace AppMasInfo.Negocio.DAL.Services
             {
                 using (this.dbContext = new MasInfoWebEntities_02())
                 {
-                    if (p_Filtro.FiltroNombre != null || p_Filtro.FiltroRut != null)
+                    if (p_Filtro.FiltroNombre != null || p_Filtro.FiltroId != null)
                     {
                         lstResultado = (from p in this.dbContext.Paciente
                                         where (p.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null) &&
                                               (p.Nombre.Contains(p_Filtro.FiltroNombre) || string.IsNullOrEmpty(p_Filtro.FiltroNombre) &&
-                                              (p.Rut == p_Filtro.FiltroRut))
+                                              (p.Id == p_Filtro.FiltroId))
                                         select new PacienteDto
                                         {
                                             Id = p.Id,

@@ -90,9 +90,10 @@ namespace AppMasInfo.Web.Controllers
 
             try
             {
-                var pFiltroObj = new PacienteDto(p_ViewModel.FiltroPaginado.PaginaActual, p_ViewModel.FiltroPaginado.TamanoPagina);
+                //var pFiltroObj = new PacienteDto(p_ViewModel.FiltroPaginado.PaginaActual, p_ViewModel.FiltroPaginado.TamanoPagina);
+                var pFiltroObj = new PacienteDto();
                 if (p_ViewModel.FiltroIdEstado != null) { pFiltroObj.FiltroIdEstado = p_ViewModel.FiltroIdEstado; } else { pFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado; }
-                pFiltroObj.FiltroRut = p_ViewModel.FiltroRut;
+                pFiltroObj.FiltroId = p_ViewModel.FiltroIdRut;
                 pFiltroObj.FiltroNombre = p_ViewModel.FiltroNombre;
 
                 var pListDbResponse = this.PacienteServiceModel.GetListaPacienteByFitro(pFiltroObj);
@@ -105,7 +106,7 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de Grupos Contribuyentes. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de Grupos Contribuyentes. Por favor, inténtelo nuevamente "+ex;
             }
 
             return jsonResult;
