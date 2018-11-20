@@ -51,6 +51,9 @@
     <Compile Include="DAL\Database\CargoFuncion.cs">
       <DependentUpon>MasInfoModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAL\Database\EquipoPaciente.cs">
+      <DependentUpon>MasInfoModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DAL\Database\Estado.cs">
       <DependentUpon>MasInfoModel.tt</DependentUpon>
     </Compile>
@@ -103,6 +106,7 @@
     <Compile Include="DAL\Entities\CargoDto.cs" />
     <Compile Include="DAL\Entities\CargoFuncionDto.cs" />
     <Compile Include="DAL\Entities\ContextoDto.cs" />
+    <Compile Include="DAL\Entities\EquipoPacienteDto.cs" />
     <Compile Include="DAL\Entities\EstadoDto.cs" />
     <Compile Include="DAL\Entities\ObjectDto.cs" />
     <Compile Include="DAL\Entities\PacienteDto.cs" />
@@ -117,9 +121,11 @@
     <Compile Include="DAL\Entities\UsuarioDto.cs" />
     <Compile Include="DAL\Services\CargoFuncionService.cs" />
     <Compile Include="DAL\Services\CargoService.cs" />
+    <Compile Include="DAL\Services\EquipoPacienteService.cs" />
     <Compile Include="DAL\Services\EstadoService.cs" />
     <Compile Include="DAL\Services\ICargoFuncionService.cs" />
     <Compile Include="DAL\Services\ICargoService.cs" />
+    <Compile Include="DAL\Services\IEquipoPacienteService.cs" />
     <Compile Include="DAL\Services\IEstadoService.cs" />
     <Compile Include="DAL\Services\IPacienteService.cs" />
     <Compile Include="DAL\Services\IPacienteUbicacionService.cs" />

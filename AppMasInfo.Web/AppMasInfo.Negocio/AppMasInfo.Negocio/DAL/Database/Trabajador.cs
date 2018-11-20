@@ -14,6 +14,12 @@ namespace AppMasInfo.Negocio.DAL.Database
     
     public partial class Trabajador
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Trabajador()
+        {
+            this.EquipoPaciente = new HashSet<EquipoPaciente>();
+        }
+    
         public long Id { get; set; }
         public string Nombre { get; set; }
         public string ApellidoPaterno { get; set; }
@@ -32,5 +38,7 @@ namespace AppMasInfo.Negocio.DAL.Database
         public virtual CargoFuncion CargoFuncion { get; set; }
         public virtual Estado Estado { get; set; }
         public virtual Usuario Usuario { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EquipoPaciente> EquipoPaciente { get; set; }
     }
 }

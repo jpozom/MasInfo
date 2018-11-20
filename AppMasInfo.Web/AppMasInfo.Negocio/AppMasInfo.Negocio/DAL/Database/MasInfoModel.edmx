@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MasInfoWebModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MasInfoWebModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Cargo">
           <Key>
             <PropertyRef Name="Id" />
@@ -19,6 +19,14 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Descripcion" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EquipoPaciente">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="IdPaciente" Type="bigint" Nullable="false" />
+          <Property Name="IdTrabajador" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="Estado">
           <Key>
@@ -152,6 +160,30 @@
             </Principal>
             <Dependent Role="Cargo">
               <PropertyRef Name="IdCargoFuncion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EquipoPaciente_Paciente">
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="1" />
+          <End Role="EquipoPaciente" Type="Self.EquipoPaciente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EquipoPaciente">
+              <PropertyRef Name="IdPaciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EquipoPaciente_Trabajador">
+          <End Role="Trabajador" Type="Self.Trabajador" Multiplicity="1" />
+          <End Role="EquipoPaciente" Type="Self.EquipoPaciente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trabajador">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EquipoPaciente">
+              <PropertyRef Name="IdTrabajador" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -314,6 +346,7 @@
         <EntityContainer Name="MasInfoWebModelStoreContainer">
           <EntitySet Name="Cargo" EntityType="Self.Cargo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CargoFuncion" EntityType="Self.CargoFuncion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EquipoPaciente" EntityType="Self.EquipoPaciente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Estado" EntityType="Self.Estado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Paciente" EntityType="Self.Paciente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PacienteUbicacion" EntityType="Self.PacienteUbicacion" Schema="dbo" store:Type="Tables" />
@@ -328,6 +361,14 @@
           <AssociationSet Name="FK_Cargo_CargoFuncion" Association="Self.FK_Cargo_CargoFuncion">
             <End Role="CargoFuncion" EntitySet="CargoFuncion" />
             <End Role="Cargo" EntitySet="Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EquipoPaciente_Paciente" Association="Self.FK_EquipoPaciente_Paciente">
+            <End Role="Paciente" EntitySet="Paciente" />
+            <End Role="EquipoPaciente" EntitySet="EquipoPaciente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EquipoPaciente_Trabajador" Association="Self.FK_EquipoPaciente_Trabajador">
+            <End Role="Trabajador" EntitySet="Trabajador" />
+            <End Role="EquipoPaciente" EntitySet="EquipoPaciente" />
           </AssociationSet>
           <AssociationSet Name="FK_Paciente_Estado" Association="Self.FK_Paciente_Estado">
             <End Role="Estado" EntitySet="Estado" />
@@ -382,8 +423,7 @@
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MasInfoWebModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -437,6 +477,7 @@
           <NavigationProperty Name="Estado" Relationship="Self.FK_Paciente_Estado" FromRole="Paciente" ToRole="Estado" />
           <NavigationProperty Name="PacienteUbicacion" Relationship="Self.FK_PacienteUbicacion_Paciente" FromRole="Paciente" ToRole="PacienteUbicacion" />
           <NavigationProperty Name="Tutor" Relationship="Self.FK_Tutor_Paciente" FromRole="Paciente" ToRole="Tutor" />
+          <NavigationProperty Name="EquipoPaciente" Relationship="MasInfoWebModel.FK_EquipoPaciente_Paciente" FromRole="Paciente" ToRole="EquipoPaciente" />
         </EntityType>
         <EntityType Name="PacienteUbicacion">
           <Key>
@@ -509,6 +550,7 @@
           <NavigationProperty Name="CargoFuncion" Relationship="Self.FK_Trabajador_CargoFuncion" FromRole="Trabajador" ToRole="CargoFuncion" />
           <NavigationProperty Name="Estado" Relationship="Self.FK_Trabajador_Estado" FromRole="Trabajador" ToRole="Estado" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Trabajador_Usuario" FromRole="Trabajador" ToRole="Usuario" />
+          <NavigationProperty Name="EquipoPaciente" Relationship="MasInfoWebModel.FK_EquipoPaciente_Trabajador" FromRole="Trabajador" ToRole="EquipoPaciente" />
         </EntityType>
         <EntityType Name="Tutor">
           <Key>
@@ -791,7 +833,50 @@
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Tutor" EntitySet="Tutor" />
           </AssociationSet>
+          <EntitySet Name="EquipoPaciente" EntityType="MasInfoWebModel.EquipoPaciente" />
+          <AssociationSet Name="FK_EquipoPaciente_Paciente" Association="MasInfoWebModel.FK_EquipoPaciente_Paciente">
+            <End Role="Paciente" EntitySet="Paciente" />
+            <End Role="EquipoPaciente" EntitySet="EquipoPaciente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EquipoPaciente_Trabajador" Association="MasInfoWebModel.FK_EquipoPaciente_Trabajador">
+            <End Role="Trabajador" EntitySet="Trabajador" />
+            <End Role="EquipoPaciente" EntitySet="EquipoPaciente" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="EquipoPaciente">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="IdPaciente" Type="Int64" Nullable="false" />
+          <Property Name="IdTrabajador" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Paciente" Relationship="MasInfoWebModel.FK_EquipoPaciente_Paciente" FromRole="EquipoPaciente" ToRole="Paciente" />
+          <NavigationProperty Name="Trabajador" Relationship="MasInfoWebModel.FK_EquipoPaciente_Trabajador" FromRole="EquipoPaciente" ToRole="Trabajador" />
+        </EntityType>
+        <Association Name="FK_EquipoPaciente_Paciente">
+          <End Type="MasInfoWebModel.Paciente" Role="Paciente" Multiplicity="1" />
+          <End Type="MasInfoWebModel.EquipoPaciente" Role="EquipoPaciente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EquipoPaciente">
+              <PropertyRef Name="IdPaciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EquipoPaciente_Trabajador">
+          <End Type="MasInfoWebModel.Trabajador" Role="Trabajador" Multiplicity="1" />
+          <End Type="MasInfoWebModel.EquipoPaciente" Role="EquipoPaciente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Trabajador">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EquipoPaciente">
+              <PropertyRef Name="IdTrabajador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -946,6 +1031,15 @@
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Pass" ColumnName="Pass" />
                 <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EquipoPaciente">
+            <EntityTypeMapping TypeName="MasInfoWebModel.EquipoPaciente">
+              <MappingFragment StoreEntitySet="EquipoPaciente">
+                <ScalarProperty Name="IdTrabajador" ColumnName="IdTrabajador" />
+                <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
