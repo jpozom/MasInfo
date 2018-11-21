@@ -94,7 +94,7 @@ namespace AppMasInfo.Web.Controllers
                 var tutorFiltroObj = new TutorDto();
                 tutorFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Tutor_Habilitado;
                 //se envia el objeto al servicio
-                var tutorListDbResponse = this.TutorServiceModel.GetTutorAll(tutorFiltroObj);
+                var tutorListDbResponse = this.TutorServiceModel.GetListaTutorByFiltro(tutorFiltroObj);
 
                 //se devuelve la consulta
                 viewModel.lstTutor = tutorListDbResponse.HasValue ? tutorListDbResponse.Value : new List<TutorDto>();
@@ -188,7 +188,7 @@ namespace AppMasInfo.Web.Controllers
                                     UsuarioNewDb.Username = p_ViewModel.Username;
                                     UsuarioNewDb.Pass = GlobalMethods.EncryptPass(p_ViewModel.Pass);
                                     UsuarioNewDb.IdRol = p_ViewModel.IdRol;
-
+                                   
                                     var objRespuesta = UsuarioServiceModel.InsertarUsuario(UsuarioNewDb);
 
                                     if (!objRespuesta.HasError)
@@ -440,7 +440,7 @@ namespace AppMasInfo.Web.Controllers
                     if (isRutOk)
                     {
                         PacienteDto objPacienteEdit = new PacienteDto();
-                        objPacienteEdit.Rut = p_ViewModel.Rut;
+                        //objPacienteEdit.Rut = p_ViewModel.Rut;
                         objPacienteEdit.Nombre = p_ViewModel.Nombre;
                         objPacienteEdit.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
                         objPacienteEdit.ApellidoPaterno = p_ViewModel.ApellidoPaterno;
@@ -473,7 +473,7 @@ namespace AppMasInfo.Web.Controllers
                                 if (isRutOk)
                                 {
                                     TutorDto objTutorUpdate = new TutorDto();
-                                    objTutorUpdate.Rut = p_ViewModel.RutTutor;
+                                    //objTutorUpdate.Rut = p_ViewModel.RutTutor;
                                     objTutorUpdate.Nombre = p_ViewModel.NombreTutor;
                                     objTutorUpdate.IdEstado = (int)EnumUtils.EstadoEnum.Tutor_Habilitado;
                                     objTutorUpdate.ApellidoPaterno = p_ViewModel.ApellidoPaternoTutor;
@@ -559,85 +559,61 @@ namespace AppMasInfo.Web.Controllers
 
         #region Delete
         [HttpPost]
-        public string Delete(TutorDetailViewModel p_ViewModel)
+        public string Delete(PacienteDetailViewModel p_ViewModel)
         {
             String jsonResult = String.Empty;
 
             try
             {
-                TelefonoDto telefonoDelete = new TelefonoDto();
-                telefonoDelete.Id = p_ViewModel.DetalleTelefono.Id;
-                telefonoDelete.IdTipoTelefono = p_ViewModel.IdTipoTelefono;
-                telefonoDelete.IdUsuario = p_ViewModel.DatosUsuario.Id;
-                telefonoDelete.NumeroTelefono = p_ViewModel.NumeroTelefono;
+                PacienteDto pacienteDelete = new PacienteDto();
+                pacienteDelete.Id = p_ViewModel.IdPaciente;
+                pacienteDelete.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Deshabilitado;
+                pacienteDelete.FchUpdate = DateTime.Now;
+                pacienteDelete.UsrUpdate = User.Identity.GetUserId();
+                pacienteDelete.FiltroId = p_ViewModel.IdPaciente;
 
-                var objtelefonoDB = this.TelefonoServiceModel.Delete(telefonoDelete);
+                TutorDto tutorDelete = new TutorDto();
+                tutorDelete.IdPaciente = p_ViewModel.IdPaciente;
+                tutorDelete.IdEstado = (int)EnumUtils.EstadoEnum.Tutor_Deshabilitado;
+                tutorDelete.FchUpdate = DateTime.Now;
+                tutorDelete.UsrUpdate = User.Identity.GetUserId();
+                tutorDelete.FiltroIdPaciente = p_ViewModel.IdPaciente;
 
-                if (!objtelefonoDB.HasError)
+                var tutorDB = this.TutorServiceModel.GetTutorByPaciente(tutorDelete);
+
+                UsuarioDto userDelete = new UsuarioDto();
+                userDelete.Id= tutorDB.Value.IdUsuario;
+
+                var objRespDB = this.UsuarioServiceModel.Delete(userDelete);
+
+                if (!objRespDB.HasError)
                 {
-                    TutorDto tutorDelete = new TutorDto();
-                    tutorDelete.Id = p_ViewModel.IdTutor;
-                    tutorDelete.IdUsuario = p_ViewModel.IdUsuario;
-                    tutorDelete.IdEstado = (int)EnumUtils.EstadoEnum.Tutor_Deshabilitado;
-                    tutorDelete.FchUpdate = DateTime.Now;
-                    tutorDelete.UsrUpdate = User.Identity.GetUserId();
-
                     var objRespuestaDB = this.TutorServiceModel.Delete(tutorDelete);
 
                     if (!objRespuestaDB.HasError)
                     {
-                        UsuarioDto userDelete = new UsuarioDto();
-                        userDelete.Id = p_ViewModel.IdUsuario;
+                        var objRespuesta = this.PacienteServiceModel.Delete(pacienteDelete);
 
-                        var objRespUser = this.UsuarioServiceModel.Delete(userDelete);
-
-                        if (!objRespUser.HasError)
+                        if (!objRespuesta.HasError)
                         {
-                            PacienteDto pacienteDelete = new PacienteDto();
-                            pacienteDelete.Id = p_ViewModel.IdPaciente;
-                            pacienteDelete.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Deshabilitado;
-                            pacienteDelete.FchUpdate = DateTime.Now;
-                            pacienteDelete.UsrUpdate = User.Identity.GetUserId();
-
-                            var objRespuesta = this.PacienteServiceModel.Delete(pacienteDelete);
-
-                            if (!objRespuesta.HasError)
-                            {
-                                jsonResult = JsonConvert.SerializeObject(
-                                    new
-                                    {
-                                        status = "ok",
-                                        message = "Registro eliminado correctamente"
-                                    });
-                            }
-                            else
-                            {
-                                jsonResult = JsonConvert.SerializeObject(
-                                        new
-                                        {
-                                            status = "error",
-                                            message = "No puede eliminar al Tutor"
-                                        });
-                            }
+                            jsonResult = JsonConvert.SerializeObject(
+                                new
+                                {
+                                    status = "ok",
+                                    message = "Registro eliminado correctamente"
+                                });
                         }
                         else
                         {
-
-                        }
-                    }
-                    else
-                    {
-                        jsonResult = JsonConvert.SerializeObject(
+                            jsonResult = JsonConvert.SerializeObject(
                                     new
                                     {
                                         status = "error",
-                                        message = "No se puede eliminar el registro"
+                                        message = "No puede eliminar al Tutor"
                                     });
-                    }
-                }
-                else
-                {
+                        }
 
+                    }
                 }
             }
             catch (Exception ex)
@@ -657,41 +633,29 @@ namespace AppMasInfo.Web.Controllers
 
             try
             {
-                TutorDto filtroTutor = new TutorDto();
-                filtroTutor.FiltroId = p_Id;
+                PacienteDto filtroPaciente = new PacienteDto();
+                filtroPaciente.FiltroId = p_Id;
 
-                var objRespuestaDb = TutorServiceModel.GetTutorById(filtroTutor);
+                var objRespuestaDb = PacienteServiceModel.GetPacienteById(filtroPaciente);
 
                 if (objRespuestaDb.HasValue)
                 {
                     viewModel = new PacienteDetailViewModel
                     {
-                        IdUsuario = objRespuestaDb.Value.DatosUsuario.Id,
-                        IdTelefono = objRespuestaDb.Value.DetalleTelefono.Id,                        
                         DetalleEstado = objRespuestaDb.Value.DetalleEstado,
-                        FchCreatePaciente = objRespuestaDb.Value.DetallePaciente.FchCreate,
-                        FchUpdatePaciente = objRespuestaDb.Value.DetallePaciente.FchUpdate,
-                        FchCreateTutor = objRespuestaDb.Value.FchCreate,
-                        FchUpdateTutor = objRespuestaDb.Value.FchUpdate,
-                        RutPaciente = objRespuestaDb.Value.DetallePaciente.Rut,
-                        RutTutor = objRespuestaDb.Value.Rut,
-                        IdTutor = objRespuestaDb.Value.Id,
+                        FchCreatePaciente = objRespuestaDb.Value.FchCreate,
+                        FchUpdatePaciente = objRespuestaDb.Value.FchUpdate,
+                        RutPaciente = objRespuestaDb.Value.Rut,
+                        IdPaciente = objRespuestaDb.Value.Id,
                         IdEstado = objRespuestaDb.Value.IdEstado,
-                        NombrePaciente = objRespuestaDb.Value.DetallePaciente.Nombre,
-                        NombreTutor = objRespuestaDb.Value.Nombre,
-                        ApellidoPaternoPaciente = objRespuestaDb.Value.DetallePaciente.ApellidoPaterno,
-                        ApellidoPaternoTutor = objRespuestaDb.Value.ApellidoPaterno,
-                        ApellidoMaternoPaciente = objRespuestaDb.Value.DetallePaciente.ApellidoMaterno,
-                        ApellidoMaternoTutor = objRespuestaDb.Value.ApellidoMaterno,
-                        Edad = objRespuestaDb.Value.DetallePaciente.Edad,
-                        NumeroTelefono = objRespuestaDb.Value.DetallePaciente.NumeroTelefono,
-                        TelefonoTutor = objRespuestaDb.Value.DetalleTelefono.NumeroTelefono,
-                        DireccionTutor = objRespuestaDb.Value.Direccion,
-                        DireccionPaciente = objRespuestaDb.Value.DetallePaciente.Direccion,
-                        UsrCreatePaciente = objRespuestaDb.Value.DetallePaciente.UsrCreate,
-                        UsrUpdatePaciente = objRespuestaDb.Value.DetallePaciente.UsrUpdate,
-                        UsrCreateTutor = objRespuestaDb.Value.UsrCreate,
-                        UsrUpdateTutor = objRespuestaDb.Value.UsrUpdate
+                        NombrePaciente = objRespuestaDb.Value.Nombre,
+                        ApellidoPaternoPaciente = objRespuestaDb.Value.ApellidoPaterno,
+                        ApellidoMaternoPaciente = objRespuestaDb.Value.ApellidoMaterno,
+                        Edad = objRespuestaDb.Value.Edad,
+                        NumeroTelefono = objRespuestaDb.Value.NumeroTelefono,
+                        DireccionPaciente = objRespuestaDb.Value.Direccion,
+                        UsrCreatePaciente = objRespuestaDb.Value.UsrCreate,
+                        UsrUpdatePaciente = objRespuestaDb.Value.UsrUpdate,
                     };
                 }
                 else
@@ -700,7 +664,7 @@ namespace AppMasInfo.Web.Controllers
                 }
 
                 if (objRespuestaDb.HasError)
-                    throw objRespuestaDb.Error;                
+                    throw objRespuestaDb.Error;
             }
 
             catch (Exception ex)
@@ -734,18 +698,18 @@ namespace AppMasInfo.Web.Controllers
                         IdTipoTelefono = objRespuestaDb.Value.DetalleTelefono.IdTipoTelefono,
                         DetalleTipoTelefono = objRespuestaDb.Value.DetalleTipoTelefono,
                         IdPaciente = objRespuestaDb.Value.DetallePaciente.Id,
-                        DetalleEstado = objRespuestaDb.Value.DetalleEstado,                        
+                        DetalleEstado = objRespuestaDb.Value.DetalleEstado,
                         FchCreateTutor = objRespuestaDb.Value.FchCreate,
                         FchUpdateTutor = objRespuestaDb.Value.FchUpdate,
                         DatosUsuario = objRespuestaDb.Value.DatosUsuario,
                         RutTutor = objRespuestaDb.Value.Rut,
                         IdTutor = objRespuestaDb.Value.Id,
-                        IdEstado = objRespuestaDb.Value.IdEstado,                       
-                        NombreTutor = objRespuestaDb.Value.Nombre,                        
-                        ApellidoPaternoTutor = objRespuestaDb.Value.ApellidoPaterno,                        
+                        IdEstado = objRespuestaDb.Value.IdEstado,
+                        NombreTutor = objRespuestaDb.Value.Nombre,
+                        ApellidoPaternoTutor = objRespuestaDb.Value.ApellidoPaterno,
                         ApellidoMaternoTutor = objRespuestaDb.Value.ApellidoMaterno,
                         DetalleTelefono = objRespuestaDb.Value.DetalleTelefono,
-                        DireccionTutor = objRespuestaDb.Value.Direccion,                                              
+                        DireccionTutor = objRespuestaDb.Value.Direccion,
                         UsrCreateTutor = objRespuestaDb.Value.UsrCreate,
                         UsrUpdateTutor = objRespuestaDb.Value.UsrUpdate
                     };

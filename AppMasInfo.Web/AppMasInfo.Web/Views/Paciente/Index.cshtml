@@ -46,9 +46,9 @@
             );
         };
 
-        var doDeleteItem = function (id) {
+        var doDeleteItem = function (idPaciente) {
             var objRequestData = new Object();
-            objRequestData.Id = id;
+            objRequestData.IdPaciente = idPaciente;
 
             $.ajax({
                 url: '@Url.Action("Delete", "Paciente")',
@@ -155,14 +155,14 @@
                                     <table id="tblPacientes" class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th><h6 align="left">Id</h6></th>
-                                                <th><h6 align="left">Rut</h6></th>
-                                                <th><h6 align="left">Nombre</h6></th>
-                                                <th><h6 align="left">Apellido Paterno</h6></th>
-                                                <th><h6 align="left">Edad</h6></th>
-                                                <th><h6 align="left">Telefono</h6></th>
-                                                <th><h6 align="left">Direccion</h6></th>
-                                                <th><h6 align="left">Acci&oacute;n</h6></th>
+                                                <th style="width:5%"><h6 align="left">Id</h6></th>
+                                                <th style="width:15%"><h6 align="left">Rut</h6></th>
+                                                <th style="width:15%"><h6 align="left">Nombre</h6></th>
+                                                <th style="width:15%"><h6 align="left">Apellido Paterno</h6></th>
+                                                <th style="width:6%"><h6 align="left">Edad</h6></th>
+                                                <th style="width:15%"><h6 align="left">Tel&eacute;fono</h6></th>
+                                                <th style="width:20%"><h6 align="left">Direcci&oacute;n</h6></th>
+                                                <th style="width:12%"><h6 align="center">Acci&oacute;n</h6></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -180,7 +180,7 @@
                                                         <td>@item.Direccion</td>
                                                         <td>
                                                             <a href="javascript:viewDetailItem(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>
-                                                            @*<a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>*@
+                                                            <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
                                                             <a href="@Url.Action("Edit", "Paciente", new { p_Id = item.Id })"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;
                                                         </td>
                                                     </tr>
@@ -206,8 +206,9 @@
                                                 <th><h6 align="left">Apellido Paterno</h6></th>
                                                 <th><h6 align="left">Email</h6></th>
                                                 <th><h6 align="left">Id Paciente</h6></th>
-                                                <th><h6 align="left">Direccion</h6></th>
-                                                <th><h6 align="left">Acci&oacute;n</h6></th>
+                                                <th><h6 align="left">Direcci&oacute;n</h6></th>
+                                                <th><h6 align="left">Rol</h6></th>
+                                                <th><h6 align="center">Acci&oacute;n</h6></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -223,9 +224,9 @@
                                                         <td>@item.Email</td>
                                                         <td>@item.IdPaciente</td>
                                                         <td>@item.Direccion</td>
-                                                        <td>
-                                                            <a href="javascript:viewDetailItemTutor(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>    
-                                                            <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
+                                                        <td>@item.DetalleRol.Descripcion</td>
+                                                        <td align="center">
+                                                            <a href="javascript:viewDetailItemTutor(@item.Id)"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>
                                                         </td>
                                                     </tr>
                                                 }

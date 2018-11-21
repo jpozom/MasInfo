@@ -18,6 +18,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public string Username { get; set; }
         public string Pass { get; set; }
         public int IdRol { get; set; }
+        public Nullable<bool> Habilitado { get; set; }
 
         public string FiltroUsername { get; set; }
         public int? FiltroIdRol { get; set; }

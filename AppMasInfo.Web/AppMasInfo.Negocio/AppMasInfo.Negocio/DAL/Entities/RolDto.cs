@@ -10,5 +10,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
     {
         public int Id { get; set; }
         public string Descripcion { get; set; }
+
+        public RolDto DetalleRol { get; set; }
     }
 }

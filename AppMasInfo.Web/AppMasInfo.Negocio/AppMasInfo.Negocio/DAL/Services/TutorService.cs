@@ -28,8 +28,10 @@ namespace AppMasInfo.Negocio.DAL.Services
         }
         #endregion
 
-        #region GetTutorAll
-        public BaseDto<List<TutorDto>> GetTutorAll(TutorDto p_Filtro)
+        #region metodos publicos
+
+        #region GetListaTutorByFiltro
+        public BaseDto<List<TutorDto>> GetListaTutorByFiltro(TutorDto p_Filtro)
         {
             BaseDto<List<TutorDto>> objResult = null;
 
@@ -50,7 +52,16 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        IdUsuario = t.IdUsuario,
                                        IdEstado = t.IdEstado,
                                        Email = t.Email,
-                                       IdPaciente = t.IdPaciente
+                                       IdPaciente = t.IdPaciente,
+                                       DetalleRol = (from u in this.dbContext.Usuario
+                                                          join r in this.dbContext.Rol on u.IdRol equals r.Id
+                                                          where u.Id == t.IdUsuario
+                                                          select new RolDto                                                         
+                                                          {
+                                                              Id = r.Id,
+                                                              Descripcion = r.Descripcion
+
+                                                          }).FirstOrDefault()
                                    }).ToList();
 
                     objResult = new BaseDto<List<TutorDto>>(tutorDb);
@@ -177,8 +188,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                     {
                         tutorDb.Nombre = p_Obj.Nombre;
                         tutorDb.ApellidoPaterno = p_Obj.ApellidoPaterno;
-                        tutorDb.ApellidoMaterno = p_Obj.ApellidoMaterno;
-                        tutorDb.Rut = p_Obj.Rut;
+                        tutorDb.ApellidoMaterno = p_Obj.ApellidoMaterno;                       
                         tutorDb.Email = p_Obj.Email;
                         tutorDb.Direccion = p_Obj.Direccion;
                         tutorDb.FchUpdate = p_Obj.FchUpdate;
@@ -218,7 +228,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                     //Obtener el objeto origen desde base de datos
                     //El metodo .FirstOrDefault, retorna el primer objeto encontrado de acuerdo
                     // a un determinado filtro de búsqueda, y en caso contrario, retorna null
-                    var objOrigenDb = this.dbContext.Tutor.FirstOrDefault(c => c.Id == p_Obj.Id);
+                    var objOrigenDb = this.dbContext.Tutor.FirstOrDefault(c => c.IdPaciente == p_Obj.IdPaciente);
 
                     if (objOrigenDb != null)
                     {
@@ -259,7 +269,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                     var tutorDb = (from t in this.dbContext.Tutor
                                    join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                    join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
-                                   join r in this.dbContext.Rol on u.IdRol equals r.Id  
+                                   join r in this.dbContext.Rol on u.IdRol equals r.Id
                                    join tel in this.dbContext.Telefono on u.Id equals tel.IdUsuario
                                    join p in this.dbContext.Paciente on t.IdPaciente equals p.Id
                                    join tt in this.dbContext.TipoTelefono on tel.IdTipoTelefono equals tt.IdTipoTelefono
@@ -322,7 +332,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        DetalleTipoTelefono = new TipoTelefonoDto
                                        {
                                            IdTipoTelefono = tt.IdTipoTelefono,
-                                           Descripcion = tt.Descripcion                                           
+                                           Descripcion = tt.Descripcion
                                        },
                                    }).FirstOrDefault();
 
@@ -354,7 +364,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                     var tutorDb = (from t in this.dbContext.Tutor
                                    join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                    join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
-                                   join r in this.dbContext.Rol on u.IdRol equals r.Id                                      
+                                   join r in this.dbContext.Rol on u.IdRol equals r.Id
                                    where t.IdPaciente == p_Filtro.FiltroIdPaciente
                                    select new TutorDto
                                    {
@@ -389,7 +399,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        {
                                            Id = r.Id,
                                            Descripcion = r.Descripcion
-                                       }                                      
+                                       }
                                    }).FirstOrDefault();
 
                     objResult = new BaseDto<TutorDto>(tutorDb);
@@ -406,6 +416,8 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             return objResult;
         }
+        #endregion
+
         #endregion
     }
 }

@@ -26,6 +26,7 @@ namespace AppMasInfo.Negocio.DAL.Database
         public string Username { get; set; }
         public string Pass { get; set; }
         public int IdRol { get; set; }
+        public Nullable<bool> Habilitado { get; set; }
     
         public virtual Rol Rol { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

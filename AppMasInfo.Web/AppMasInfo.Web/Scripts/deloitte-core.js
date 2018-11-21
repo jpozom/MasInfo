@@ -160,10 +160,10 @@ var bindPagerControlToEvents = function (callback) {
     $('#TamanoPagina').on("change", function () { doPaginador('page', callback) });
 };
 
-var showPrivacyStatement = function (url) {
+var showPrivacidad = function (url) {
     BootstrapDialog.show({
         type: BootstrapDialog.TYPE_INFO,
-        title: 'Deloitte Privacy Statement',
+        title: 'MasInfo Términos y Condiciones',
         message: function (dialog) {
             var $message = $('<div></div>');
             var pageToLoad = dialog.getData('pageToLoad');
@@ -177,7 +177,7 @@ var showPrivacyStatement = function (url) {
         size: BootstrapDialog.SIZE_WIDE,
         buttons: [{
             label: 'Aceptar',
-            cssClass: 'btn-success',
+            cssClass: 'btn-default',
             action: function (dialog) {
                 dialog.close();
             }

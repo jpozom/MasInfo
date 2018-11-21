@@ -125,37 +125,22 @@ namespace AppMasInfo.Web.Models
 
         public string NumeroTelefono { get; set; }
 
-        public string DescripcionTelefono { get; set; }
+        public string DescripcionTelefono { get; set; }       
 
         [Display(Name = "Rut")]
-        public string RutPaciente { get; set; }
-
-        [Display(Name = "Rut")]
-        public string RutTutor { get; set; }
+        public string RutTutor { get; set; }       
 
         [Display(Name = "Nombre")]
-        public string NombrePaciente { get; set; }
-
-        [Display(Name = "Nombre")]
-        public string NombreTutor { get; set; }
-
-        [Display(Name = "Apellido Paterno")]
-        public string ApellidoPaternoPaciente { get; set; }
+        public string NombreTutor { get; set; }        
 
         [Display(Name = "Apellido Paterno")]
         public string ApellidoPaternoTutor { get; set; }
 
         [Display(Name = "Apellido Materno")]
-        public string ApellidoMaternoPaciente { get; set; }
-
-        [Display(Name = "Apellido Materno")]
         public string ApellidoMaternoTutor { get; set; }
 
         [Display(Name = "Edad")]
-        public int Edad { get; set; }
-
-        [Display(Name = "Dirección")]
-        public string DireccionPaciente { get; set; }
+        public int Edad { get; set; }       
 
         [Display(Name = "Dirección")]
         public string DireccionTutor { get; set; }
@@ -167,29 +152,18 @@ namespace AppMasInfo.Web.Models
         public string TelefonoTutor { get; set; }
 
         [Display(Name = "Fecha Inserción")]
-        public Nullable<System.DateTime> FchCreatePaciente { get; set; }
-
-        [Display(Name = "Fecha Inserción")]
-        public Nullable<System.DateTime> FchCreateTutor { get; set; }
-
-        [Display(Name = "Usuario Inserción")]
-        public string UsrCreatePaciente { get; set; }
+        public Nullable<System.DateTime> FchCreateTutor { get; set; }      
 
         [Display(Name = "Usuario Inserción")]
         public string UsrCreateTutor { get; set; }
 
         [Display(Name = "Fecha Actualización")]
-        public Nullable<System.DateTime> FchUpdatePaciente { get; set; }
-
-        [Display(Name = "Fecha Actualización")]
-        public Nullable<System.DateTime> FchUpdateTutor { get; set; }
-
-        [Display(Name = "Usuario Actualización")]
-        public string UsrUpdatePaciente { get; set; }
+        public Nullable<System.DateTime> FchUpdateTutor { get; set; }      
 
         [Display(Name = "Usuario Actualización")]
         public string UsrUpdateTutor { get; set; }
 
+        [Display(Name = "Estado")]
         public int IdEstado { get; set; }       
 
         public EstadoDto DetalleEstado { get; set; }

@@ -15,29 +15,15 @@ namespace AppMasInfo.Web.Models
             this.LstPaciente = new BaseDto<List<PacienteDto>>(new List<PacienteDto>());
         }
         
-        public BaseDto<List<PacienteDto>> LstPaciente
-        {
-            get;
-            set;
-        }
+        public BaseDto<List<PacienteDto>> LstPaciente { get; set; }
+   
+        public List<PacienteDto> lstPaciente { get; set; }
+    
+        public BaseDto<List<TutorDto>> LstTutor { get; set; }
+     
+        public List<TutorDto> lstTutor { get; set; }          
 
-        public List<PacienteDto> lstPaciente
-        {
-            get;
-            set;
-        }
-
-        public BaseDto<List<TutorDto>> LstTutor
-        {
-            get;
-            set;
-        }
-
-        public List<TutorDto> lstTutor
-        {
-            get;
-            set;
-        }
+        public RolDto DetalleRol { get; set; }
     }
 
     public class PacienteCreateViewModel
@@ -155,7 +141,7 @@ namespace AppMasInfo.Web.Models
 
         #region Propiedades Paciente
         
-        [Display(Name = "Rut")]
+        [Display(Name = "Rut Paciente")]
         public string Rut { get; set; }
 
         [Display(Name = "Nombre")]
@@ -183,7 +169,7 @@ namespace AppMasInfo.Web.Models
 
         public long IdTutor { get; set; }
 
-        [Required(ErrorMessage = "Debe ingresar un Rut")]       
+        [Display(Name = "Rut Tutor")]
         public string RutTutor { get; set; }
 
         [Display(Name = "Nombre")]
@@ -234,6 +220,8 @@ namespace AppMasInfo.Web.Models
 
     public class PacienteDetailViewModel
     {
+        public long Id { get; set; }
+
         public long IdTutor { get; set; }
 
         public int IdTelefono { get; set; }
@@ -246,73 +234,40 @@ namespace AppMasInfo.Web.Models
 
         public long IdPaciente { get; set; }
 
-        public string NumeroTelefono { get; set; }
-
-        public string DescricionTelefono { get; set; }
+        [Display(Name = "Número teléfono")]
+        public string NumeroTelefono { get; set; }       
 
         [Display(Name = "Rut")]        
-        public string RutPaciente { get; set; }
-
-        [Display(Name = "Rut")]
-        public string RutTutor { get; set; }
+        public string RutPaciente { get; set; }      
 
         [Display(Name = "Nombre")]        
-        public string NombrePaciente { get; set; }
-
-        [Display(Name = "Nombre")]
-        public string NombreTutor { get; set; }
+        public string NombrePaciente { get; set; }       
 
         [Display(Name = "Apellido Paterno")]        
-        public string ApellidoPaternoPaciente { get; set; }
-
-        [Display(Name = "Apellido Paterno")]
-        public string ApellidoPaternoTutor { get; set; }
+        public string ApellidoPaternoPaciente { get; set; }        
 
         [Display(Name = "Apellido Materno")]       
-        public string ApellidoMaternoPaciente { get; set; }
-
-        [Display(Name = "Apellido Materno")]
-        public string ApellidoMaternoTutor { get; set; }
+        public string ApellidoMaternoPaciente { get; set; }       
 
         [Display(Name = "Edad")]        
         public int Edad { get; set; }
 
         [Display(Name = "Dirección")]        
-        public string DireccionPaciente { get; set; }
-
-        [Display(Name = "Dirección")]
-        public string DireccionTutor { get; set; }
-
-        [Display(Name = "Username")]
-        public string Username { get; set; }
-
-        [Display(Name = "Telefono")]
-        public string TelefonoTutor { get; set; }
-
+        public string DireccionPaciente { get; set; }         
+       
         [Display(Name = "Fecha Inserción")]
-        public Nullable<System.DateTime> FchCreatePaciente { get; set; }
-
-        [Display(Name = "Fecha Inserción")]
-        public Nullable<System.DateTime> FchCreateTutor { get; set; }
+        public Nullable<System.DateTime> FchCreatePaciente { get; set; }       
 
         [Display(Name = "Usuario Inserción")]
         public string UsrCreatePaciente { get; set; }
-
-        [Display(Name = "Usuario Inserción")]
-        public string UsrCreateTutor{ get; set; }
-
+        
         [Display(Name = "Fecha Actualización")]
-        public Nullable<System.DateTime> FchUpdatePaciente { get; set; }
-
-        [Display(Name = "Fecha Actualización")]
-        public Nullable<System.DateTime> FchUpdateTutor { get; set; }
+        public Nullable<System.DateTime> FchUpdatePaciente { get; set; }       
 
         [Display(Name = "Usuario Actualización")]
         public string UsrUpdatePaciente{ get; set; }
 
-        [Display(Name = "Usuario Actualización")]
-        public string UsrUpdateTutor { get; set; }
-
+        [Display(Name = "Estado")]
         public int IdEstado { get; set; }
 
         public EstadoDto DetalleEstado { get; set; }

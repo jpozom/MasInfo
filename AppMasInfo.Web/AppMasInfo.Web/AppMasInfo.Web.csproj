@@ -1767,6 +1767,9 @@
     <Content Include="Views\EquipoPaciente\Edit.cshtml" />
     <Content Include="Views\SeleccionPaciente\Index.cshtml" />
     <Content Include="Views\Paciente\DetailTutor.cshtml" />
+    <Content Include="Views\Account\Privacy.cshtml" />
+    <Content Include="Views\Account\Mision.cshtml" />
+    <Content Include="Views\Account\Vision.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

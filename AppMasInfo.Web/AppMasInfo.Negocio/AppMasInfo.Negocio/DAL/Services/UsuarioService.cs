@@ -46,7 +46,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                     var usuarioDb = (from u in this.dbContext.Usuario.Include("Trabajador").Include("Rol")
                                      join r in this.dbContext.Rol on u.IdRol equals r.Id
                                      where u.Username == p_Filtro.Username &&
-                                           u.Pass == p_Filtro.Pass
+                                           u.Pass == p_Filtro.Pass &&
+                                           u.Habilitado == true
                                      select u).FirstOrDefault();
 
                     if (usuarioDb != null)
@@ -57,6 +58,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                             Id = usuarioDb.Id,
                             Username = usuarioDb.Username,
                             IdRol = usuarioDb.IdRol,
+                            Habilitado = usuarioDb.Habilitado,
 
                             DetalleRol = new RolDto
                             {
@@ -103,7 +105,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                                          Id = u.Id,
                                          Username = u.Username,
                                          IdRol = u.IdRol,
-                                         Pass = u.Pass
+                                         Pass = u.Pass,
+                                         Habilitado = u.Habilitado
                                      }).FirstOrDefault();
 
                     objResult = new BaseDto<UsuarioDto>(usuarioDb);
@@ -136,16 +139,13 @@ namespace AppMasInfo.Negocio.DAL.Services
                         {
                             Username = p_Obj.Username,
                             Pass = p_Obj.Pass,
-                            IdRol = p_Obj.IdRol
+                            IdRol = p_Obj.IdRol,
+                            Habilitado = true
                         });
 
                     // Guardamos los cambios en base de datos
                     this.dbContext.SaveChanges();
-                    //var idusr = (from u in this.dbContext.Usuario
-                    //             where u.Username == p_Obj.Username
-                    //             select u).SingleOrDefault();
-
-                    //p_Obj.Id = idusr.Id;
+                   
                     // Asignamos un valor a la variable result describiendo la ejecución correcta
                     result = new BaseDto<bool>(true);
                 }
@@ -225,7 +225,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                                      {
                                          Id = u.Id,
                                          Username = u.Username,
-                                         IdRol = u.IdRol,                                                                                                                          
+                                         IdRol = u.IdRol,  
+                                         Habilitado = u.Habilitado,
                                          DetalleRol = new RolDto
                                          {
                                              Id = r.Id,
@@ -262,14 +263,11 @@ namespace AppMasInfo.Negocio.DAL.Services
                     //Obtener el objeto origen desde base de datos
                     //El metodo .FirstOrDefault, retorna el primer objeto encontrado de acuerdo
                     // a un determinado filtro de búsqueda, y en caso contrario, retorna null
-                    var objOrigenDb = this.dbContext.Usuario.FirstOrDefault(c => c.Id == p_Obj.Id);
-
+                    var objOrigenDb = this.dbContext.Usuario.FirstOrDefault(u => u.Id== p_Obj.Id);
+                    
                     if (objOrigenDb != null)
-                    {
-                        objOrigenDb.Pass = p_Obj.Pass;
-                        objOrigenDb.Username = p_Obj.Username;
-                        objOrigenDb.IdRol = p_Obj.IdRol;
-                        objOrigenDb.Id = p_Obj.Id;
+                    {                        
+                        objOrigenDb.Habilitado = false;
 
                         this.dbContext.SaveChanges();
                         result = new BaseDto<bool>(true);

@@ -150,6 +150,7 @@
           <Property Name="Username" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Pass" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="IdRol" Type="int" Nullable="false" />
+          <Property Name="Habilitado" Type="bit" />
         </EntityType>
         <Association Name="FK_Cargo_CargoFuncion">
           <End Role="CargoFuncion" Type="Self.CargoFuncion" Multiplicity="0..1" />
@@ -594,6 +595,7 @@
           <NavigationProperty Name="Telefono" Relationship="Self.FK_Telefono_Usuario" FromRole="Usuario" ToRole="Telefono" />
           <NavigationProperty Name="Trabajador" Relationship="Self.FK_Trabajador_Usuario" FromRole="Usuario" ToRole="Trabajador" />
           <NavigationProperty Name="Tutor" Relationship="Self.FK_Tutor_Usuario" FromRole="Usuario" ToRole="Tutor" />
+          <Property Name="Habilitado" Type="Boolean" />
         </EntityType>
         <Association Name="FK_Cargo_CargoFuncion">
           <End Role="CargoFuncion" Type="Self.CargoFuncion" Multiplicity="0..1" />
@@ -1027,6 +1029,7 @@
           <EntitySetMapping Name="Usuario">
             <EntityTypeMapping TypeName="MasInfoWebModel.Usuario">
               <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="Habilitado" ColumnName="Habilitado" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Pass" ColumnName="Pass" />
