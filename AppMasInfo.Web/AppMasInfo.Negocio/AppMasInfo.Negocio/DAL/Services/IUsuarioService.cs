@@ -43,5 +43,12 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Filtro"></param>
         /// <returns></returns>
         BaseDto<List<UsuarioDto>> GetListaUsuariobyFiltro(UsuarioDto p_Filtro);
+
+        /// <summary>
+        /// Metooo para eliminar el regitro de usuario en la DB
+        /// </summary>
+        /// <param name="p_Obj"></param>
+        /// <returns></returns>
+        BaseDto<bool> Delete(UsuarioDto p_Obj);
     }
 }

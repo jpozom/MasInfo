@@ -34,5 +34,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public UsuarioDto DatosUsuario { get; set; }
         public RolDto DetalleRol { get; set; }
         public TelefonoDto DetalleTelefono { get; set; }
+        public PacienteDto DetallePaciente { get; set; }
+        public TipoTelefonoDto DetalleTipoTelefono { get; set; }
     }
 }

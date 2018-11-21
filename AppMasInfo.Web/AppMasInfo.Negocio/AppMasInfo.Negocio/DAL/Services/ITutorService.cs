@@ -44,5 +44,19 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Filtro">Filtro de datos</param>
         /// <returns>Usuario encontrado</returns>
         BaseDto<TutorDto> GetTutorByPaciente(TutorDto p_Filtro);
+
+        /// <summary>
+        /// Metodo para obtener una lista de tutor por un determinado filtro de busqueda 
+        /// </summary>
+        /// <param name="p_Filtro">Filtro de datos</param>
+        /// <returns>Usuario encontrado</returns>
+        BaseDto<List<TutorDto>> GetTutorAll(TutorDto p_Filtro);
+
+        // <summary>
+        /// Metodo para eliminar un paciente solo de forma logica del sistema y almacenando el usuario que lo realizo
+        /// </summary>
+        /// <param name="p_Obj"></param>
+        /// <returns></returns>
+        BaseDto<bool> Delete(TutorDto p_Obj);
     }
 }

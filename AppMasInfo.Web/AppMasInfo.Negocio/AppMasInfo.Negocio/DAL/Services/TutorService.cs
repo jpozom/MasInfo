@@ -179,6 +179,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                         tutorDb.ApellidoPaterno = p_Obj.ApellidoPaterno;
                         tutorDb.ApellidoMaterno = p_Obj.ApellidoMaterno;
                         tutorDb.Rut = p_Obj.Rut;
+                        tutorDb.Email = p_Obj.Email;
                         tutorDb.Direccion = p_Obj.Direccion;
                         tutorDb.FchUpdate = p_Obj.FchUpdate;
                         tutorDb.UsrUpdate = p_Obj.UsrUpdate;
@@ -205,6 +206,47 @@ namespace AppMasInfo.Negocio.DAL.Services
         }
         #endregion
 
+        #region Delete
+        public BaseDto<bool> Delete(TutorDto p_Obj)
+        {
+            BaseDto<bool> result = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    //Obtener el objeto origen desde base de datos
+                    //El metodo .FirstOrDefault, retorna el primer objeto encontrado de acuerdo
+                    // a un determinado filtro de búsqueda, y en caso contrario, retorna null
+                    var objOrigenDb = this.dbContext.Tutor.FirstOrDefault(c => c.Id == p_Obj.Id);
+
+                    if (objOrigenDb != null)
+                    {
+                        objOrigenDb.FchUpdate = p_Obj.FchUpdate;
+                        objOrigenDb.UsrUpdate = p_Obj.UsrUpdate;
+                        objOrigenDb.IdEstado = p_Obj.IdEstado;
+
+                        this.dbContext.SaveChanges();
+                        result = new BaseDto<bool>(true);
+                    }
+                    else
+                    {
+                        throw new Exception("Tutor no encontrado en base de datos");
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                result = new BaseDto<bool>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                result = new BaseDto<bool>(true, ex);
+            }
+            return result;
+        }
+        #endregion
+
         #region GetTutorById
         public BaseDto<TutorDto> GetTutorById(TutorDto p_Filtro)
         {
@@ -217,11 +259,15 @@ namespace AppMasInfo.Negocio.DAL.Services
                     var tutorDb = (from t in this.dbContext.Tutor
                                    join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                    join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
-                                   join r in this.dbContext.Rol on u.IdRol equals r.Id                                   
+                                   join r in this.dbContext.Rol on u.IdRol equals r.Id  
+                                   join tel in this.dbContext.Telefono on u.Id equals tel.IdUsuario
+                                   join p in this.dbContext.Paciente on t.IdPaciente equals p.Id
+                                   join tt in this.dbContext.TipoTelefono on tel.IdTipoTelefono equals tt.IdTipoTelefono
                                    where t.Id == p_Filtro.FiltroId
                                    select new TutorDto
                                    {
                                        Id = t.Id,
+                                       Rut = t.Rut,
                                        Nombre = t.Nombre,
                                        ApellidoPaterno = t.ApellidoPaterno,
                                        ApellidoMaterno = t.ApellidoMaterno,
@@ -233,6 +279,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        IdUsuario = t.IdUsuario,
                                        IdEstado = t.IdEstado,
                                        IdPaciente = t.IdPaciente,
+                                       Direccion = t.Direccion,
                                        DetalleEstado = new EstadoDto
                                        {
                                            Id = es.Id,
@@ -250,7 +297,33 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        {
                                            Id = r.Id,
                                            Descripcion = r.Descripcion
-                                       }
+                                       },
+                                       DetalleTelefono = new TelefonoDto
+                                       {
+                                           Id = tel.Id,
+                                           NumeroTelefono = tel.NumeroTelefono,
+                                           IdTipoTelefono = tel.IdTipoTelefono,
+                                           IdUsuario = tel.IdUsuario
+                                       },
+                                       DetallePaciente = new PacienteDto
+                                       {
+                                           Id = p.Id,
+                                           Nombre = p.Nombre,
+                                           ApellidoPaterno = p.ApellidoPaterno,
+                                           ApellidoMaterno = p.ApellidoMaterno,
+                                           Edad = p.Edad,
+                                           Rut = p.Rut,
+                                           Direccion = p.Direccion,
+                                           FchCreate = p.FchCreate,
+                                           UsrCreate = p.UsrCreate,
+                                           FchUpdate = p.FchUpdate,
+                                           NumeroTelefono = p.NumeroTelefono
+                                       },
+                                       DetalleTipoTelefono = new TipoTelefonoDto
+                                       {
+                                           IdTipoTelefono = tt.IdTipoTelefono,
+                                           Descripcion = tt.Descripcion                                           
+                                       },
                                    }).FirstOrDefault();
 
                     objResult = new BaseDto<TutorDto>(tutorDb);

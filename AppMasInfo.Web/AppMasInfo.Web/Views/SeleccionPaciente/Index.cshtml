@@ -7,40 +7,41 @@
 
 @section Scripts{
     <script type="text/javascript">
-                var filtroBusqueda = function() {
-                var objRequestData = new Object();
-                objRequestData.FiltroRut = $('#FiltroRut').find('option:selected').val();
-                objRequestData.FiltroNombre = $('#FiltroNombre').val();
-                objRequestData.FiltroPaginado = new Object();
-                objRequestData.FiltroPaginado.PaginaActual = parseInt($('#PaginaActual').val());
-                objRequestData.FiltroPaginado.TamanoPagina = parseInt($('#TamanoPagina').find('option:selected').val());
+        var filtroBusqueda = function() {
+            //var formContainer = $('#form-busqueda');
+
+            var objRequestData = new Object();                
+            objRequestData.FiltroIdRut = $('#FiltroIdRut').val();
+            objRequestData.FiltroNombre = $('#FiltroNombre').val();
 
                 $.ajax({
                     url: '@Url.Action("Index", "SeleccionPaciente")',
                     method: 'POST',
                     contentType: "application/json;charset=utf-8",
-                    dataType: "json",
+                    cache: false,
+                    //dataType: "json",
                     data: JSON.stringify(objRequestData),
+                    //data: formContainer.serialize(),
                     beforeSend: function () {
                         showModalLoading();
                     },
-                    success: function (data) {
+                    success: function(data) {
                         if (data != null) {
                             var tableBody = $('#lstDatos tbody');
                             var tableBodyData = '';
 
-                               $(data.Value).each(function (index, item) {
+                            $(data.value).each(function (index, item) {
 
                                    tableBodyData += `<tr>` +
-                                    `<td>${item.Id}</td>` +
-                                    `<td>${item.Nombre}</td>` +
-                                    `<td>${item.ApellidoPaterno}</td>` +
-                                    `<td>${item.Edad}</td>` +
-                                    `<td>${item.NumeroTelefono}</td>` +
-                                    `<td>${item.Direccion}</td>` +
-                                    `<td>` +
-                                        `<a href="javascript:viewDetailItem(${item.Id})"><i title="Seleccionar" class="glyphicon glyphicon-info-sign"></i></a>` +
-                                    `</td >` +
+                                       `<td>${item.Id}</td>` +
+                                        `<td>${item.Nombre}</td>` +
+                                        `<td>${item.ApellidoPaterno}</td>` +
+                                        `<td>${item.Edad}</td>` +
+                                        `<td>${item.NumeroTelefono}</td>` +
+                                        `<td>${item.Direccion}</td>` +
+                                        `<td>` +
+                                            `<a href="javascript:viewDetailItem(${item.Id})"><i title="Seleccionar" class="glyphicon glyphicon-info-sign"></i></a>` +
+                                        `</td >` +
                                     `</tr>`;
                             });
 
@@ -49,7 +50,7 @@
                             }
 
                             tableBody.html(tableBodyData);
-                            updatePaginador(data.DatosPaginado);
+                            //updatePaginador(data.DatosPaginado);
                         }
                         else {
                             showMessageDialog(BootstrapDialog.TYPE_ERROR,
@@ -118,7 +119,7 @@
 
         function limpiar() {
             $('#FiltroNombre').val('');
-            $('#FiltroRut').val('');
+            $('#FiltroIdRut').val('');
         }
 
         function myFunction() {
@@ -132,14 +133,15 @@
 <div class="panel panel-primary">
     <div class="panel-body">
         <h5 class="m-b-30 m-t-0">Selecci&oacute;n de pacientes</h5>
+        <form id="form-busqueda">
         <fieldset>
             <legend>Filtro de b&uacute;squeda</legend>
 
             <div class="row">
                 <div class="form-group col-sm-4">
-                    <label class="control-label col-md-12" for="FiltroRut">Rut</label>
+                    <label class="control-label col-md-12" for="FiltroId">Rut</label>
                     <div class="col-md-12">
-                        @Html.DropDownListFor(model => model.FiltroRut,
+                        @Html.DropDownListFor(model => model.FiltroIdRut,
                                              new SelectList(Model.lstPaciente, "Id", "Rut"),
                                              "Seleccione Rut", new { @class = "form-control" })
 
@@ -148,7 +150,7 @@
             </div>
             <div class="row">
                 <div class="form-group col-sm-4">
-                    <label class="control-label col-md-12" for="FiltroNombre">Nombre Paciente</label>
+                    <label class="control-label col-md-12" for="Nombre">Nombre Paciente</label>
                     <div class="col-md-12">
                         @Html.TextBoxFor(model => model.FiltroNombre, new { @class = "form-control" })
 
@@ -172,6 +174,8 @@
             </div>
 
         </fieldset>
+        </form>
+
         <br />
 
         <fieldset>
