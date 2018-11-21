@@ -9,5 +9,6 @@ namespace AppMasInfo.Negocio.DAL.Services
     public interface IEquipoPacienteService
     {
         BaseDto<List<EquipoPacienteDto>> GetEquipoPacienteByIdPaciente(PacienteDto p_Filtro);
+        BaseDto<bool> AddEquipoPaciente(EquipoPacienteDto equipo);
     }
 }

@@ -13,5 +13,6 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public long Idtrabajador { get; set; }
         public PacienteDto Paciente { get; set; }
         public TrabajadorDto Trabajador { get; set;  }
+        
     }
 }
