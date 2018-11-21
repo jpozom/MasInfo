@@ -11,11 +11,18 @@ namespace AppMasInfo.Web.Models
     public class EquipoPacienteViewModel
     { 
         public PacienteDto Paciente { get; set; }
-        public List<TrabajadorDto> Trabajadores { get; set; }
+
         public long IdPaciente { get; set; }
+
         public long Id { get; set; }
+
+        [Required(ErrorMessage = "Debe seleccionar un trabajador")]
         public long Idtrabajador { get; set; }
+
         public List<EquipoPacienteDto> Equipo { get; set; }
+
+        public List<TrabajadorDto> LstTrabajadores { get; set; }
+
 
     }
 

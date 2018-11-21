@@ -1,92 +1,173 @@
-﻿@model AppMasInfo.Web.Models.PacienteEditViewModel
+﻿@model AppMasInfo.Web.Models.EquipoPacienteViewModel
 
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
 
+              var deleteItem = function (id) {
+            confirmationDialog(
+                'Eliminar Paciente',
+                '¿Esta seguro(a) que desea eliminar a el Paciente?',
+                function () { doDeleteItem(id); }
+            );
+        };
+
+        var doDeleteItem = function (id) {
+            var objRequestData = new Object();
+            objRequestData.Id = id;
+
+            $.ajax({
+                url: '@Url.Action("Delete", "Paciente")',
+                method: 'POST',
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(objRequestData),
+                beforeSend: function () {
+                    showModalLoading();
+                },
+                success: function (data) {
+                    if (data !== '') {
+                        if (data.status === 'ok') {
+                            showMessageDialogRedirect(BootstrapDialog.TYPE_INFO,
+                                'Información',
+                                data.message,
+                                '@Url.Action("Index", "Paciente")');
+                        }
+                        else {
+                            showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                                'Error',
+                                data.message);
+                        }
+                    }
+                    else {
+                        showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                            'Error',
+                            'Error al intentar ingresar el registro. Por favor, inténtelo nuevamente');
+                    }
+                },
+                error: function (jqXHR, status, error) {
+                    showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                        'Error',
+                        'Ha ocurrido un error al intentar realizar la petición. Por favor, inténtelo nuevamente');
+                    if (jqXHR.status === parseInt('@((int)System.Net.HttpStatusCode.BadRequest)')) {
+                        var modelStateErrors = jqXHR.responseJSON;
+                        for (var i = 0; i < modelStateErrors.length; i++) {
+                            $(`span[data-valmsg-for="${modelStateErrors[i].key}"]`).text(modelStateErrors[i].errors[0]);
+                        }
+                    }
+                },
+                complete: function () {
+                    hideModalLoading();
+                }
+            });
+        };
+
+            var saveMessage = '@TempData["SaveOkMessage"]';
+            if (saveMessage !== '') {
+                showMessageDialog(
+                    BootstrapDialog.TYPE_SUCCESS,
+                    'Información',
+                    saveMessage
+                );
+            }
+
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage !== '') {
+                ShowMessageDialog(
+                   BootstrapDialog.TYPE_DANGER,
+                   'Error',
+                   errorMessage
+               );
+            }
+        });
+    </script>
+}
 <div class="panel panel-primary">
     <div class="panel-body">
-        <h4 class="m-b-30 m-t-0">Editar Paciente</h4>
+        <h4 class="m-b-30 m-t-0">Equipo Asignado al Paciente</h4>
+        <fieldset>
+            <legend>Paciente - <strong>@Model.Paciente.Nombre &nbsp; @Model.Paciente.ApellidoPaterno &nbsp; @Model.Paciente.ApellidoMaterno </strong></legend>
 
+        </fieldset>
         @using (Html.BeginForm("Edit", "EquipoPaciente", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.IdPaciente)
 
-            <fieldset>
-                <legend>Datos del Usuario</legend>
-
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Rut, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Rut, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Rut, "", new { @class = "text-danger" })
+            <fieldset class="panel panel-default">
+                <div class="panel-heading">Asignar</div>
+                <div class="row panel-body">
+                    <div class="form-group">
+                        <div>
+                            @Html.LabelFor(model => model.Idtrabajador, "Trabajadores disponibles", htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-5">
+                            @Html.DropDownListFor(model => model.Idtrabajador,
+                                      new SelectList(Model.LstTrabajadores, "Id", "NombreCompleto" ),
+                                      "Selecciona", new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.Idtrabajador, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" value="Asignar Trabajadores" class="btn btn-primary" />
+                        </div>
                     </div>
+
                 </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ApellidoPaterno, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ApellidoPaterno, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ApellidoMaterno, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ApellidoMaterno, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Edad, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Edad, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Edad, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Direccion, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Direccion, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                                
             </fieldset>
+        }
+        <fieldset>
+            <legend>Trabajadores Asignados</legend>
+            <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
+                <thead>
+                    <tr>
+                        <th><h6 align="left">Trabajador</h6></th>
+                        <th><h6 align="left">Cargo</h6></th>
+                        <th><h6 align="left">Funci&oacute;n</h6></th>
+                        <th><h6 align="left">Acci&oacute;n</h6></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Equipo.Count() > 0)
+                    {
+                        foreach (var item in Model.Equipo)
+                        {
+                            <tr>
+                                <td>@item.Trabajador.Nombre &nbsp;  @item.Trabajador.ApellidoPaterno </td>
+                                <td>@item.Trabajador.DetalleCargo.Descripcion</td>
+                                <td>@item.Trabajador.DetalleFuncion.Descripcion</td>
+                                <td>
+                                    <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash mdi-24px"></i>&nbsp;</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="8">No existen datos</td></tr>
+                    }
+                </tbody>
+            </table>
 
-            <br />
 
-            <div class="row">
-                <div class="form-group col-sm-12">
-                    <div class="col-md-12">
-                        <input type="submit" value="Guardar" class="btn btn-primary" /> &nbsp;
-                        <a href="@Url.Action("Index", "Paciente")" class="btn btn-default" role="button" aria-pressed="true">Volver</a>
-                    </div>
+
+        </fieldset>
+
+        <br />
+
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <div class="col-md-12">
+
+                    <a href="@Url.Action("Index", "EquipoPaciente")" class="btn btn-default" role="button" aria-pressed="true">Volver</a>
                 </div>
             </div>
-        }
+        </div>
+
     </div>
 </div>

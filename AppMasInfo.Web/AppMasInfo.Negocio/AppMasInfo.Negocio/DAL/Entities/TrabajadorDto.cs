@@ -42,5 +42,9 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public CargoFuncionDto DetalleFuncion { get; set; }
 
         public List<UsuarioDto> ListaUsuarios { get; set; }
+
+        public string NombreCompleto {
+            get { return Nombre + " " + ApellidoPaterno + " " + ApellidoMaterno; }
+        }
     }
 }

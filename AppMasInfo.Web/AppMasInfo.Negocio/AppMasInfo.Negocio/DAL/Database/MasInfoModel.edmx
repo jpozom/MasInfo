@@ -24,7 +24,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="IdPaciente" Type="bigint" Nullable="false" />
           <Property Name="IdTrabajador" Type="bigint" Nullable="false" />
         </EntityType>
@@ -849,7 +849,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdPaciente" Type="Int64" Nullable="false" />
           <Property Name="IdTrabajador" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Paciente" Relationship="MasInfoWebModel.FK_EquipoPaciente_Paciente" FromRole="EquipoPaciente" ToRole="Paciente" />
