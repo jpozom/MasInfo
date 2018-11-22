@@ -59,8 +59,8 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string Direccion { get; set; }
 
-        [Display(Name = "Teléfono")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]       
+        [Phone(ErrorMessage = "Dee ingresar un número de teléfono correcto")]
+        [Display(Name = "Teléfono")]             
         public string Telefono { get; set; }
 
         public string FiltroRut { get; set; }       
@@ -98,8 +98,7 @@ namespace AppMasInfo.Web.Models
         public string TelefonoTutor { get; set; }
 
         [Display(Name = "Email")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
+        [EmailAddress(ErrorMessage = "Debe ingresar Correo")]
         public string Email { get; set; }
 
         public long IdUsuario { get; set; }

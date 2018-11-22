@@ -113,6 +113,23 @@ namespace AppMasInfo.Web.Controllers
                             //userInfo.AccesoPaginas = userDb.Value.DetalleRol.AccesoPaginasWeb;
                             //SessionStore.Store<ContextoDto>(SessionKeys.UsuarioSessionKey, userInfo);
 
+                            if (userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Tutor)
+                            {
+                                return RedirectToAction("Index", "PacienteDatos");
+                            }
+
+                            if (userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Administrador)
+                            {
+                                return RedirectToAction("Index", "Home");
+                            }
+
+                            if (userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Tecnico ||
+                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Enfermera ||
+                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Auxiliar)
+                            {
+                                return RedirectToAction("Index", "SeleccionPaciente");
+                            }
+
                             return RedirectToAction("Index", "Home");
                         }
                         else

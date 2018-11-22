@@ -6,17 +6,17 @@
     <li class="has_sub">
         <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-bank"></i> <span> Administraci&oacute;n </span> <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
         <ul class="list-unstyled">
-            <li><a href="#">Pacientes</a></li>
-            <li><a href="#">Usuarios</a></li>
-            <li><a href="#">Tutores</a></li>
-            <li><a href="@Url.Action("Index","SeleccionPaciente")">Seleccion Pacientes</a></li>
+            <li><a href="@Url.Action("Index","Paciente")">Paciente | Tutor</a></li>
+            <li><a href="@Url.Action("Index","Trabajador")">Trabajadores</a></li>
+            <li><a href="@Url.Action("Index","EquipoPaciente")">Asignaci&oacute;n Equipos Cl&iacute;nicos</a></li>
+            <li><a href="@Url.Action("Index","SeleccionPaciente")">Selecci&oacute;n Pacientes</a></li>
         </ul>
     </li>
 
     <li class="has_sub">
         <a href="javascript:void(0);" class="waves-effect"><i class="mdi mdi-layers-off"></i> <span> Vistas Tutor </span> <span class="pull-right"><i class="mdi mdi-plus"></i></span></a>
         <ul class="list-unstyled">
-            <li><a href="#">Consulta</a></li>
+            <li><a href="@Url.Action("Index","PacienteDatos")">Consulta</a></li>
             <li><a href="#">Insumos</a></li>
             <li><a href="#">Equipo Trabajo</a></li>
         </ul>

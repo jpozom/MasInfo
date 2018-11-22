@@ -182,12 +182,14 @@
     <Compile Include="Controllers\PacienteController.cs" />
     <Compile Include="Controllers\SeleccionPacienteController.cs" />
     <Compile Include="Controllers\TrabajadorController.cs" />
+    <Compile Include="Controllers\PacienteDatosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\EquipoPacienteViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\PacienteDatosViewModel.cs" />
     <Compile Include="Models\PacienteViewModel.cs" />
     <Compile Include="Models\SeleccionPacienteViewModel.cs" />
     <Compile Include="Models\TablePagerViewModel.cs" />
@@ -1770,6 +1772,7 @@
     <Content Include="Views\Account\Privacy.cshtml" />
     <Content Include="Views\Account\Mision.cshtml" />
     <Content Include="Views\Account\Vision.cshtml" />
+    <Content Include="Views\PacienteDatos\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
