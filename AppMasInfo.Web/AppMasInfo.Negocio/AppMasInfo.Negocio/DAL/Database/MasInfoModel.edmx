@@ -58,7 +58,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="IdPaciente" Type="bigint" Nullable="false" />
           <Property Name="IdUbicacion" Type="int" Nullable="false" />
           <Property Name="FchIngreso" Type="datetime" />
@@ -484,7 +484,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdPaciente" Type="Int64" Nullable="false" />
           <Property Name="IdUbicacion" Type="Int32" Nullable="false" />
           <Property Name="FchIngreso" Type="DateTime" Precision="3" />

@@ -180,6 +180,7 @@
     <Compile Include="Controllers\EquipoPacienteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PacienteController.cs" />
+    <Compile Include="Controllers\PacienteUbicacionController.cs" />
     <Compile Include="Controllers\SeleccionPacienteController.cs" />
     <Compile Include="Controllers\TrabajadorController.cs" />
     <Compile Include="Controllers\PacienteDatosController.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Models\EquipoPacienteViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\PacienteDatosViewModel.cs" />
+    <Compile Include="Models\PacienteUbicacionViewModel.cs" />
     <Compile Include="Models\PacienteViewModel.cs" />
     <Compile Include="Models\SeleccionPacienteViewModel.cs" />
     <Compile Include="Models\TablePagerViewModel.cs" />
@@ -1773,10 +1775,11 @@
     <Content Include="Views\Account\Mision.cshtml" />
     <Content Include="Views\Account\Vision.cshtml" />
     <Content Include="Views\PacienteDatos\Index.cshtml" />
+    <Content Include="Views\PacienteUbicacion\Index.cshtml" />
+    <Content Include="Views\PacienteUbicacion\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\EquipoPacienteViewModel\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppMasInfo.Negocio\AppMasInfo.Negocio\AppMasInfo.Negocio.csproj">

@@ -99,7 +99,7 @@ namespace AppMasInfo.Web.Controllers
                             //    userDb.ListaTrabajador.FirstOrDefault().ApellidoPaterno,
                             //    userDb.ListaTrabajador.FirstOrDefault().ApellidoMaterno,
                             //    userDb.ListaTrabajador.FirstOrDefault().Email);
-                            
+
                             // Generamos la identidad con Owin
                             var identity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie);
                             identity.AddClaims(new List<Claim>
@@ -125,7 +125,8 @@ namespace AppMasInfo.Web.Controllers
 
                             if (userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Tecnico ||
                                 userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Enfermera ||
-                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Auxiliar)
+                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Auxiliar ||
+                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Medico)
                             {
                                 return RedirectToAction("Index", "SeleccionPaciente");
                             }

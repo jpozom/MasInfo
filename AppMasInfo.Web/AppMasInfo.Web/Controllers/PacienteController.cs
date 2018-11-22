@@ -13,7 +13,7 @@ using static AppMasInfo.Web.Models.PacienteViewModel;
 
 namespace AppMasInfo.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrador, Enfermero/a, Médico")]
     public class PacienteController : Controller
     {
         #region propiedades privadas
@@ -439,8 +439,7 @@ namespace AppMasInfo.Web.Controllers
 
                     if (isRutOk)
                     {
-                        PacienteDto objPacienteEdit = new PacienteDto();
-                        //objPacienteEdit.Rut = p_ViewModel.Rut;
+                        PacienteDto objPacienteEdit = new PacienteDto();                       
                         objPacienteEdit.Nombre = p_ViewModel.Nombre;
                         objPacienteEdit.IdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
                         objPacienteEdit.ApellidoPaterno = p_ViewModel.ApellidoPaterno;

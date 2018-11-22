@@ -1,7 +1,58 @@
-﻿@model AppMasInfo.Web.Models.PacienteViewModel
+﻿@model AppMasInfo.Web.Models.PacienteDatosViewModel
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
 
+@section Scripts{
+    <script type="text/javascript">
+
+         $(function () {
+            var saveMessage = '@TempData["SaveOkMessage"]';
+            if (saveMessage !== '') {
+                showMessageDialog(
+                    BootstrapDialog.TYPE_SUCCESS,
+                    'Información',
+                    saveMessage
+                );
+            }
+
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage !== '') {
+                ShowMessageDialog(
+                   BootstrapDialog.TYPE_DANGER,
+                   'Error',
+                   errorMessage
+               );
+            }
+        });
+    </script>
+}
+<div class="panel panel-primary">
+    <div class="panel-body" id="panel">
+        <h4 class="m-b-30 m-t-0">
+            Bienvenido
+        </h4>
+        <div style="font-size: 20px;">
+            <strong>@Model.NombreTutor &nbsp; @Model.ApellidoPaternoTutor &nbsp; @Model.ApellidoMaternoTutor </strong>
+        </div>
+        <br />
+        <br />
+        <fieldset>
+            <legend style="font-size: 15px;">Datos Paciente</legend>
+            <div class="list-group">
+                <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Nombre: &nbsp;  @Model.DetallePaciente.Nombre &nbsp; @Model.DetallePaciente.ApellidoPaterno &nbsp; @Model.DetallePaciente.ApellidoMaterno</strong></a>
+                <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>RUT: &nbsp;  @Model.DetallePaciente.Rut </strong></a>
+                <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Edad: &nbsp;  @Model.DetallePaciente.Edad </strong></a>
+                <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Direccion: &nbsp;  @Model.DetallePaciente.Direccion </strong></a>
+                <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Telefono: &nbsp;  @Model.DetallePaciente.NumeroTelefono </strong></a>
+                <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Fecha Ingreso: &nbsp;  @Model.DetallePaciente.FchCreate </strong></a>
+            </div>
+            
+            
+
+        </fieldset>
+
+    </div>
+</div>

@@ -13,8 +13,9 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public long IdPaciente { get; set; }
         public int IdUbicacion { get; set; }
         public Nullable<System.DateTime> FchIngreso { get; set; }
-        public string UsrIngreso { get; set; }
-        public long IdUsuario { get; set; }
+        public string UsrIngreso { get; set; }        
         public string Observacion { get; set; }
+
+        public PacienteDto DetallePaciente { get; set; }
     }
 }

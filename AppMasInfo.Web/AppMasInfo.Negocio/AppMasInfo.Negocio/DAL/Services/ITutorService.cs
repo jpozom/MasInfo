@@ -46,6 +46,13 @@ namespace AppMasInfo.Negocio.DAL.Services
         BaseDto<TutorDto> GetTutorByPaciente(TutorDto p_Filtro);
 
         /// <summary>
+        /// Metodo para obtener un paciente por Id por un determinado filtro de busqueda 
+        /// </summary>
+        /// <param name="p_Filtro">Filtro de datos</param>
+        /// <returns>Usuario encontrado</returns>
+        BaseDto<TutorDto> GetTutorByUsuarioId(TutorDto p_Filtro);
+
+        /// <summary>
         /// Metodo para obtener una lista de tutor por un determinado filtro de busqueda 
         /// </summary>
         /// <param name="p_Filtro">Filtro de datos</param>

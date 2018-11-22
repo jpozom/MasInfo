@@ -61,6 +61,7 @@ namespace AppMasInfo.Negocio.DAL.Services
             return result;
         }
         #endregion
+
         #region GetEquipoPacienteByIdPaciente
         public BaseDto<List<EquipoPacienteDto>> GetEquipoPacienteByIdPaciente(PacienteDto p_Filtro)
         {

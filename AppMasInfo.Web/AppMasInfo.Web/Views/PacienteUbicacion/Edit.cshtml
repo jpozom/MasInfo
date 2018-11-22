@@ -1,0 +1,177 @@
+﻿@model AppMasInfo.Web.Models.PacienteUbicacionViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+
+              var deleteItem = function (id) {
+            confirmationDialog(
+                'Eliminar Paciente',
+                '¿Esta seguro(a) que desea eliminar a el Paciente?',
+                function () { doDeleteItem(id); }
+            );
+        };
+
+        var doDeleteItem = function (id) {
+            var objRequestData = new Object();
+            objRequestData.Id = id;
+
+            $.ajax({
+                url: '@Url.Action("Delete", "Paciente")',
+                method: 'POST',
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(objRequestData),
+                beforeSend: function () {
+                    showModalLoading();
+                },
+                success: function (data) {
+                    if (data !== '') {
+                        if (data.status === 'ok') {
+                            showMessageDialogRedirect(BootstrapDialog.TYPE_INFO,
+                                'Información',
+                                data.message,
+                                '@Url.Action("Index", "Paciente")');
+                        }
+                        else {
+                            showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                                'Error',
+                                data.message);
+                        }
+                    }
+                    else {
+                        showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                            'Error',
+                            'Error al intentar ingresar el registro. Por favor, inténtelo nuevamente');
+                    }
+                },
+                error: function (jqXHR, status, error) {
+                    showMessageDialog(BootstrapDialog.TYPE_ERROR,
+                        'Error',
+                        'Ha ocurrido un error al intentar realizar la petición. Por favor, inténtelo nuevamente');
+                    if (jqXHR.status === parseInt('@((int)System.Net.HttpStatusCode.BadRequest)')) {
+                        var modelStateErrors = jqXHR.responseJSON;
+                        for (var i = 0; i < modelStateErrors.length; i++) {
+                            $(`span[data-valmsg-for="${modelStateErrors[i].key}"]`).text(modelStateErrors[i].errors[0]);
+                        }
+                    }
+                },
+                complete: function () {
+                    hideModalLoading();
+                }
+            });
+        };
+
+            var saveMessage = '@TempData["SaveOkMessage"]';
+            if (saveMessage !== '') {
+                showMessageDialog(
+                    BootstrapDialog.TYPE_SUCCESS,
+                    'Información',
+                    saveMessage
+                );
+            }
+
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage !== '') {
+                ShowMessageDialog(
+                   BootstrapDialog.TYPE_DANGER,
+                   'Error',
+                   errorMessage
+               );
+            }
+        });
+    </script>
+}
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <h4 class="m-b-30 m-t-0">Equipo Asignado al Paciente</h4>
+        <fieldset>
+            <legend>Paciente - <strong>@Model.DetallePaciente.Nombre &nbsp; @Model.DetallePaciente.ApellidoPaterno &nbsp; @Model.DetallePaciente.ApellidoMaterno </strong></legend>
+
+        </fieldset>
+        @using (Html.BeginForm("Edit", "PacienteUbicacion", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.IdPaciente)
+
+            <fieldset class="panel panel-default">
+                <div class="panel-heading">Asignar</div>
+                <div class="row panel-body">
+                    <div class="form-group">
+                        <div>
+                            @Html.LabelFor(model => model.IdUbicacion, "Ubicaciones disponibles", htmlAttributes: new { @class = "control-label col-md-2" })
+                        </div>
+                        <div class="col-md-5">
+                            @Html.DropDownListFor(model => model.IdUbicacion,
+                                      new SelectList(Model.LstUbicaciones, "Id", "Descripcion" ),
+                                      "Selecciona", new { @class = "form-control"})
+                            @Html.ValidationMessageFor(model => model.IdUbicacion, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" value="Asignar Trabajadores" class="btn btn-primary" />
+                        </div>
+                    </div>
+
+                </div>
+
+            </fieldset>
+        }
+        <fieldset>
+            <legend>Ubicaciones Asignadas</legend>
+            <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
+                <thead>
+                    <tr>
+                        <th><h6 align="left">Id</h6></th>
+                        <th><h6 align="left">Rut</h6></th>
+                        <th><h6 align="left">Nombre</h6></th>
+                        <th><h6 align="left">Apellido Paterno</h6></th>
+                        <th><h6 align="left">Apellido Materno</h6></th>
+                        <th><h6 align="left">Ubicacion</h6></th>
+                        <th><h6 align="left">Acci&oacute;n</h6></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.LstPacienteUbicacion.Count() > 0)
+                    {
+                        foreach (var item in Model.LstPacienteUbicacion)
+                        {
+                            <tr>
+                                <td>@item.DetallePaciente.Id</td>
+                                <td>@item.DetallePaciente.Rut</td>
+                                <td>@item.DetallePaciente.Nombre</td>
+                                <td>@item.DetallePaciente.ApellidoPaterno</td>
+                                <td>@item.DetallePaciente.ApellidoMaterno</td>
+                                <td>@item.IdUbicacion</td>                               
+                                <td>
+                                    <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash mdi-24px"></i>&nbsp;</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="7">No existen datos</td></tr>
+                    }
+                </tbody>
+            </table>
+
+        </fieldset>
+
+        <br />
+
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <div class="col-md-12">
+
+                    <a href="@Url.Action("Index", "PacienteUbicacion")" class="btn btn-default" role="button" aria-pressed="true">Volver</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

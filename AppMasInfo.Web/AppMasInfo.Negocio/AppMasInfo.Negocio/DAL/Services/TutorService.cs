@@ -265,7 +265,7 @@ namespace AppMasInfo.Negocio.DAL.Services
             try
             {
                 using (this.dbContext = new MasInfoWebEntities_02())
-                {//left join al conjunto A sobre B se almacena en un campo temporal
+                {
                     var tutorDb = (from t in this.dbContext.Tutor
                                    join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                    join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
@@ -273,7 +273,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                    join tel in this.dbContext.Telefono on u.Id equals tel.IdUsuario
                                    join p in this.dbContext.Paciente on t.IdPaciente equals p.Id
                                    join tt in this.dbContext.TipoTelefono on tel.IdTipoTelefono equals tt.IdTipoTelefono
-                                   where t.Id == p_Filtro.FiltroId
+                                   where t.Id == p_Filtro.FiltroId                                 
                                    select new TutorDto
                                    {
                                        Id = t.Id,
@@ -360,7 +360,7 @@ namespace AppMasInfo.Negocio.DAL.Services
             try
             {
                 using (this.dbContext = new MasInfoWebEntities_02())
-                {//left join al conjunto A sobre B se almacena en un campo temporal
+                {
                     var tutorDb = (from t in this.dbContext.Tutor
                                    join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                    join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
@@ -399,6 +399,89 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        {
                                            Id = r.Id,
                                            Descripcion = r.Descripcion
+                                       }
+                                   }).FirstOrDefault();
+
+                    objResult = new BaseDto<TutorDto>(tutorDb);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                objResult = new BaseDto<TutorDto>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                objResult = new BaseDto<TutorDto>(true, ex);
+            }
+
+            return objResult;
+        }
+        #endregion
+
+        #region GetTutorByPaciente
+        public BaseDto<TutorDto> GetTutorByUsuarioId(TutorDto p_Filtro)
+        {
+            BaseDto<TutorDto> objResult = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    var tutorDb = (from t in this.dbContext.Tutor
+                                   join es in this.dbContext.Estado on t.IdEstado equals es.Id
+                                   join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
+                                   join r in this.dbContext.Rol on u.IdRol equals r.Id
+                                   join p in this.dbContext.Paciente on t.IdPaciente equals p.Id
+                                   where t.IdUsuario == p_Filtro.FiltroIdUsuario
+                                   select new TutorDto
+                                   {
+                                       Id = t.Id,
+                                       Nombre = t.Nombre,
+                                       Rut = t.Rut,
+                                       ApellidoPaterno = t.ApellidoPaterno,
+                                       ApellidoMaterno = t.ApellidoMaterno,
+                                       Direccion = t.Direccion,
+                                       FchCreate = t.FchCreate,
+                                       UsrCreate = t.UsrCreate,
+                                       FchUpdate = t.FchUpdate,
+                                       UsrUpdate = t.UsrUpdate,
+                                       Email = t.Email,
+                                       IdUsuario = t.IdUsuario,
+                                       IdEstado = t.IdEstado,
+                                       IdPaciente = t.IdPaciente,
+                                       DetalleEstado = new EstadoDto
+                                       {
+                                           Id = es.Id,
+                                           Descripcion = es.Descripcion,
+                                           Tabla = es.Tabla
+                                       },
+                                       DatosUsuario = new UsuarioDto
+                                       {
+                                           Id = u.Id,
+                                           Pass = u.Pass,
+                                           Username = u.Username,
+                                           IdRol = u.IdRol
+                                       },
+                                       DetalleRol = new RolDto
+                                       {
+                                           Id = r.Id,
+                                           Descripcion = r.Descripcion
+                                       },
+                                       DetallePaciente = new PacienteDto
+                                       {
+                                           Id = p.Id,
+                                           Rut = p.Rut,
+                                           Nombre = p.Nombre,
+                                           ApellidoPaterno = p.ApellidoPaterno,
+                                           ApellidoMaterno = p.ApellidoMaterno,
+                                           Edad = p.Edad,
+                                           Direccion = p.Direccion,
+                                           FchCreate = p.FchCreate,
+                                           UsrCreate = p.UsrCreate,
+                                           FchUpdate = p.FchUpdate,
+                                           UsrUpdate = p.UsrUpdate,
+                                           NumeroTelefono = p.NumeroTelefono,
+                                           IdEstado = p.IdEstado
                                        }
                                    }).FirstOrDefault();
 
