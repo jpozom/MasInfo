@@ -167,6 +167,11 @@ namespace AppMasInfo.Negocio.DAL.Services
                 {
                     var pacienteDb = (from p in this.dbContext.Paciente
                                       join es in this.dbContext.Estado on p.IdEstado equals es.Id
+                                      join t in this.dbContext.Tutor on p.Id equals t.IdPaciente                                                                                                                
+                                      join ep in this.dbContext.EquipoPaciente on p.Id equals ep.IdPaciente into tmpCf
+                                      join pu in this.dbContext.PacienteUbicacion on p.Id equals pu.IdPaciente into tmpC                                      
+                                      from ep in tmpCf.DefaultIfEmpty()
+                                      from pu in tmpC.DefaultIfEmpty()
                                       where p.Id == p_Filtro.FiltroId
                                       select new PacienteDto
                                       {
@@ -188,7 +193,46 @@ namespace AppMasInfo.Negocio.DAL.Services
                                               Id = es.Id,
                                               Descripcion = es.Descripcion,
                                               Tabla = es.Tabla
-                                          }
+                                          },
+                                          DetalleTutor = new TutorDto
+                                          {
+                                              Id = t.Id,
+                                              Nombre = t.Nombre,
+                                              Rut = t.Rut,
+                                              ApellidoPaterno = t.ApellidoPaterno,
+                                              ApellidoMaterno = t.ApellidoMaterno,
+                                              Direccion = t.Direccion,
+                                              FchCreate = t.FchCreate,
+                                              UsrCreate = t.UsrCreate,
+                                              FchUpdate = t.FchUpdate,
+                                              UsrUpdate = t.UsrUpdate,
+                                              Email = t.Email,
+                                              IdUsuario = t.IdUsuario,
+                                              IdEstado = t.IdEstado,
+                                              IdPaciente = t.IdPaciente
+                                          },                                                                                    
+                                          DetalleEquipoPaciente = new EquipoPacienteDto
+                                          {
+                                              Id = ep == null ? 0 : ep.Id,
+                                              IdPaciente = ep == null ? 0 : ep.IdPaciente,
+                                              Idtrabajador = ep == null ? 0 : ep.IdPaciente,
+                                          },
+                                          DetallePacienteUbicacion = new PacienteUbicacionDto
+                                          {
+                                              Id = pu == null ? 0 : pu.Id,
+                                              IdPaciente = pu == null ? 0 : pu.IdPaciente,
+                                              FchIngreso = pu.FchIngreso,
+                                              Observacion = pu.Observacion,
+                                          },
+                                          DetalleUbicacion = (from ub in this.dbContext.Ubicacion
+                                                        join pu in this.dbContext.PacienteUbicacion on ub.Id equals pu.IdUbicacion
+                                                        where ub.Id == pu.IdUbicacion
+                                                        select new UbicacionDto
+                                                        {
+                                                            Id = ub.Id,
+                                                            Descripcion = ub.Descripcion
+
+                                                        }).FirstOrDefault()
                                       }).FirstOrDefault();
 
                     objResult = new BaseDto<PacienteDto>(pacienteDb);

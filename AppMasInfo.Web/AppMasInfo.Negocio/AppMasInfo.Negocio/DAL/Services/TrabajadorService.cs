@@ -86,7 +86,7 @@ namespace AppMasInfo.Negocio.DAL.Services
             {
                 using (this.dbContext = new MasInfoWebEntities_02())
                 {
-                    var trabajadorDb = this.dbContext.Trabajador.FirstOrDefault(p => p.Id == p_Obj.Id);                    
+                    var trabajadorDb = this.dbContext.Trabajador.FirstOrDefault(p => p.Id == p_Obj.Id);
 
                     if (trabajadorDb != null)
                     {
@@ -98,7 +98,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                         trabajadorDb.Email = p_Obj.Email;
                         trabajadorDb.FchUpdate = p_Obj.FchUpdate;
                         trabajadorDb.UsrUpdate = p_Obj.UsrUpdate;
-                        
+
                         this.dbContext.SaveChanges();
                         resultObj = new BaseDto<bool>(true);
                     }
@@ -201,7 +201,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                              Id = u.Id,
                                              Username = u.Username,
                                              Pass = u.Pass,
-                                             IdRol = u.IdRol
+                                             IdRol = u.IdRol,
                                          },
                                          DetalleRol = new RolDto
                                          {
@@ -236,11 +236,11 @@ namespace AppMasInfo.Negocio.DAL.Services
             {
                 using (this.dbContext = new MasInfoWebEntities_02())
                 {//left join al conjunto A sobre B se almacena en un campo temporal
-                    var trabajadorDb = (from t in this.dbContext.Trabajador 
+                    var trabajadorDb = (from t in this.dbContext.Trabajador
                                         join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                         join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
                                         join r in this.dbContext.Rol on u.IdRol equals r.Id
-                                        join cf in this.dbContext.CargoFuncion on t.IdCargoFuncion equals cf.Id into tmpCf                                        
+                                        join cf in this.dbContext.CargoFuncion on t.IdCargoFuncion equals cf.Id into tmpCf
                                         join c in this.dbContext.Cargo on t.IdCargo equals c.Id into tmpC
                                         from cf in tmpCf.DefaultIfEmpty()
                                         from c in tmpC.DefaultIfEmpty()
@@ -281,7 +281,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                             },
                                             DetalleCargo = new CargoDto
                                             {
-                                                Id = c == null? 0 :c.Id,
+                                                Id = c == null ? 0 : c.Id,
                                                 Descripcion = c.Descripcion,
                                                 IdCargoFuncion = c == null ? 0 : c.IdCargoFuncion
                                             },
@@ -346,6 +346,70 @@ namespace AppMasInfo.Negocio.DAL.Services
                 result = new BaseDto<bool>(true, ex);
             }
             return result;
+        }
+        #endregion
+
+        #region GetTrabajadorByUsuarioId
+        public BaseDto<TrabajadorDto> GetTrabajadorByUsuarioId(TrabajadorDto p_Filtro)
+        {
+            BaseDto<TrabajadorDto> objResult = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    var trabajadorDb = (from t in this.dbContext.Trabajador
+                                        join es in this.dbContext.Estado on t.IdEstado equals es.Id
+                                        join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
+                                        join r in this.dbContext.Rol on u.IdRol equals r.Id
+                                        where t.IdUsuario == p_Filtro.FiltroIdUsuario &&
+                                        (t.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null)
+                                        select new TrabajadorDto
+                                        {
+                                            Id = t.Id,
+                                            Nombre = t.Nombre,
+                                            ApellidoPaterno = t.ApellidoPaterno,
+                                            ApellidoMaterno = t.ApellidoMaterno,
+                                            FchCreate = t.FchCreate,
+                                            UsrCreate = t.UsrCreate,
+                                            FchUpdate = t.FchUpdate,
+                                            UsrUpdate = t.UsrUpdate,
+                                            Email = t.Email,
+                                            IdUsuario = t.IdUsuario,
+                                            IdEstado = t.IdEstado,
+                                            DetalleEstado = new EstadoDto
+                                            {
+                                                Id = es.Id,
+                                                Descripcion = es.Descripcion,
+                                                Tabla = es.Tabla
+                                            },
+                                            DatosUsuario = new UsuarioDto
+                                            {
+                                                Id = u.Id,
+                                                Pass = u.Pass,
+                                                Username = u.Username,
+                                                IdRol = u.IdRol
+                                            },
+                                            DetalleRol = new RolDto
+                                            {
+                                                Id = r.Id,
+                                                Descripcion = r.Descripcion
+                                            },
+                                        }).FirstOrDefault();
+
+                    objResult = new BaseDto<TrabajadorDto>(trabajadorDb);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                objResult = new BaseDto<TrabajadorDto>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                objResult = new BaseDto<TrabajadorDto>(true, ex);
+            }
+
+            return objResult;
         }
         #endregion
 

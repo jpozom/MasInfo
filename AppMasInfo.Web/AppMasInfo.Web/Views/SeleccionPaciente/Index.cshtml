@@ -10,7 +10,7 @@
         var filtroBusqueda = function() {
             //var formContainer = $('#form-busqueda');
 
-            var objRequestData = new Object();                
+            var objRequestData = new Object();
             objRequestData.FiltroIdRut = $('#FiltroIdRut').val();
             objRequestData.FiltroNombre = $('#FiltroNombre').val();
 
@@ -105,8 +105,8 @@
             console.log("entro");
             var urlDetallePaciente = '@Url.Content("~/SeleccionPaciente/Detail")?p_id=' + id;
             dialogInstanceArchivo = BootstrapDialog.show({
-                title: 'MAsInfoWeb - Detalle Paciente',
-                message: $('<div></div>').load(urlDetallePaciente),
+                title: 'MasInfoWeb - Detalle Paciente',
+                message: $('<div>rqrrqrrqrrtqte</div>').load(urlDetallePaciente),
                 size: BootstrapDialog.SIZE_WIDE,
                 buttons: [{
                     label: 'Cerrar',
@@ -125,7 +125,6 @@
         function myFunction() {
             location.reload();
         }
-      
 
     </script>
 }
@@ -134,46 +133,46 @@
     <div class="panel-body">
         <h5 class="m-b-30 m-t-0">Selecci&oacute;n de pacientes</h5>
         <form id="form-busqueda">
-        <fieldset>
-            <legend>Filtro de b&uacute;squeda</legend>
+            <fieldset>
+                <legend>Filtro de b&uacute;squeda</legend>
 
-            <div class="row">
-                <div class="form-group col-sm-4">
-                    <label class="control-label col-md-12" for="FiltroId">Rut</label>
-                    <div class="col-md-12">
-                        @Html.DropDownListFor(model => model.FiltroIdRut,
-                                             new SelectList(Model.lstPaciente, "Id", "Rut"),
-                                             "Seleccione Rut", new { @class = "form-control" })
+                <div class="row">
+                    <div class="form-group col-sm-4">
+                        <label class="control-label col-md-12" for="FiltroId">Rut</label>
+                        <div class="col-md-12">
+                            @Html.DropDownListFor(model => model.FiltroIdRut,
+                                                 new SelectList(Model.lstPaciente, "Id", "Rut"),
+                                                 "Seleccione Rut", new { @class = "form-control" })
 
-                    </div>
-                </div>            
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-4">
-                    <label class="control-label col-md-12" for="Nombre">Nombre Paciente</label>
-                    <div class="col-md-12">
-                        @Html.TextBoxFor(model => model.FiltroNombre, new { @class = "form-control" })
-
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="form-group col-sm-4">
+                        <label class="control-label col-md-12" for="Nombre">Nombre Paciente</label>
+                        <div class="col-md-12">
+                            @Html.TextBoxFor(model => model.FiltroNombre, new { @class = "form-control" })
 
-            <div class="row">
-                <div class="form-group col-sm-12">
-                    <div class="col-md-12 text-right">
-                        <button type="button" class="btn btn-primary" onclick="filtroBusqueda()">
-                            <i class="glyphicon glyphicon-search"></i>
-                            Buscar
-                        </button> &nbsp;
-                        <button type="button" class="btn btn-default" onclick="limpiar()">
-                            <i class="glyphicon glyphicon-remove"></i>
-                            Limpiar
-                        </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </fieldset>
+                <div class="row">
+                    <div class="form-group col-sm-12">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-primary" onclick="filtroBusqueda()">
+                                <i class="glyphicon glyphicon-search"></i>
+                                Buscar
+                            </button> &nbsp;
+                            <button type="button" class="btn btn-default" onclick="limpiar()">
+                                <i class="glyphicon glyphicon-remove"></i>
+                                Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </fieldset>
         </form>
 
         <br />

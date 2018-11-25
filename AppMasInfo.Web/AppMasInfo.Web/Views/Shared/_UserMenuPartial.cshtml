@@ -53,12 +53,12 @@
         <a href="" class="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown" aria-expanded="true">                    
             <span class="profile-username">
                 @User.Identity.GetUserId()<br />
-                <small>@(((System.Security.Claims.ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).FirstOrDefault())</small>
+                <small>@(((System.Security.Claims.ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).FirstOrDefault())</small>                
             </span>
         </a>
         <ul class="dropdown-menu">
             <li><a href="javascript:void(0)"> Profile</a></li>
-            <li><a href="javascript:void(0)"><span class="badge badge-success pull-right">5</span> Settings </a></li>
+            <li><a href="@Url.Action("Index", "CambioPass")"><span class="badge badge-success pull-right"></span> Cambio de Contraseña</a></li>
             <li><a href="javascript:void(0)"> Lock screen</a></li>
             <li class="divider"></li>
             <li><a href="javascript:logoutConfirmation('@Url.Content("~/Account/Logout")')">Logout</a></li>

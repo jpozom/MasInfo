@@ -20,6 +20,7 @@ namespace AppMasInfo.Negocio.DAL.Database
         public Nullable<System.DateTime> FchIngreso { get; set; }
         public string UsrIngreso { get; set; }
         public string Observacion { get; set; }
+        public Nullable<bool> Habilitado { get; set; }
     
         public virtual Paciente Paciente { get; set; }
         public virtual Ubicacion Ubicacion { get; set; }

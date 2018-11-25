@@ -3,6 +3,7 @@ using AppMasInfo.Negocio.DAL.Services;
 using AppMasInfo.Utils.Utils;
 using AppMasInfo.Web.Models;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,29 +92,36 @@ namespace AppMasInfo.Web.Controllers
             {
                 TempData.Clear();
 
-                var filtroPaciente = new PacienteDto();
-                filtroPaciente.FiltroId = p_Id;
-
-                var oDb = this.PacienteUbicacionServiceModel.GetUbicacionPacienteByIdPaciente(filtroPaciente);
-                var ids = new HashSet<int>();
-                if (oDb.HasValue)
+                if (ModelState.IsValid)
                 {
-                    viewModel.DetallePaciente = new PacienteDto();
-                    BaseDto<PacienteDto> paciente = this.PacienteServiceModel.GetPacienteById(filtroPaciente);
-                    if (paciente.HasValue)
-                    {
-                        viewModel.DetallePaciente = paciente.Value;
+                    var filtroPaciente = new PacienteDto();
+                    filtroPaciente.FiltroId = p_Id;
+
+                    var oDb = this.PacienteUbicacionServiceModel.GetUbicacionPacienteByIdPaciente(filtroPaciente);
+                    var ids = new HashSet<int>();
+                    if (oDb.HasValue)
+                    {                        
+                        viewModel.DetallePaciente = new PacienteDto();
+                        BaseDto<PacienteDto> paciente = this.PacienteServiceModel.GetPacienteById(filtroPaciente);
+                        if (paciente.HasValue)
+                        {
+                            viewModel.DetallePaciente = paciente.Value;
+                        }
+                        viewModel.LstPacienteUbicacion = oDb.Value;
+                        ids = new HashSet<int>(oDb.Value.Select(x => x.IdUbicacion));                       
                     }
-                    viewModel.LstPacienteUbicacion = oDb.Value;
-                    ids = new HashSet<int>(oDb.Value.Select(x => x.IdUbicacion));
+                    var tDb = this.UbicacionServiceModel.GetListaUbicacionAll().Value;
+                    viewModel.LstUbicaciones = new List<UbicacionDto>();
+                    viewModel.LstUbicaciones = tDb.Where(t => !ids.Contains(t.Id)).ToList();
+                    viewModel.IdUbicacion = 0;                    
+                    viewModel.IdPaciente = p_Id;
+                    if (oDb.HasError)
+                        throw oDb.Error;
                 }
-                var tDb = this.UbicacionServiceModel.GetListaUbicacionAll().Value;
-                viewModel.LstUbicaciones = new List<UbicacionDto>();
-                viewModel.LstUbicaciones = tDb.Where(t => !ids.Contains(t.Id)).ToList();
-                viewModel.IdUbicacion = 0;
-                viewModel.IdPaciente = p_Id;
-                if (oDb.HasError)
-                    throw oDb.Error;
+                else
+                {
+                    TempData["ErrorMessage"] = "Ha ocurrido un Error, faltan datos a Ingresar. Por favor, inténtelo nuevamente";
+                }
             }
             catch (Exception ex)
             {
@@ -133,7 +141,7 @@ namespace AppMasInfo.Web.Controllers
                 TempData.Clear();
 
                 //guardar asignacion
-                PacienteUbicacionDto ubicacion = new PacienteUbicacionDto();
+                PacienteUbicacionDto ubicacion = new PacienteUbicacionDto();                
                 ubicacion.IdPaciente = viewModel.IdPaciente;
                 ubicacion.IdUbicacion = viewModel.IdUbicacion;
                 ubicacion.FchIngreso = DateTime.Now;
@@ -144,11 +152,11 @@ namespace AppMasInfo.Web.Controllers
 
                 if (res.Value)
                 {
-                    TempData["SaveOkMessage"] = "Trabajador asignado correctamente";
+                    TempData["SaveOkMessage"] = "Paciente Asignado Correctamente";
                 }
                 else
                 {
-                    TempData["ErrorMessage"] = "Ha ocurrido un error al asignar. Por favor, inténtelo nuevamente";
+                    TempData["ErrorMessage"] = "Ha Ocurrido un error al Asignar. Por favor, Inténtelo Nuevamente";
 
                 }
                 var filtroPaciente = new PacienteDto();
@@ -174,6 +182,7 @@ namespace AppMasInfo.Web.Controllers
                 viewModel.IdPaciente = viewModel.IdPaciente;
                 if (oDb.HasError)
                     throw oDb.Error;
+
             }
             catch (Exception ex)
             {
@@ -183,6 +192,47 @@ namespace AppMasInfo.Web.Controllers
             }
 
             return View(viewModel);
+        }
+        #endregion
+
+        #region Delete
+        [HttpPost]
+        public string Delete(PacienteUbicacionViewModel p_ViewModel)
+        {
+            String jsonResult = String.Empty;
+
+            try
+            {
+                PacienteUbicacionDto ubicacionDelete = new PacienteUbicacionDto();
+                ubicacionDelete.Id = p_ViewModel.Id;                                                        
+
+                var objRespuesta = this.PacienteUbicacionServiceModel.Delete(ubicacionDelete);
+
+                if (!objRespuesta.HasError)
+                {
+                    jsonResult = JsonConvert.SerializeObject(
+                        new
+                        {
+                            status = "ok",
+                            message = "Asignación Eliminada Correctamente"
+                        });
+                }
+                else
+                {
+                    jsonResult = JsonConvert.SerializeObject(
+                            new
+                            {
+                                status = "error",
+                                message = "No se Puede Eliminar la Asiganación. Por favor, Intente Nuevamente"
+                            });
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonResult = JsonConvert.SerializeObject(new { status = "error", message = "Error al intentar eliminar el usuario", ex });
+            }
+
+            return jsonResult;
         }
         #endregion
 

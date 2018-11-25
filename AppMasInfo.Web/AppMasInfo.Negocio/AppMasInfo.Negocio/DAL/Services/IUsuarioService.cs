@@ -49,6 +49,6 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// </summary>
         /// <param name="p_Obj"></param>
         /// <returns></returns>
-        BaseDto<bool> Delete(UsuarioDto p_Obj);
+        BaseDto<bool> Delete(UsuarioDto p_Obj);       
     }
 }

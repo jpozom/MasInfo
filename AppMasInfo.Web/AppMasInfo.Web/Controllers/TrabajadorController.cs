@@ -395,33 +395,50 @@ namespace AppMasInfo.Web.Controllers
 
             try
             {
-                TrabajadorDto userDelete = new TrabajadorDto();
-                userDelete.Id = p_ViewModel.Id;
-                userDelete.IdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Deshabilitado;
-                userDelete.FchUpdate = DateTime.Now;
-                userDelete.UsrUpdate = User.Identity.GetUserId();
+                TrabajadorDto userTrabajadorDelete = new TrabajadorDto();
+                userTrabajadorDelete.FiltroId = p_ViewModel.Id;                
 
-                User.Identity.GetUserId();
+                var trabajadorDB = this.TrabajadorServiceModel.GetTrabajadorById(userTrabajadorDelete);               
 
-                var objRespuesta = this.TrabajadorServiceModel.Delete(userDelete);
-
-                if (!objRespuesta.HasError)
+                if (trabajadorDB.HasValue)
                 {
-                    jsonResult = JsonConvert.SerializeObject(
-                        new
+                    UsuarioDto userDelete = new UsuarioDto();
+                    userDelete.Id = trabajadorDB.Value.IdUsuario;
+
+                    var objRespDB = this.UsuarioServiceModel.Delete(userDelete);
+
+                    if (!objRespDB.HasError)
+                    {
+                        userTrabajadorDelete.Id = p_ViewModel.Id;
+                        userTrabajadorDelete.IdEstado = (int)EnumUtils.EstadoEnum.Trabajador_Deshabilitado;
+                        userTrabajadorDelete.FchUpdate = DateTime.Now;
+                        userTrabajadorDelete.UsrUpdate = User.Identity.GetUserId();
+                        var trabDB = this.TrabajadorServiceModel.Delete(userTrabajadorDelete);
+
+                        if (trabDB.HasValue)
                         {
-                            status = "ok",
-                            message = "Usuario Eliminado Correctamente"
-                        });
+                            jsonResult = JsonConvert.SerializeObject(
+                            new
+                            {
+                                status = "ok",
+                                message = "Usuario Eliminado Correctamente"
+                            });
+
+                        }
+                        else
+                        {
+                            jsonResult = JsonConvert.SerializeObject(
+                                    new
+                                    {
+                                        status = "error",
+                                        message = "No se Puede Eliminar al Trabajador"
+                                    });
+                        }
+                    }                                                                  
                 }
                 else
                 {
-                    jsonResult = JsonConvert.SerializeObject(
-                            new
-                            {
-                                status = "error",
-                                message = "No se Puede Eliminar al Trabajador"
-                            });
+
                 }
             }
             catch (Exception ex)

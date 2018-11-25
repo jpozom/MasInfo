@@ -50,5 +50,7 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <param name="p_Filtro">Filtro de datos</param>
         /// <returns>Usuario encontrado</returns>
         BaseDto<TrabajadorDto> GetTrabajadorById(TrabajadorDto p_Filtro);
+
+        BaseDto<TrabajadorDto> GetTrabajadorByUsuarioId(TrabajadorDto p_Filtro);
     }
 }

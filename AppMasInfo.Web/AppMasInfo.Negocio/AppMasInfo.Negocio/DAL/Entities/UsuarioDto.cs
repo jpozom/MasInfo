@@ -22,10 +22,12 @@ namespace AppMasInfo.Negocio.DAL.Entities
 
         public string FiltroUsername { get; set; }
         public int? FiltroIdRol { get; set; }
+        public long FiltroTrabajador { get; set; }
 
         public List<TrabajadorDto> ListaTrabajador { get; set; }
 
         public RolDto DetalleRol { get; set; }
+        public TrabajadorDto DetalleTrabajador { get; set; }
 
     }
 }

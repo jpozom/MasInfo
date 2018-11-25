@@ -15,7 +15,9 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public Nullable<System.DateTime> FchIngreso { get; set; }
         public string UsrIngreso { get; set; }        
         public string Observacion { get; set; }
+        public Nullable<bool> Habilitado { get; set; }
 
         public PacienteDto DetallePaciente { get; set; }
+        public UbicacionDto DetalleUbicacion { get; set; }
     }
 }

@@ -6,12 +6,11 @@
 }
 @section Scripts{
     <script type="text/javascript">
-        $(function () {
 
-              var deleteItem = function (id) {
+        var deleteItem = function (id) {
             confirmationDialog(
                 'Eliminar Paciente',
-                '¿Esta seguro(a) que desea eliminar a el Paciente?',
+                '¿Esta seguro(a) que desea eliminar la Asociación?',
                 function () { doDeleteItem(id); }
             );
         };
@@ -19,9 +18,10 @@
         var doDeleteItem = function (id) {
             var objRequestData = new Object();
             objRequestData.Id = id;
-
+            console.log("dasdasd")
+            console.log(objRequestData)
             $.ajax({
-                url: '@Url.Action("Delete", "Paciente")',
+                url: '@Url.Action("Delete", "PacienteUbicacion")',
                 method: 'POST',
                 contentType: "application/json;charset=utf-8",
                 dataType: "json",
@@ -35,7 +35,7 @@
                             showMessageDialogRedirect(BootstrapDialog.TYPE_INFO,
                                 'Información',
                                 data.message,
-                                '@Url.Action("Index", "Paciente")');
+                                '@Url.Action("Index", "PacienteUbicacion")');
                         }
                         else {
                             showMessageDialog(BootstrapDialog.TYPE_ERROR,
@@ -66,6 +66,7 @@
             });
         };
 
+         $(function () {
             var saveMessage = '@TempData["SaveOkMessage"]';
             if (saveMessage !== '') {
                 showMessageDialog(
@@ -88,80 +89,100 @@
 }
 <div class="panel panel-primary">
     <div class="panel-body">
-        <h4 class="m-b-30 m-t-0">Equipo Asignado al Paciente</h4>
-        <fieldset>
-            <legend>Paciente - <strong>@Model.DetallePaciente.Nombre &nbsp; @Model.DetallePaciente.ApellidoPaterno &nbsp; @Model.DetallePaciente.ApellidoMaterno </strong></legend>
+        <h4 class="m-b-30 m-t-0">Asignaci&oacute;n de Ubicaciones al Paciente</h4>
 
-        </fieldset>
         @using (Html.BeginForm("Edit", "PacienteUbicacion", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.IdPaciente)
+            @Html.HiddenFor(model => model.Id)
+
+            <fieldset>
+                <legend style="font-size:15px;">Paciente &nbsp; <strong>@Model.DetallePaciente.Nombre &nbsp; @Model.DetallePaciente.ApellidoPaterno &nbsp; @Model.DetallePaciente.ApellidoMaterno </strong></legend>
+            </fieldset>
 
             <fieldset class="panel panel-default">
                 <div class="panel-heading">Asignar</div>
                 <div class="row panel-body">
                     <div class="form-group">
                         <div>
-                            @Html.LabelFor(model => model.IdUbicacion, "Ubicaciones disponibles", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.LabelFor(model => model.IdUbicacion, "Ubicaciones disponibles", htmlAttributes: new { @class = "control-label col-md-3" })
                         </div>
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             @Html.DropDownListFor(model => model.IdUbicacion,
                                       new SelectList(Model.LstUbicaciones, "Id", "Descripcion" ),
-                                      "Selecciona", new { @class = "form-control"})
+                                      "Selecciona Ubicación", new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.IdUbicacion, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-2">
-                            <input type="submit" value="Asignar Trabajadores" class="btn btn-primary" />
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend style="font-size:15px;">Observaci&oacute;n Estado del Paciente</legend>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Observacion, "Observación", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        <div class="m-t-20">
+                            @Html.TextAreaFor(model => model.Observacion, htmlAttributes: new { @class = "form-control", cols = "70", rows = "4" })
+                            @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
                         </div>
                     </div>
-
                 </div>
+
+                <br />
+
+                <div class="form-group col-sm-12">
+                    <div class="col-md-12 text-right">
+                        <input type="submit" value="Asignar Ubicación" class="btn btn-primary" />
+                    </div>
+                </div>
+            </fieldset>
+
+            <br />
+
+            <fieldset>
+                <legend style="font-size:15px;">Ubicaciones Asignadas</legend>
+                <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
+                    <thead>
+                        <tr>                            
+                            <th><h6 align="left">Id</h6></th>
+                            <th><h6 align="left">Rut</h6></th>
+                            <th><h6 align="left">Nombre</h6></th>
+                            <th><h6 align="left">Apellido Paterno</h6></th>
+                            <th><h6 align="left">Apellido Materno</h6></th>
+                            <th><h6 align="left">Ubicaci&oacute;n</h6></th>
+                            <th><h6 align="left">Acci&oacute;n</h6></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.LstPacienteUbicacion.Count() > 0)
+                        {
+                            foreach (var item in Model.LstPacienteUbicacion)
+                            {
+                                <tr>                                    
+                                    <td>@item.DetallePaciente.Id</td>
+                                    <td>@item.DetallePaciente.Rut</td>
+                                    <td>@item.DetallePaciente.Nombre</td>
+                                    <td>@item.DetallePaciente.ApellidoPaterno</td>
+                                    <td>@item.DetallePaciente.ApellidoMaterno</td>
+                                    <td>@item.DetalleUbicacion.Descripcion</td>
+                                    <td>
+                                        <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="7">No existen datos</td></tr>
+                        }
+                    </tbody>
+                </table>
 
             </fieldset>
         }
-        <fieldset>
-            <legend>Ubicaciones Asignadas</legend>
-            <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
-                <thead>
-                    <tr>
-                        <th><h6 align="left">Id</h6></th>
-                        <th><h6 align="left">Rut</h6></th>
-                        <th><h6 align="left">Nombre</h6></th>
-                        <th><h6 align="left">Apellido Paterno</h6></th>
-                        <th><h6 align="left">Apellido Materno</h6></th>
-                        <th><h6 align="left">Ubicacion</h6></th>
-                        <th><h6 align="left">Acci&oacute;n</h6></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.LstPacienteUbicacion.Count() > 0)
-                    {
-                        foreach (var item in Model.LstPacienteUbicacion)
-                        {
-                            <tr>
-                                <td>@item.DetallePaciente.Id</td>
-                                <td>@item.DetallePaciente.Rut</td>
-                                <td>@item.DetallePaciente.Nombre</td>
-                                <td>@item.DetallePaciente.ApellidoPaterno</td>
-                                <td>@item.DetallePaciente.ApellidoMaterno</td>
-                                <td>@item.IdUbicacion</td>                               
-                                <td>
-                                    <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash mdi-24px"></i>&nbsp;</a>
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr><td colspan="7">No existen datos</td></tr>
-                    }
-                </tbody>
-            </table>
-
-        </fieldset>
-
         <br />
 
         <div class="row">

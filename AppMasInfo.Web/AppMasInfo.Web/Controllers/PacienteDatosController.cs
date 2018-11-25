@@ -64,6 +64,8 @@ namespace AppMasInfo.Web.Controllers
         }
         #endregion
 
+        #region Index
+
         // GET: TutorDatosPaciente
         public ActionResult Index()
         {
@@ -97,6 +99,8 @@ namespace AppMasInfo.Web.Controllers
                         viewModel.DetalleRol = tutorDB.Value.DetalleRol;
                         viewModel.DetalleEstado = tutorDB.Value.DetalleEstado;
                         viewModel.DetallePaciente = tutorDB.Value.DetallePaciente;
+                        viewModel.DetalleUbicacion = tutorDB.Value.DetalleUbicacion;
+                        viewModel.DetallePacienteUbicacion = tutorDB.Value.DetallePacienteUbicacion;
                     }
                     else
                     {
@@ -114,7 +118,8 @@ namespace AppMasInfo.Web.Controllers
             }
 
             return View(viewModel);
-
         }
+
+        #endregion
     }
 }

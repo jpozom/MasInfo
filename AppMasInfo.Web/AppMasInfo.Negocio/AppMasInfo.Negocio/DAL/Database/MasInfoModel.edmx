@@ -24,7 +24,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdPaciente" Type="bigint" Nullable="false" />
           <Property Name="IdTrabajador" Type="bigint" Nullable="false" />
         </EntityType>
@@ -58,12 +58,13 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdPaciente" Type="bigint" Nullable="false" />
           <Property Name="IdUbicacion" Type="int" Nullable="false" />
           <Property Name="FchIngreso" Type="datetime" />
           <Property Name="UsrIngreso" Type="varchar" MaxLength="50" />
-          <Property Name="Observacion" Type="varchar" MaxLength="50" />
+          <Property Name="Observacion" Type="varchar" MaxLength="200" />
+          <Property Name="Habilitado" Type="bit" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -489,9 +490,10 @@
           <Property Name="IdUbicacion" Type="Int32" Nullable="false" />
           <Property Name="FchIngreso" Type="DateTime" Precision="3" />
           <Property Name="UsrIngreso" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Observacion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Observacion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Paciente" Relationship="Self.FK_PacienteUbicacion_Paciente" FromRole="PacienteUbicacion" ToRole="Paciente" />
           <NavigationProperty Name="Ubicacion" Relationship="Self.FK_PacienteUbicacion_Ubicacion" FromRole="PacienteUbicacion" ToRole="Ubicacion" />
+          <Property Name="Habilitado" Type="Boolean" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -933,6 +935,7 @@
           <EntitySetMapping Name="PacienteUbicacion">
             <EntityTypeMapping TypeName="MasInfoWebModel.PacienteUbicacion">
               <MappingFragment StoreEntitySet="PacienteUbicacion">
+                <ScalarProperty Name="Habilitado" ColumnName="Habilitado" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="IdPaciente" ColumnName="IdPaciente" />
                 <ScalarProperty Name="IdUbicacion" ColumnName="IdUbicacion" />

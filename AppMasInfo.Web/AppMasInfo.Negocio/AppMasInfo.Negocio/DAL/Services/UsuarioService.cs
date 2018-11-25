@@ -289,7 +289,7 @@ namespace AppMasInfo.Negocio.DAL.Services
             return result;
         }
         #endregion
-       
+        
         #endregion
     }
 }

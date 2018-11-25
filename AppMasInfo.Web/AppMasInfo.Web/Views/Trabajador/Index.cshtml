@@ -46,7 +46,7 @@
                                 `<td>` +
                                 `<a href="javascript:viewDetailItem(${item.Id})"><i title="Detalle" class="glyphicon glyphicon-info-sign"></i>&nbsp;</a>&nbsp;` +
                                 `<a href="javascript:deleteItem(${item.Id})"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>` +
-                                `<a href="${urlEditItem}"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;` +                                
+                                `<a href="${urlEditItem}"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;</a>&nbsp;` +
                                 `</td >` +
                                 `</tr>`;
                         });
@@ -115,7 +115,7 @@
         var doDeleteItem = function (id) {
             var objRequestData = new Object();
             objRequestData.Id = id;
-
+            
             $.ajax({
                 url: '@Url.Action("Delete", "Trabajador")',
                 method: 'POST',
@@ -194,7 +194,7 @@
         <h5 class="m-b-30 m-t-0">Mantenedor Usuario / Trabajador</h5>
         <fieldset>
             <legend>Filtro de b&uacute;squeda</legend>
-            <div class="row">                
+            <div class="row">
                 <div class="form-group col-sm-4">
                     <label class="control-label col-md-12" for="txtNombre">Rol</label>
                     <div class="col-md-12">
@@ -282,6 +282,15 @@
                 @Html.Partial("~/Views/Shared/_TablePagerPartial.cshtml", Model.LstTrabajador.DatosPaginado)
             }
         </fieldset>
+
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <div class="col-md-12">
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-default" role="button" aria-pressed="true">Volver</a>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 <!-- end row -->

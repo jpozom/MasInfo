@@ -120,16 +120,17 @@
 
 <div class="panel panel-primary">
     <div class="panel-body" id="panel">
-        <h5 class="m-b-30 m-t-0">Mantenedor Pacientes</h5>
+        <h4 class="m-b-30 m-t-0">Mantenedor Pacientes</h4>
 
         <br />
+
         <fieldset>
-            <legend>Lista de datos</legend>
+            <legend style="font-size:20px;">Lista de Datos</legend>
             <div class="row">
                 <div class="form-group col-sm-12">
                     <div class="col-md-12 text-right">
                         <a href='@Url.Action("Create", "Paciente")' class="btn btn-primary" role="button" aria-pressed="true">
-                            <i class="glyphicon glyphicon-plus"></i> Crear
+                            <i class="glyphicon glyphicon-log-in">&nbsp;</i>Crear
                         </a>
                     </div>
                 </div>
@@ -152,7 +153,7 @@
                         <div class="tab-content" style="border: none !important;">
                             <div class="tab-pane active" id="Paciente">
                                 <div class="table-responsive">
-                                    <table id="tblPacientes" class="table table-bordered">
+                                    <table id="tblPacientes" class="table table-hover">
                                         <thead>
                                             <tr>
                                                 <th style="width:5%"><h6 align="left">Id</h6></th>
@@ -197,7 +198,7 @@
 
                             <div class="tab-pane" id="Tutor">
                                 <div class="table-responsive">
-                                    <table id="tblTutor" class="table table-bordered">
+                                    <table id="tblTutor" class="table table-hover">
                                         <thead>
                                             <tr>
                                                 <th><h6 align="left">Id</h6></th>
@@ -233,7 +234,7 @@
                                             }
                                             else
                                             {
-                                                <tr><td colspan="8">No existen datos</td></tr>
+                                                <tr><td colspan="9">No existen datos</td></tr>
                                             }
                                         </tbody>
                                     </table>
@@ -245,5 +246,17 @@
                 </div>
             </div>
         </fieldset>
+        <br />
+
+        <div class="row">
+            <div class="form-group col-sm-12">
+                <div class="col-md-12">
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-default" role="button" aria-pressed="true">                        
+                        <i class="glyphicon glyphicon-backward">&nbsp;</i>Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>

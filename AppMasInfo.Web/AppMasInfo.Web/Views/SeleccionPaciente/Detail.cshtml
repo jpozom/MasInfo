@@ -1,0 +1,173 @@
+﻿
+@model AppMasInfo.Web.Models.SeleccionPacienteDetailViewModel
+
+@{
+    Layout = null;
+}
+
+<style>
+    .legend {
+        font-size: 15px;
+    }
+</style>
+@Html.HiddenFor(model => model.DetallePacienteUbicacion.Id)
+
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <form class="form-horizontal" role="form">
+
+            <fieldset>
+                <legend>Datos Personales Paciente</legend>                
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RutPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.RutPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NombrePaciente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.NombrePaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApellidoPaternoPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ApellidoPaternoPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApellidoMaternoPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.ApellidoMaternoPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Edad, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Edad, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DireccionPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DireccionPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NumeroTelefono, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.NumeroTelefono, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Datos Personales Tutor Asignado</legend>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DetalleTutor, "Rut", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DetalleTutor.Rut, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DetalleTutor, "Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DetalleTutor.Nombre, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DetalleTutor, "Apellido Paterno", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DetalleTutor.ApellidoPaterno, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DetalleTutor, "Apellido Materno", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DetalleTutor.ApellidoMaterno, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DetalleTutor, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.DetalleTutor.Email, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <fieldset>
+            <legend>Datos Personales Equipo Cl&iacute;nico Asignado</legend>
+            <fieldset>
+                <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
+                    <thead>
+                        <tr>
+                            <th><h6 align="left">Trabajador</h6></th>
+                            <th><h6 align="left">Cargo</h6></th>
+                            <th><h6 align="left">Funci&oacute;n</h6></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Equipo.Count() > 0)
+                        {
+                            foreach (var item in Model.Equipo)
+                            {
+                                <tr>
+                                    <td>@item.Trabajador.Nombre &nbsp;  @item.Trabajador.ApellidoPaterno&nbsp;  @item.Trabajador.ApellidoMaterno</td>
+                                    <td>@item.Trabajador.DetalleCargo.Descripcion</td>
+                                    <td>@item.Trabajador.DetalleFuncion.Descripcion</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="8">No existen datos</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </fieldset>
+        </fieldset>
+
+        @using (Html.BeginForm("Detail", "SeleccionPaciente", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.IdPaciente)
+            @Html.HiddenFor(model => model.IdPacienteUbicacion)
+            <fieldset id="observacion">
+                <legend style="font-size:15px;">Observaci&oacute;n Estado del Paciente</legend>
+                <p>Fecha Ingreso: <span>@Model.FchIngreso</span></p>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Observacion, "Observación", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        <div class="m-t-20">
+                            @Html.TextAreaFor(model => model.Observacion, htmlAttributes: new { @class = "form-control", cols = "70", rows = "4" })
+                            @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+
+                <div class="form-group col-sm-12">
+                    <div class="col-md-12 text-right">
+                        <input type="submit" value="Actualice Observación" class="btn btn-primary" />
+                    </div>
+                </div>
+            </fieldset>
+        }
+
+    </div>
+</div>

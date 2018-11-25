@@ -177,6 +177,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CambioPassController.cs" />
     <Compile Include="Controllers\EquipoPacienteController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PacienteController.cs" />
@@ -188,6 +189,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModel.cs" />
+    <Compile Include="Models\CambioPassViewModel.cs" />
     <Compile Include="Models\EquipoPacienteViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\PacienteDatosViewModel.cs" />
@@ -1777,6 +1779,8 @@
     <Content Include="Views\PacienteDatos\Index.cshtml" />
     <Content Include="Views\PacienteUbicacion\Index.cshtml" />
     <Content Include="Views\PacienteUbicacion\Edit.cshtml" />
+    <Content Include="Views\CambioPass\Index.cshtml" />
+    <Content Include="Views\SeleccionPaciente\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

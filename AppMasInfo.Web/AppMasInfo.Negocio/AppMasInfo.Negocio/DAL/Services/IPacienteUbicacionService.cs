@@ -12,5 +12,9 @@ namespace AppMasInfo.Negocio.DAL.Services
         BaseDto<bool> AddUbicacionPaciente(PacienteUbicacionDto ubicacion);
 
         BaseDto<List<PacienteUbicacionDto>> GetUbicacionPacienteByIdPaciente(PacienteDto p_Filtro);
+
+        BaseDto<bool> Delete(PacienteUbicacionDto p_Obj);
+
+        BaseDto<bool> UpdatePacienteUbicacion(PacienteUbicacionDto p_Obj);
     }
 }

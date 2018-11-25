@@ -1,0 +1,196 @@
+﻿@model AppMasInfo.Web.Models.CambioPassViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+<script src="~/Scripts/sha256.js"></script>
+@section Scripts {
+    <script type="text/javascript">     
+
+        $("#divStatus").hide();      
+
+        //evento que permite ocultar y mostrar la contraseña
+        $(document).on("ready", function () {
+            $(".show-hide-pass").on("click", function (e) {
+                e.preventDefault();
+
+                var current = $(this).attr("action");
+
+                if (current == "hide") {
+                    $(this).prev().attr("type", "text");
+                    $(this).removeClass("glyphicon-eye-open").addClass("glyphicon-eye-close").attr("action", "show");
+                }
+
+                if (current == "show") {
+                    $(this).prev().attr("type", "password");
+                    $(this).removeClass("glyphicon-eye-close").addClass("glyphicon-eye-open").attr("action", "hide");
+                }
+            })
+
+        })
+
+        $(function () {           
+            //evento que controla el confirm de la contraseña y encripta la contraseña
+            $("#passwordTest").on("change", function () {
+
+
+                if (userSHA == storedSHA) {
+                    $("#status").html("<span class=\"label label-success\">Status:</span> Las contraseñas coinciden.");
+
+                } else {
+                    $("#status").html("<span class=\"label label-danger\">Status:</span> Las contraseñas <b>No</b> coinciden. Inténtelo nuevamente.");
+                }
+                $("#divStatus").show();
+
+            });
+
+        });
+
+        var storedSHA;
+        var userSHA;
+
+        $("#passwordInput").keyup(function () {
+            var value = $(this).val();
+            $("#storedSHA").text("SHA256 Hash for Password: " + sha256_digest(value));
+            storedSHA = value;
+        }).keyup();
+
+        $("#passwordTest").keyup(function () {
+            var value = $(this).val();
+            $("#currentSHA").text("SHA256 Hash for Second Password: " + sha256_digest(value));
+            userSHA = value;
+        }).keyup();
+
+        $(function () {
+            var saveMessage = '@TempData["SaveOkMessage"]';
+            if (saveMessage !== '') {
+                showMessageDialog(
+                    BootstrapDialog.TYPE_SUCCESS,
+                    'Información',
+                    saveMessage
+                );
+            }
+
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage !== '') {
+                showMessageDialog(
+                   BootstrapDialog.TYPE_DANGER,
+                   'Error',
+                   errorMessage
+               );
+            }
+        });
+
+    </script>
+}
+
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <h4 class="m-b-30 m-t-0">Cambio Contraseña</h4>
+
+        @using (Html.BeginForm("Index", "CambioPass", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.IdUsuario)
+            @Html.HiddenFor(model => model.IdTrabajador)
+            @Html.HiddenFor(model => model.IdRol)
+
+            <fieldset>
+                <legend class="legend">Datos del Usuario</legend>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NombreTrabajador, "Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.NombreTrabajador, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.NombreTrabajador, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApellidoPaternoTrabajador, "Apellido Paterno", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.ApellidoPaternoTrabajador, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.ApellidoPaternoTrabajador, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApellidoMaternoTrabajador, "Apellido Materno", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.ApellidoMaternoTrabajador, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.ApellidoMaternoTrabajador, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.DetalleRol, "Rol", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.DetalleRol.Descripcion, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.DetalleRol, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend class="legend">Actualizaci&oacute;n datos para Inicio de Sesi&oacute;n</legend>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Pass, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.Pass, new { htmlAttributes = new { @class = "form-control", placeholder = "Actualize Password", type = "password", id = "passwordInput" } })
+                                <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide"></span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ConfirmPass, "Confirma Password", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                @Html.EditorFor(model => model.ConfirmPass, new { htmlAttributes = new { @class = "form-control", placeholder = "Confirme Password", type = "password", id = "passwordTest" } })
+                                <span class="show-hide-pass input-group-addon glyphicon glyphicon glyphicon-eye-open" action="hide"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2"></label>
+                    <div class="col-md-6">
+                        <div class="alert alert-info" id="divStatus">
+                            <p id="status"></p>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <br />
+
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <div class="col-md-12">
+                        <input type="submit" value="Guardar" class="btn btn-primary" /> &nbsp;
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+<!-- end row -->

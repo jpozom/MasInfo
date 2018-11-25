@@ -13,7 +13,7 @@ using static AppMasInfo.Web.Models.PacienteViewModel;
 
 namespace AppMasInfo.Web.Controllers
 {
-    [Authorize(Roles = "Administrador, Enfermero/a, Médico")]
+    [Authorize/*(Roles = "Administrador")*/]
     public class PacienteController : Controller
     {
         #region propiedades privadas

@@ -364,7 +364,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                     var tutorDb = (from t in this.dbContext.Tutor
                                    join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                    join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
-                                   join r in this.dbContext.Rol on u.IdRol equals r.Id
+                                   join r in this.dbContext.Rol on u.IdRol equals r.Id                                   
                                    where t.IdPaciente == p_Filtro.FiltroIdPaciente
                                    select new TutorDto
                                    {
@@ -418,7 +418,7 @@ namespace AppMasInfo.Negocio.DAL.Services
         }
         #endregion
 
-        #region GetTutorByPaciente
+        #region GetTutorByUsuarioId
         public BaseDto<TutorDto> GetTutorByUsuarioId(TutorDto p_Filtro)
         {
             BaseDto<TutorDto> objResult = null;
@@ -432,6 +432,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                                    join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
                                    join r in this.dbContext.Rol on u.IdRol equals r.Id
                                    join p in this.dbContext.Paciente on t.IdPaciente equals p.Id
+                                   join pu in this.dbContext.PacienteUbicacion on p.Id equals pu.IdPaciente
+                                   join ub in this.dbContext.Ubicacion on pu.IdUbicacion equals ub.Id
                                    where t.IdUsuario == p_Filtro.FiltroIdUsuario
                                    select new TutorDto
                                    {
@@ -482,7 +484,21 @@ namespace AppMasInfo.Negocio.DAL.Services
                                            UsrUpdate = p.UsrUpdate,
                                            NumeroTelefono = p.NumeroTelefono,
                                            IdEstado = p.IdEstado
-                                       }
+                                       },
+                                       DetallePacienteUbicacion = new PacienteUbicacionDto
+                                       {
+                                           Id = pu.Id,
+                                           IdPaciente = pu.IdPaciente,
+                                           IdUbicacion = pu.IdUbicacion,
+                                           FchIngreso = pu.FchIngreso,
+                                           UsrIngreso = pu.UsrIngreso,
+                                           Observacion = pu.Observacion
+                                       },
+                                       DetalleUbicacion = new UbicacionDto
+                                       {
+                                           Id = ub.Id,
+                                           Descripcion = ub.Descripcion,                                           
+                                       },
                                    }).FirstOrDefault();
 
                     objResult = new BaseDto<TutorDto>(tutorDb);

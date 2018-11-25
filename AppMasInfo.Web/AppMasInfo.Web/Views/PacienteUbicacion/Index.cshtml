@@ -45,7 +45,7 @@
 }
 <div class="panel panel-primary">
     <div class="panel-body" id="panel">
-        <h5 class="m-b-30 m-t-0">Asigna Equipo a Paciente</h5>
+        <h5 class="m-b-30 m-t-0">Asigna Ubicaci&oacute;n a Paciente</h5>
 
         <br />
 
@@ -59,6 +59,7 @@
                             <th><h6 align="left">Rut</h6></th>
                             <th><h6 align="left">Nombre</h6></th>
                             <th><h6 align="left">Apellido Paterno</h6></th>
+                            <th><h6 align="left">Apellido Materno</h6></th>
                             <th><h6 align="left">Acci&oacute;n</h6></th>
                         </tr>
                     </thead>
@@ -72,8 +73,9 @@
                                     <td>@item.Rut</td>
                                     <td>@item.Nombre</td>
                                     <td>@item.ApellidoPaterno</td>
+                                    <td>@item.ApellidoMaterno</td>
                                     <td>
-                                        <a href="@Url.Action("Edit", "PacienteUbicacion", new { p_Id = item.Id })" class="btn btn-primary"><i title="Editar" class="glyphicon glyphicon-edit"></i>&nbsp;Asignar Equipo</a>&nbsp;
+                                        <a href="@Url.Action("Edit", "PacienteUbicacion", new { p_Id = item.Id })" class="btn btn-primary">&nbsp;Asignar Ubicaci&oacute;n</a>&nbsp;
                                     </td>
                                 </tr>
                             }
