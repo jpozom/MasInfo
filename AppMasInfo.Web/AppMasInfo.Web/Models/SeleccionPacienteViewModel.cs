@@ -73,13 +73,21 @@ namespace AppMasInfo.Web.Models
         public TutorDto DetalleTutor { get; set; }
         public EquipoPacienteDto DetalleEquipoPaciente { get; set; }        
         public PacienteDto Paciente { get; set; }
-      
+        public PacienteDto DetallePaciente { get; set; }
+
         [Required(ErrorMessage = "Debe seleccionar un trabajador")]
         public long Idtrabajador { get; set; }
+
+        [Required(ErrorMessage = "Debe Seleccionar una Ubicación")]
+        public int IdUbicacion { get; set; }
 
         public List<EquipoPacienteDto> Equipo { get; set; }
 
         public List<TrabajadorDto> LstTrabajadores { get; set; }
+
+        public List<UbicacionDto> LstUbicaciones { get; set; }
+
+        public List<PacienteUbicacionDto> LstPacienteUbicacion { get; set; }       
     }
 
 }

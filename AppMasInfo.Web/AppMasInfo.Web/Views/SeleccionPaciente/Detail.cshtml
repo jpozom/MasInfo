@@ -1,5 +1,4 @@
-﻿
-@model AppMasInfo.Web.Models.SeleccionPacienteDetailViewModel
+﻿@model AppMasInfo.Web.Models.SeleccionPacienteDetailViewModel
 
 @{
     Layout = null;
@@ -10,14 +9,13 @@
         font-size: 15px;
     }
 </style>
-@Html.HiddenFor(model => model.DetallePacienteUbicacion.Id)
 
 <div class="panel panel-primary">
     <div class="panel-body">
         <form class="form-horizontal" role="form">
 
             <fieldset>
-                <legend>Datos Personales Paciente</legend>                
+                <legend style="font-size:20px;">Datos Personales Paciente</legend>
                 <div class="form-group">
                     @Html.LabelFor(model => model.RutPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -68,8 +66,10 @@
                 </div>
             </fieldset>
 
+            <br />
+
             <fieldset>
-                <legend>Datos Personales Tutor Asignado</legend>
+                <legend style="font-size:20px;">Datos Personales Tutor Asignado</legend>
                 <div class="form-group">
                     @Html.LabelFor(model => model.DetalleTutor, "Rut", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
@@ -107,8 +107,10 @@
             </fieldset>
         </form>
 
+        <br />
+
         <fieldset>
-            <legend>Datos Personales Equipo Cl&iacute;nico Asignado</legend>
+            <legend style="font-size:20px;">Datos Personales Equipo Cl&iacute;nico Asignado</legend>
             <fieldset>
                 <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
                     <thead>
@@ -139,6 +141,9 @@
             </fieldset>
         </fieldset>
 
+        <br />
+
+
         @using (Html.BeginForm("Detail", "SeleccionPaciente", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.AntiForgeryToken()
@@ -146,8 +151,7 @@
             @Html.HiddenFor(model => model.IdPaciente)
             @Html.HiddenFor(model => model.IdPacienteUbicacion)
             <fieldset id="observacion">
-                <legend style="font-size:15px;">Observaci&oacute;n Estado del Paciente</legend>
-                <p>Fecha Ingreso: <span>@Model.FchIngreso</span></p>
+                <legend style="font-size:20px;">Observaci&oacute;n Estado del Paciente</legend>
                 <div class="form-group">
                     @Html.LabelFor(model => model.Observacion, "Observación", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-8">
@@ -159,15 +163,47 @@
                     </div>
                 </div>
 
-                <br />
-
                 <div class="form-group col-sm-12">
                     <div class="col-md-12 text-right">
                         <input type="submit" value="Actualice Observación" class="btn btn-primary" />
                     </div>
                 </div>
+
             </fieldset>
         }
 
+        <fieldset>
+            <legend style="font-size:20px;">Lista Datos Ubicaci&oacute;n</legend>
+            <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
+                <thead>
+                    <tr>
+                        <th><h6 align="left">Id</h6></th>
+                        <th><h6 align="left">Rut</h6></th>
+                        <th><h6 align="left">Nombre</h6></th>
+                        <th><h6 align="left">Ubicaci&oacute;n</h6></th>
+                        <th><h6 align="left">Ingreso</h6></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.LstPacienteUbicacion.Count() > 0)
+                    {
+                        foreach (var item in Model.LstPacienteUbicacion)
+                        {
+                            <tr>
+                                <td>@item.DetallePaciente.Id</td>
+                                <td>@item.DetallePaciente.Rut</td>
+                                <td>@item.DetallePaciente.Nombre &nbsp;@item.DetallePaciente.ApellidoPaterno &nbsp;@item.DetallePaciente.ApellidoMaterno</td>
+                                <td>@item.DetalleUbicacion.Descripcion</td>
+                                <td>@item.FchIngreso</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="5">No existen datos</td></tr>
+                    }
+                </tbody>
+            </table>
+        </fieldset>
     </div>
 </div>

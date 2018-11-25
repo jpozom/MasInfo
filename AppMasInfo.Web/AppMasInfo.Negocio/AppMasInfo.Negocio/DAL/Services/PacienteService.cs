@@ -172,7 +172,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                                       join pu in this.dbContext.PacienteUbicacion on p.Id equals pu.IdPaciente into tmpC                                      
                                       from ep in tmpCf.DefaultIfEmpty()
                                       from pu in tmpC.DefaultIfEmpty()
-                                      where p.Id == p_Filtro.FiltroId
+                                      where p.Id == p_Filtro.FiltroId &&
+                                      pu.Habilitado == true
                                       select new PacienteDto
                                       {
                                           Id = p.Id,

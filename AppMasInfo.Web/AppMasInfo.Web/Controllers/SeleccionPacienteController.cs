@@ -72,6 +72,14 @@ namespace AppMasInfo.Web.Controllers
                 return PacienteUbicacionService.GetInstance();
             }
         }
+
+        private IUbicacionService UbicacionServiceModel
+        {
+            get
+            {
+                return UbicacionService.GetInstance();
+            }
+        }
         #endregion
 
         #region Metodos Publicos
@@ -197,6 +205,30 @@ namespace AppMasInfo.Web.Controllers
                 viewModel.Idtrabajador = 0;
                 viewModel.IdPaciente = p_Id;
                 if (oDb.HasError)
+                    throw oDb.Error;
+
+                var filtroP = new PacienteDto();
+                filtroP.FiltroId = p_Id;
+
+                var poDb = this.PacienteUbicacionServiceModel.GetUbicacionPacienteByIdPaciente(filtroP);
+                var pids = new HashSet<int>();
+                if (poDb.HasValue)
+                {
+                    viewModel.DetallePaciente = new PacienteDto();
+                    BaseDto<PacienteDto> paciente = this.PacienteServiceModel.GetPacienteById(filtroP);
+                    if (paciente.HasValue)
+                    {
+                        viewModel.DetallePaciente = paciente.Value;
+                    }
+                    viewModel.LstPacienteUbicacion = poDb.Value;
+                    pids = new HashSet<int>(poDb.Value.Select(x => x.IdUbicacion));
+                }
+                var ptDb = this.UbicacionServiceModel.GetListaUbicacionAll().Value;
+                viewModel.LstUbicaciones = new List<UbicacionDto>();
+                viewModel.LstUbicaciones = ptDb.Where(t => !pids.Contains(t.Id)).ToList();
+                viewModel.IdUbicacion = 0;
+                viewModel.IdPaciente = p_Id;
+                if (poDb.HasError)
                     throw oDb.Error;
             }
 

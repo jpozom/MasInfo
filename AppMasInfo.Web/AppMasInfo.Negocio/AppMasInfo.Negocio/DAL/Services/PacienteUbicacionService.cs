@@ -86,6 +86,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                                  IdPaciente = pu.IdPaciente,
                                                  IdUbicacion = pu.IdUbicacion,
                                                  Observacion = pu.Observacion,
+                                                 FchIngreso = pu.FchIngreso,
                                                  DetallePaciente = new PacienteDto
                                                  {
                                                      Id = p.Id,
@@ -117,7 +118,6 @@ namespace AppMasInfo.Negocio.DAL.Services
             return objResult;
         }
         #endregion
-
 
         #region UpdatePacienteUbicacion
         public BaseDto<bool> UpdatePacienteUbicacion(PacienteUbicacionDto p_Obj)

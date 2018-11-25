@@ -100,7 +100,11 @@ namespace AppMasInfo.Web.Controllers
                         viewModel.DetalleEstado = tutorDB.Value.DetalleEstado;
                         viewModel.DetallePaciente = tutorDB.Value.DetallePaciente;
                         viewModel.DetalleUbicacion = tutorDB.Value.DetalleUbicacion;
-                        viewModel.DetallePacienteUbicacion = tutorDB.Value.DetallePacienteUbicacion;
+                        if(tutorDB.Value.DetallePacienteUbicacion.Habilitado == true)
+                        {
+                            viewModel.Observacion = tutorDB.Value.DetallePacienteUbicacion.Observacion;
+                            viewModel.FchIngreso = tutorDB.Value.DetallePacienteUbicacion.FchIngreso;
+                        }                        
                     }
                     else
                     {

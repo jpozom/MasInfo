@@ -434,7 +434,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                                    join p in this.dbContext.Paciente on t.IdPaciente equals p.Id
                                    join pu in this.dbContext.PacienteUbicacion on p.Id equals pu.IdPaciente
                                    join ub in this.dbContext.Ubicacion on pu.IdUbicacion equals ub.Id
-                                   where t.IdUsuario == p_Filtro.FiltroIdUsuario
+                                   where t.IdUsuario == p_Filtro.FiltroIdUsuario &&
+                                   pu.Habilitado == true
                                    select new TutorDto
                                    {
                                        Id = t.Id,
@@ -492,7 +493,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                                            IdUbicacion = pu.IdUbicacion,
                                            FchIngreso = pu.FchIngreso,
                                            UsrIngreso = pu.UsrIngreso,
-                                           Observacion = pu.Observacion
+                                           Observacion = pu.Observacion,
+                                           Habilitado = true                                           
                                        },
                                        DetalleUbicacion = new UbicacionDto
                                        {

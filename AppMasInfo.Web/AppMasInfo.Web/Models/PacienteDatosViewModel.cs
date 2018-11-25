@@ -30,10 +30,14 @@ namespace AppMasInfo.Web.Models
 
         public string TelefonoPaciente { get; set; }
 
+        public string Observacion { get; set; }
+       
+        public Nullable<System.DateTime> FchIngreso { get; set; }
+
         #endregion
 
         #region Propiedades Tutor
-        
+
         public string RutTutor { get; set; }
 
         public string NombreTutor { get; set; }
