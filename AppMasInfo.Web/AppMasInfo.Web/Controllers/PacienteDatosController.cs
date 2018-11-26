@@ -55,18 +55,43 @@ namespace AppMasInfo.Web.Controllers
             }
         }
 
-        private ITipoTelefonoService TIpoTelefonoServiceModel
+        private IEquipoPacienteService EquipoPacienteServiceModel
         {
             get
             {
-                return TipoTelefonoService.GetInstance();
+                return EquipoPacienteService.GetInstance();
             }
         }
+
+        private ITrabajadorService TrabajadorServiceModel
+        {
+            get
+            {
+                return TrabajadorService.GetInstance();
+            }
+        }
+
+        private IPacienteUbicacionService PacienteUbicacionServiceModel
+        {
+            get
+            {
+                return PacienteUbicacionService.GetInstance();
+            }
+        }
+
+        private IUbicacionService UbicacionServiceModel
+        {
+            get
+            {
+                return UbicacionService.GetInstance();
+            }
+        }
+
+
         #endregion
 
         #region Index
-
-        // GET: TutorDatosPaciente
+       
         public ActionResult Index()
         {
             PacienteDatosViewModel viewModel = new PacienteDatosViewModel();
@@ -124,6 +149,103 @@ namespace AppMasInfo.Web.Controllers
             return View(viewModel);
         }
 
+        #endregion
+
+        #region GetEquipoTrabajo
+        [HttpGet]
+        public ActionResult EquipoTrabajo(long p_Id)
+        {
+            SeleccionPacienteDetailViewModel viewModel = new SeleccionPacienteDetailViewModel();
+
+            try
+            {
+                PacienteDto filtroPaciente = new PacienteDto();
+                filtroPaciente.FiltroId = p_Id;
+
+                var objRespuestaDb = PacienteServiceModel.GetPacienteById(filtroPaciente);
+
+                if (objRespuestaDb.HasValue)
+                {
+                    viewModel = new SeleccionPacienteDetailViewModel
+                    {
+                        RutPaciente = objRespuestaDb.Value.Rut,
+                        IdPaciente = objRespuestaDb.Value.Id,
+                        NombrePaciente = objRespuestaDb.Value.Nombre,
+                        ApellidoPaternoPaciente = objRespuestaDb.Value.ApellidoPaterno,
+                        ApellidoMaternoPaciente = objRespuestaDb.Value.ApellidoMaterno,
+                        Edad = objRespuestaDb.Value.Edad,
+                        NumeroTelefono = objRespuestaDb.Value.NumeroTelefono,
+                        DireccionPaciente = objRespuestaDb.Value.Direccion,
+                        DetalleTutor = objRespuestaDb.Value.DetalleTutor,
+                        IdPacienteUbicacion = objRespuestaDb.Value.DetallePacienteUbicacion.Id,
+                        Observacion = objRespuestaDb.Value.DetallePacienteUbicacion.Observacion,
+                        FchIngreso = objRespuestaDb.Value.DetallePacienteUbicacion.FchIngreso,
+                        DetalleUbicacion = objRespuestaDb.Value.DetalleUbicacion,
+                        DetalleEquipoPaciente = objRespuestaDb.Value.DetalleEquipoPaciente,
+
+                    };
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente";
+                }
+
+                var filtroPac = new PacienteDto();
+                filtroPac.FiltroId = p_Id;
+
+                var oDb = this.EquipoPacienteServiceModel.GetEquipoPacienteByIdPaciente(filtroPac);
+                var ids = new HashSet<long>();
+                if (oDb.HasValue)
+                {
+                    viewModel.Paciente = new PacienteDto();
+                    BaseDto<PacienteDto> paciente = this.PacienteServiceModel.GetPacienteById(filtroPac);
+                    if (paciente.HasValue)
+                    {
+                        viewModel.Paciente = paciente.Value;
+                    }
+                    viewModel.Equipo = oDb.Value;
+                    ids = new HashSet<long>(oDb.Value.Select(x => x.Idtrabajador));
+                }
+                var tDb = this.TrabajadorServiceModel.GetListaTrabajadorAll().Value;
+                viewModel.LstTrabajadores = new List<TrabajadorDto>();
+                viewModel.LstTrabajadores = tDb.Where(t => !ids.Contains(t.Id)).ToList();
+                viewModel.Idtrabajador = 0;
+                viewModel.IdPaciente = p_Id;
+                if (oDb.HasError)
+                    throw oDb.Error;
+
+                var filtroP = new PacienteDto();
+                filtroP.FiltroId = p_Id;
+
+                var poDb = this.PacienteUbicacionServiceModel.GetUbicacionPacienteByIdPaciente(filtroP);
+                var pids = new HashSet<int>();
+                if (poDb.HasValue)
+                {
+                    viewModel.DetallePaciente = new PacienteDto();
+                    BaseDto<PacienteDto> paciente = this.PacienteServiceModel.GetPacienteById(filtroP);
+                    if (paciente.HasValue)
+                    {
+                        viewModel.DetallePaciente = paciente.Value;
+                    }
+                    viewModel.LstPacienteUbicacion = poDb.Value;
+                    pids = new HashSet<int>(poDb.Value.Select(x => x.IdUbicacion));
+                }
+                var ptDb = this.UbicacionServiceModel.GetListaUbicacionAll().Value;
+                viewModel.LstUbicaciones = new List<UbicacionDto>();
+                viewModel.LstUbicaciones = ptDb.Where(t => !pids.Contains(t.Id)).ToList();
+                viewModel.IdUbicacion = 0;
+                viewModel.IdPaciente = p_Id;
+                if (poDb.HasError)
+                    throw oDb.Error;
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return View(viewModel);
+        }
         #endregion
     }
 }

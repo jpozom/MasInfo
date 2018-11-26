@@ -47,13 +47,46 @@
                 <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Edad: &nbsp;  @Model.DetallePaciente.Edad </strong></a>
                 <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Direccion: &nbsp;  @Model.DetallePaciente.Direccion </strong></a>
                 <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Telefono: &nbsp;  @Model.DetallePaciente.NumeroTelefono </strong></a>
+            </div>
+        </fieldset>
+
+        <br />
+
+        <fieldset>
+            <legend style="font-size: 15px;">Datos de Seguimiento</legend>
+            <div class="list-group">
                 <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Fecha Ingreso: &nbsp;  @Model.FchIngreso </strong></a>
                 <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Ubicación Actual: &nbsp;  @Model.DetalleUbicacion.Descripcion </strong></a>
-                <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Observación: &nbsp;  @Model.Observacion </strong></a>
             </div>
-            
-            
+        </fieldset>
 
+        <br />
+
+        <fieldset>
+            <legend style="font-size:15px;">Observaci&oacute;n Estado del Paciente</legend>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Observacion, "Observación Actual", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    <div class="m-t-20">
+                        @Html.TextAreaFor(model => model.Observacion, htmlAttributes: new { @class = "form-control", cols = "70", rows = "6", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <br />
+        <fieldset>
+            <legend style="font-size: 15px;">Conozca al Equipo M&eacute;dico A Cargo</legend>
+            <br />
+            <div class="form-group col-sm-12">
+                <div class="col-md-12 text-left">
+                    <a href='@Url.Action("EquipoTrabajo", "PacienteDatos", new { p_Id = Model.DetallePaciente.Id})' class="btn btn-primary" role="button" aria-pressed="true">
+                        <i class="glyphicon glyphicon-wrench">&nbsp;</i>Equipo Clínico
+                    </a>
+                </div>
+            </div>
         </fieldset>
 
     </div>

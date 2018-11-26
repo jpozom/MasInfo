@@ -1,0 +1,100 @@
+﻿@model AppMasInfo.Web.Models.SeleccionPacienteDetailViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+}
+
+
+<div class="panel panel-primary">
+    <div class="panel-body">
+
+        <h4 class="m-b-30 m-t-0">
+            Bienvenido
+        </h4>
+        <div style="font-size: 20px;">
+            <strong>@Model.DetalleTutor.Nombre &nbsp; @Model.DetalleTutor.ApellidoPaterno &nbsp; @Model.DetalleTutor.ApellidoMaterno </strong>
+        </div>
+
+        <br />
+        <br />
+
+        <fieldset>
+            <legend style="font-size: 15px;">Datos Paciente</legend>
+            <div class="list-group">
+                <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>Nombre: &nbsp;  @Model.DetallePaciente.Nombre &nbsp; @Model.DetallePaciente.ApellidoPaterno &nbsp; @Model.DetallePaciente.ApellidoMaterno</strong></a>
+                <a href="#" class="list-group-item col-md-10" style="border:none !important;"><strong>RUT: &nbsp;  @Model.DetallePaciente.Rut </strong></a>
+            </div>
+        </fieldset>
+
+        <br />        
+
+        <fieldset>
+            <legend style="font-size:15px;">Datos Personales Equipo Cl&iacute;nico Asignado</legend>
+            <fieldset>
+                <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
+                    <thead>
+                        <tr>
+                            <th><h6 align="left">Trabajador</h6></th>
+                            <th><h6 align="left">Cargo</h6></th>
+                            <th><h6 align="left">Funci&oacute;n</h6></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Equipo.Count() > 0)
+                        {
+                            foreach (var item in Model.Equipo)
+                            {
+                                <tr>
+                                    <td>@item.Trabajador.Nombre &nbsp;  @item.Trabajador.ApellidoPaterno&nbsp;  @item.Trabajador.ApellidoMaterno</td>
+                                    <td>@item.Trabajador.DetalleCargo.Descripcion</td>
+                                    <td>@item.Trabajador.DetalleFuncion.Descripcion</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="8">No existen datos</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </fieldset>
+        </fieldset>
+
+        <br />
+
+        <fieldset>
+            <legend style="font-size:15px;">Lista Datos Ubicaci&oacute;n</legend>
+            <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
+                <thead>
+                    <tr>
+                        <th><h6 align="left">Id</h6></th>
+                        <th><h6 align="left">Rut</h6></th>
+                        <th><h6 align="left">Nombre</h6></th>
+                        <th><h6 align="left">Ubicaci&oacute;n</h6></th>
+                        <th><h6 align="left">Ingreso</h6></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.LstPacienteUbicacion.Count() > 0)
+                    {
+                        foreach (var item in Model.LstPacienteUbicacion)
+                        {
+                            <tr>
+                                <td>@item.DetallePaciente.Id</td>
+                                <td>@item.DetallePaciente.Rut</td>
+                                <td>@item.DetallePaciente.Nombre &nbsp;@item.DetallePaciente.ApellidoPaterno &nbsp;@item.DetallePaciente.ApellidoMaterno</td>
+                                <td>@item.DetalleUbicacion.Descripcion</td>
+                                <td>@item.FchIngreso</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="5">No existen datos</td></tr>
+                    }
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+</div>

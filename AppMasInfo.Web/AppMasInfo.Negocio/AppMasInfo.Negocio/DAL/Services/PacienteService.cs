@@ -29,6 +29,8 @@ namespace AppMasInfo.Negocio.DAL.Services
         }
         #endregion
 
+        #region Metodos Publicos
+
         #region GetListaPacienteAll
         public BaseDto<List<PacienteDto>> GetListaPacienteAll(PacienteDto p_Filtro)
         {
@@ -410,6 +412,8 @@ namespace AppMasInfo.Negocio.DAL.Services
 
             return result;
         }
+        #endregion
+
         #endregion
     }
 }

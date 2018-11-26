@@ -1781,6 +1781,7 @@
     <Content Include="Views\PacienteUbicacion\Edit.cshtml" />
     <Content Include="Views\CambioPass\Index.cshtml" />
     <Content Include="Views\SeleccionPaciente\Detail.cshtml" />
+    <Content Include="Views\PacienteDatos\EquipoTrabajo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
