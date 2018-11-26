@@ -177,6 +177,18 @@ namespace AppMasInfo.Web.Controllers
                         DetalleEquipoPaciente = objRespuestaDb.Value.DetalleEquipoPaciente,
 
                     };
+                    //Deshabilitar la opcion de modificar la observacion ingresada al paciente, esta opcion
+                    //queda solo habilitada para roles asignados
+                    var RolActual = (((System.Security.Claims.ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).FirstOrDefault());
+
+                    if(RolActual == "Técnico" || RolActual == "Auxiliar")
+                    {
+                        viewModel.Disabled = true;
+                    }
+                    else
+                    {
+                        viewModel.Disabled = false;
+                    }
                 }
                 else
                 {

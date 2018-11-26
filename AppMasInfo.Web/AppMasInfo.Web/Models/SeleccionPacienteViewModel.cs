@@ -42,6 +42,8 @@ namespace AppMasInfo.Web.Models
 
         public long IdPaciente { get; set; }
 
+        public bool Disabled { get; set; }
+
         [Display(Name = "Número teléfono")]
         public string NumeroTelefono { get; set; }
 
