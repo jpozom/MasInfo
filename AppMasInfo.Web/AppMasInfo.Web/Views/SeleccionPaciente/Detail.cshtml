@@ -117,7 +117,7 @@
                         <tr>
                             <th><h6 align="left">Trabajador</h6></th>
                             <th><h6 align="left">Cargo</h6></th>
-                            <th><h6 align="left">Funci&oacute;n</h6></th>
+                            <th><h6 align="left">Especialidad</h6></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -127,8 +127,9 @@
                             {
                                 <tr>
                                     <td>@item.Trabajador.Nombre &nbsp;  @item.Trabajador.ApellidoPaterno&nbsp;  @item.Trabajador.ApellidoMaterno</td>
-                                    <td>@item.Trabajador.DetalleCargo.Descripcion</td>
                                     <td>@item.Trabajador.DetalleFuncion.Descripcion</td>
+                                    <td>@item.Trabajador.DetalleCargo.Descripcion</td>
+                                    
                                 </tr>
                             }
                         }
@@ -178,11 +179,10 @@
             <legend style="font-size:20px;">Lista Datos Ubicaci&oacute;n</legend>
             <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
                 <thead>
-                    <tr>
-                        <th><h6 align="left">Id</h6></th>
+                    <tr>                       
                         <th><h6 align="left">Rut</h6></th>
-                        <th><h6 align="left">Nombre</h6></th>
-                        <th><h6 align="left">Ubicaci&oacute;n</h6></th>
+                        <th><h6 align="left">Nombre Paciente</h6></th>
+                        <th><h6 align="left">Ubicaciones</h6></th>
                         <th><h6 align="left">Ingreso</h6></th>
                     </tr>
                 </thead>
@@ -191,8 +191,7 @@
                     {
                         foreach (var item in Model.LstPacienteUbicacion)
                         {
-                            <tr>
-                                <td>@item.DetallePaciente.Id</td>
+                            <tr>                               
                                 <td>@item.DetallePaciente.Rut</td>
                                 <td>@item.DetallePaciente.Nombre &nbsp;@item.DetallePaciente.ApellidoPaterno &nbsp;@item.DetallePaciente.ApellidoMaterno</td>
                                 <td>@item.DetalleUbicacion.Descripcion</td>

@@ -176,6 +176,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                       from pu in tmpC.DefaultIfEmpty()
                                       where p.Id == p_Filtro.FiltroId &&
                                       pu.Habilitado == true
+                                      orderby pu.FchIngreso descending
                                       select new PacienteDto
                                       {
                                           Id = p.Id,

@@ -91,7 +91,7 @@ namespace AppMasInfo.Web.Controllers
         #endregion
 
         #region Index
-       
+
         public ActionResult Index()
         {
             PacienteDatosViewModel viewModel = new PacienteDatosViewModel();
@@ -112,24 +112,48 @@ namespace AppMasInfo.Web.Controllers
 
                     if (tutorDB.HasValue)
                     {
-                        viewModel.Username = usuarioDbResponse.Value.Username;                        
-                        viewModel.NombreTutor = tutorDB.Value.Nombre;                      
+                        viewModel.Username = usuarioDbResponse.Value.Username;
+                        viewModel.NombreTutor = tutorDB.Value.Nombre;
                         viewModel.DireccionTutor = tutorDB.Value.Direccion;
                         viewModel.NombreTutor = tutorDB.Value.Nombre;
                         viewModel.RutTutor = tutorDB.Value.Rut;
                         viewModel.ApellidoPaternoTutor = tutorDB.Value.ApellidoPaterno;
-                        viewModel.ApellidoMaternoTutor = tutorDB.Value.ApellidoMaterno;                       
+                        viewModel.ApellidoMaternoTutor = tutorDB.Value.ApellidoMaterno;
                         viewModel.NombreTutor = tutorDB.Value.Nombre;
                         viewModel.ApellidoPaternoTutor = tutorDB.Value.ApellidoPaterno;
                         viewModel.DetalleRol = tutorDB.Value.DetalleRol;
                         viewModel.DetalleEstado = tutorDB.Value.DetalleEstado;
-                        viewModel.DetallePaciente = tutorDB.Value.DetallePaciente;
+                        viewModel.IdPaciente = tutorDB.Value.DetallePaciente.Id;
                         viewModel.DetalleUbicacion = tutorDB.Value.DetalleUbicacion;
-                        if(tutorDB.Value.DetallePacienteUbicacion.Habilitado == true)
+                        if (tutorDB.Value.DetallePacienteUbicacion.Habilitado == true)
                         {
                             viewModel.Observacion = tutorDB.Value.DetallePacienteUbicacion.Observacion;
                             viewModel.FchIngreso = tutorDB.Value.DetallePacienteUbicacion.FchIngreso;
-                        }                        
+                        }
+
+                        var filtroP = new PacienteDto();
+                        filtroP.FiltroId = tutorDB.Value.DetallePaciente.Id;
+
+                        var poDb = this.PacienteUbicacionServiceModel.GetUbicacionPacienteByIdPaciente(filtroP);
+                        var pids = new HashSet<int>();
+                        if (poDb.HasValue)
+                        {
+                            viewModel.DetallePaciente = new PacienteDto();
+                            BaseDto<PacienteDto> paciente = this.PacienteServiceModel.GetPacienteById(filtroP);
+                            if (paciente.HasValue)
+                            {
+                                viewModel.DetallePaciente = paciente.Value;
+                            }
+                            viewModel.LstPacienteUbicacion = poDb.Value;
+                            pids = new HashSet<int>(poDb.Value.Select(x => x.IdUbicacion));
+                        }
+                        var ptDb = this.UbicacionServiceModel.GetListaUbicacionAll().Value;
+                        viewModel.LstUbicaciones = new List<UbicacionDto>();
+                        viewModel.LstUbicaciones = ptDb.Where(t => !pids.Contains(t.Id)).ToList();
+                        viewModel.IdUbicacion = 0;
+                        viewModel.IdPaciente = tutorDB.Value.DetallePaciente.Id;
+                        if (poDb.HasError)
+                            throw poDb.Error;
                     }
                     else
                     {
@@ -212,30 +236,6 @@ namespace AppMasInfo.Web.Controllers
                 viewModel.Idtrabajador = 0;
                 viewModel.IdPaciente = p_Id;
                 if (oDb.HasError)
-                    throw oDb.Error;
-
-                var filtroP = new PacienteDto();
-                filtroP.FiltroId = p_Id;
-
-                var poDb = this.PacienteUbicacionServiceModel.GetUbicacionPacienteByIdPaciente(filtroP);
-                var pids = new HashSet<int>();
-                if (poDb.HasValue)
-                {
-                    viewModel.DetallePaciente = new PacienteDto();
-                    BaseDto<PacienteDto> paciente = this.PacienteServiceModel.GetPacienteById(filtroP);
-                    if (paciente.HasValue)
-                    {
-                        viewModel.DetallePaciente = paciente.Value;
-                    }
-                    viewModel.LstPacienteUbicacion = poDb.Value;
-                    pids = new HashSet<int>(poDb.Value.Select(x => x.IdUbicacion));
-                }
-                var ptDb = this.UbicacionServiceModel.GetListaUbicacionAll().Value;
-                viewModel.LstUbicaciones = new List<UbicacionDto>();
-                viewModel.LstUbicaciones = ptDb.Where(t => !pids.Contains(t.Id)).ToList();
-                viewModel.IdUbicacion = 0;
-                viewModel.IdPaciente = p_Id;
-                if (poDb.HasError)
                     throw oDb.Error;
             }
 

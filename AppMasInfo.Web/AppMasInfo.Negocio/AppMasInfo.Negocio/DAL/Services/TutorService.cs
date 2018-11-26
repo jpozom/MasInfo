@@ -436,6 +436,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                    join ub in this.dbContext.Ubicacion on pu.IdUbicacion equals ub.Id
                                    where t.IdUsuario == p_Filtro.FiltroIdUsuario &&
                                    pu.Habilitado == true
+                                   orderby pu.FchIngreso descending
                                    select new TutorDto
                                    {
                                        Id = t.Id,

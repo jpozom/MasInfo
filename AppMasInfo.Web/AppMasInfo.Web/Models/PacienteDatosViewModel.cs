@@ -18,6 +18,8 @@ namespace AppMasInfo.Web.Models
 
         public string RutPaciente { get; set; }
 
+        public long IdPaciente { get; set; }
+
         public string NombrePaciente { get; set; }
 
         public string ApellidoPaternoPaciente { get; set; }
@@ -31,8 +33,15 @@ namespace AppMasInfo.Web.Models
         public string TelefonoPaciente { get; set; }
 
         public string Observacion { get; set; }
-       
+
+        [Display(Name = "Número teléfono")]
+        public string NumeroTelefono { get; set; }
+
         public Nullable<System.DateTime> FchIngreso { get; set; }
+
+        public int IdPacienteUbicacion { get; set; }
+
+        public int IdUbicacion { get; set; }
 
         #endregion
 
@@ -63,8 +72,14 @@ namespace AppMasInfo.Web.Models
         public TipoTelefonoDto DetalleTipoTelefono { get; set; }
         public PacienteUbicacionDto DetallePacienteUbicacion { get; set; }
         public UbicacionDto DetalleUbicacion { get; set; }
+        public TutorDto DetalleTutor { get; set; }
+        public EquipoPacienteDto DetalleEquipoPaciente { get; set; }
 
         #endregion
 
+        #region Listas
+        public List<PacienteUbicacionDto> LstPacienteUbicacion { get; set; }
+        public List<UbicacionDto> LstUbicaciones { get; set; }
+        #endregion
     }
 }

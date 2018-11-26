@@ -79,7 +79,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                                              join ub in this.dbContext.Ubicacion on pu.IdUbicacion equals ub.Id
                                              join p in this.dbContext.Paciente on pu.IdPaciente equals p.Id
                                              where pu.IdPaciente == p_Filtro.FiltroId &&
-                                             pu.Habilitado == true
+                                             pu.Habilitado == true 
+                                             orderby pu.FchIngreso descending                                             
                                              select new PacienteUbicacionDto
                                              {
                                                  Id = pu.Id,
@@ -98,7 +99,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                                  DetalleUbicacion = new UbicacionDto
                                                  {
                                                      Id = ub.Id,
-                                                     Descripcion = ub.Descripcion,                                                    
+                                                     Descripcion = ub.Descripcion,
                                                  }
 
                                              }).ToList();

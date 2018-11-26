@@ -131,10 +131,10 @@
 
 <div class="panel panel-primary">
     <div class="panel-body">
-        <h5 class="m-b-30 m-t-0">Selecci&oacute;n de pacientes</h5>
+        <h3 class="m-b-30 m-t-0">Selecci&oacute;n de Pacientes</h3>
         <form id="form-busqueda">
             <fieldset>
-                <legend>Filtro de b&uacute;squeda</legend>
+                <legend style="font-size:20px;">Filtro de B&uacute;squeda</legend>
 
                 <div class="row">
                     <div class="form-group col-sm-4">
@@ -178,19 +178,16 @@
         <br />
 
         <fieldset>
-            <legend>Lista de datos</legend>
+            <legend style="font-size:20px;">Lista de Datos</legend>
             <div class="row">
                 <table id="lstDatos" class="table table-hover" role="grid" aria-describedby="datatable_info">
                     <thead>
-                        <tr>
-                            <th><h6 align="left">Id</h6></th>
+                        <tr>                           
                             <th><h6 align="left">Rut</h6></th>
                             <th><h6 align="left">Nombre</h6></th>
                             <th><h6 align="left">Apellido Paterno</h6></th>
-                            <th><h6 align="left">Edad</h6></th>
-                            <th><h6 align="left">Telefono</h6></th>
-                            <th><h6 align="left">Direccion</h6></th>
-                            <th><h6 align="left">Seleccionar</h6></th>
+                            <th><h6 align="left">Edad</h6></th>                           
+                            <th><h6 align="center">Seleccionar</h6></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -198,15 +195,12 @@
                         {
                             foreach (var item in Model.lstPaciente)
                             {
-                                <tr>
-                                    <td>@item.Id</td>
+                                <tr>                                   
                                     <td>@item.Rut</td>
                                     <td>@item.Nombre</td>
                                     <td>@item.ApellidoPaterno</td>
-                                    <td>@item.Edad</td>
-                                    <td>@item.NumeroTelefono</td>
-                                    <td>@item.Direccion</td>
-                                    <td>
+                                    <td>@item.Edad</td>                                   
+                                    <td align="center">
                                         <a href="javascript:viewDetailItem(@item.Id)"><i title="Seleccionar" class="glyphicon glyphicon-info-sign"></i></a>
                                     </td>
                                 </tr>
