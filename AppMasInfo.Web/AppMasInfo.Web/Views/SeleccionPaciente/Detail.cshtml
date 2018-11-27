@@ -3,9 +3,11 @@
 @{
     Layout = null;
     object attributesSegunRol =  new { @class = "form-control", cols = "70", rows = "6" };
+    string habilitado = "";
     if (Model.Disabled)
     {
         attributesSegunRol = new { @class = "form-control", cols = "70", rows = "6", @disabled = "disabled" };
+        habilitado = "disabled='disabled'";
     }
 }
 
@@ -173,7 +175,7 @@
 
                 <div class="form-group col-sm-12">
                     <div class="col-md-12 text-right">
-                        <input type="submit" value="Actualice Observación" class="btn btn-primary" />
+                        <input type="submit" value="Actualice Observación" class="btn btn-primary" @Html.Raw(habilitado) />
                     </div>
                 </div>
             </fieldset>

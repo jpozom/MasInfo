@@ -92,7 +92,9 @@ namespace AppMasInfo.Web.Controllers
                 var filtroPaciente = new PacienteDto();
                 filtroPaciente.FiltroId = p_Id;
                 
+                //oDb = variable que contiene el ojeto enviado al servicio para la consulta
                 var oDb = this.EquipoPacienteServiceModel.GetEquipoPacienteByIdPaciente(filtroPaciente);
+                // contiene el número de elementos que puede contener el objeto, en este caso se almacenan las id del paciente.
                 var ids = new HashSet<long>();
                 if (oDb.HasValue)
                 {
@@ -106,6 +108,7 @@ namespace AppMasInfo.Web.Controllers
                 }
                 var tDb = this.TrabajadorServiceModel.GetListaTrabajadorAll().Value ;
                 viewModel.LstTrabajadores = new List<TrabajadorDto>();
+                //.Contains() metodo Determina si un objeto HashSet<T> contiene el elemento especificado.
                 viewModel.LstTrabajadores = tDb.Where(t=> !ids.Contains(t.Id)).ToList();
                 viewModel.Idtrabajador = 0;
                 viewModel.IdPaciente = p_Id;
@@ -182,7 +185,6 @@ namespace AppMasInfo.Web.Controllers
 
         #endregion
 
-        #endregion
-       
+        #endregion       
     }
 }

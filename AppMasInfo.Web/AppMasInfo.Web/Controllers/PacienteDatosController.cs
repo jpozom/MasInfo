@@ -90,6 +90,8 @@ namespace AppMasInfo.Web.Controllers
 
         #endregion
 
+        #region Metodos Publicos
+
         #region Index
 
         public ActionResult Index()
@@ -246,6 +248,8 @@ namespace AppMasInfo.Web.Controllers
 
             return View(viewModel);
         }
+        #endregion
+
         #endregion
     }
 }

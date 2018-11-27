@@ -117,6 +117,5 @@ namespace AppMasInfo.Negocio.DAL.Services
             return objResult;
         }
         #endregion
-
     }
 }

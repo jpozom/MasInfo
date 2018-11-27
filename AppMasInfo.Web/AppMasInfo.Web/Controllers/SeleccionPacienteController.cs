@@ -83,6 +83,8 @@ namespace AppMasInfo.Web.Controllers
         #endregion
 
         #region Metodos Publicos
+
+        #region Index
         // GET: Paciente
         [HttpGet]
         public ActionResult Index()
@@ -143,6 +145,7 @@ namespace AppMasInfo.Web.Controllers
 
             return jsonResult;
         }
+        #endregion
 
         #region Detail
         [HttpGet]
@@ -243,7 +246,6 @@ namespace AppMasInfo.Web.Controllers
                 if (poDb.HasError)
                     throw oDb.Error;
             }
-
             catch (Exception ex)
             {
                 throw ex;
@@ -251,13 +253,10 @@ namespace AppMasInfo.Web.Controllers
 
             return View(viewModel);
         }
-        #endregion
-
+      
         [HttpPost]
         public ActionResult Detail(SeleccionPacienteDetailViewModel p_ViewModel)
-        {
-            //string jsonResult = string.Empty;
-
+        {           
             try
             {
                 // Creamos un objeto para almacenar los datos de la tabla PacienteUbicacion modificados por el usuario
@@ -287,5 +286,6 @@ namespace AppMasInfo.Web.Controllers
         }
         #endregion
 
+        #endregion
     }
 }
