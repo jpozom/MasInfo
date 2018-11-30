@@ -28,6 +28,8 @@ namespace AppMasInfo.Negocio.DAL.Services
         }
         #endregion
 
+        #region metodos publicos
+
         #region AddUbicacionPaciente
         public BaseDto<bool> AddUbicacionPaciente(PacienteUbicacionDto ubicacion)
         {
@@ -194,6 +196,8 @@ namespace AppMasInfo.Negocio.DAL.Services
             }
             return result;
         }
+        #endregion
+
         #endregion
     }
 }

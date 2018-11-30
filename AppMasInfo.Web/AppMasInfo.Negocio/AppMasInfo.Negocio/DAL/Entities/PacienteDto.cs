@@ -35,6 +35,7 @@ namespace AppMasInfo.Negocio.DAL.Entities
 
         public int? FiltroIdEstado { get; set; }
         public long? FiltroId { get; set; }
+        public long? FiltroIdTutor { get; set; }
         public string FiltroRut { get; set; }       
         public string FiltroNombre { get; set; }
 
@@ -42,6 +43,18 @@ namespace AppMasInfo.Negocio.DAL.Entities
         public PacienteUbicacionDto DetallePacienteUbicacion { get; set; }
         public UbicacionDto DetalleUbicacion { get; set; }
         public TutorDto DetalleTutor { get; set; }
-        public EquipoPacienteDto DetalleEquipoPaciente { get; set; }        
+        public EquipoPacienteDto DetalleEquipoPaciente { get; set; }
+
+        public string DatosPaciente
+        {
+            get
+            {
+                // se crea arreglo que se llena con las priopiedades que se asignaron en la obtencion de la lista completa de trabajador                 
+                string datosPaciente = string.Empty;
+                datosPaciente = String.Format("{0} - {1} {2} {3}", Rut, Nombre, ApellidoPaterno, ApellidoMaterno);
+
+                return datosPaciente;
+            }
+        }
     }
 }

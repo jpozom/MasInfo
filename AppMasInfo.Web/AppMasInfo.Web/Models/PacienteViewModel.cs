@@ -28,7 +28,7 @@ namespace AppMasInfo.Web.Models
 
     public class PacienteCreateViewModel
     {
-        #region Propiedades Paciente
+        #region Propiedades PacienteCreate
 
         [Required(ErrorMessage = "Debe ingresar un Rut")]       
         [Display(Name = "Rut")]        
@@ -66,7 +66,7 @@ namespace AppMasInfo.Web.Models
         public string FiltroRut { get; set; }       
         #endregion
 
-        #region Propiedades Tutor
+        #region Propiedades TutorCreate
 
         [Required(ErrorMessage = "Debe ingresar un Rut")]
         [Display(Name = "Rut")]
@@ -87,14 +87,20 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Texto, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string ApellidoMaternoTutor { get; set; }
 
+        [Display(Name = "Edad")]
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
+        [RegularExpression(Validacion.Patterns.Entero, ErrorMessage = Validacion.Mensajes.RegularExpression)]
+        public int EdadTutor { get; set; }
+
         [Display(Name = "Dirección")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string DireccionTutor { get; set; }
 
-        [Display(Name = "Telefono")]
-        [Required(ErrorMessage = Validacion.Mensajes.Required)]
-        [RegularExpression(Validacion.Patterns.Entero, ErrorMessage = Validacion.Mensajes.RegularExpression)]
+
+        [Phone]
+        [Display(Name = "Teléfono")]
+        [Required(ErrorMessage = "Debe Ingresar una Télefono")]
         public string TelefonoTutor { get; set; }
 
         [Display(Name = "Email")]
@@ -179,6 +185,9 @@ namespace AppMasInfo.Web.Models
 
         [Display(Name = "Apellido Materno")]  
         public string ApellidoMaternoTutor { get; set; }
+
+        [Display(Name = "Edad")]        
+        public int EdadTutor { get; set; }
 
         [Display(Name = "Dirección")]      
         public string DireccionTutor { get; set; }

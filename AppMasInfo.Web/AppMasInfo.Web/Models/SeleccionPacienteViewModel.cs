@@ -12,16 +12,14 @@ namespace AppMasInfo.Web.Models
     {
         public SeleccionPacienteViewModel()
         {
-            this.ListaPacientes = new BaseDto<List<PacienteDto>>(new List<PacienteDto>());
+            this.LstPaciente = new BaseDto<List<PacienteDto>>(new List<PacienteDto>());
         }
 
-        public BaseDto<List<PacienteDto>> ListaPacientes { get; set; }
-
-        public List<PacienteDto> lstPaciente { get; set; } 
-        
+        public BaseDto<List<PacienteDto>> LstPaciente { get; set; }
+               
         public List<TutorDto> LstTutor { get; set; }
 
-        public long FiltroIdRut { get; set; }
+        public long FiltroRut { get; set; }
 
         public string FiltroNombre { get; set; }
 

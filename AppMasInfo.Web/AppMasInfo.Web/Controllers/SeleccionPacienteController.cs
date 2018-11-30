@@ -89,19 +89,23 @@ namespace AppMasInfo.Web.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            //PacienteViewModel viewModel = new PacienteViewModel();
             SeleccionPacienteViewModel viewModel = new SeleccionPacienteViewModel();
 
             try
             {
+                var lstPaciente = this.PacienteServiceModel.GetListaPacienteAll();
+                viewModel.LstPaciente.Value = lstPaciente.HasValue ? lstPaciente.Value : new List<PacienteDto>();
+
                 //se crea un objeto
-                var pacienteFiltroObj = new PacienteDto();
+                var pacienteFiltroObj = new PacienteDto(1,10);
                 pacienteFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
                 //se envia el objeto al servicio
-                var pacienteListDbResponse = this.PacienteServiceModel.GetListaPacienteAll(pacienteFiltroObj);
+                var pacienteListDbResponse = this.PacienteServiceModel.GetListaPacienteByFitro(pacienteFiltroObj);
 
-                //se devuelve la consulta
-                viewModel.lstPaciente = pacienteListDbResponse.HasValue ? pacienteListDbResponse.Value : new List<PacienteDto>();
+                if (!pacienteListDbResponse.HasError)
+                {
+                    viewModel.LstPaciente = pacienteListDbResponse;
+                }                
 
                 if (pacienteListDbResponse.HasError)
                 {
@@ -114,7 +118,6 @@ namespace AppMasInfo.Web.Controllers
             }
 
             return View(viewModel);
-
         }
 
         [HttpPost]
@@ -124,13 +127,12 @@ namespace AppMasInfo.Web.Controllers
 
             try
             {
-                //var pFiltroObj = new PacienteDto(p_ViewModel.FiltroPaginado.PaginaActual, p_ViewModel.FiltroPaginado.TamanoPagina);
-                var pFiltroObj = new PacienteDto();
-                if (p_ViewModel.FiltroIdEstado != null) { pFiltroObj.FiltroIdEstado = p_ViewModel.FiltroIdEstado; } else { pFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado; }
-                pFiltroObj.FiltroId = p_ViewModel.FiltroIdRut;
-                pFiltroObj.FiltroNombre = p_ViewModel.FiltroNombre;
+                var pacienteFiltroObj = new PacienteDto(p_ViewModel.FiltroPaginado.PaginaActual, p_ViewModel.FiltroPaginado.TamanoPagina);
+                pacienteFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
+                pacienteFiltroObj.FiltroId = p_ViewModel.FiltroRut;
+                pacienteFiltroObj.FiltroNombre = p_ViewModel.FiltroNombre;
 
-                var pListDbResponse = this.PacienteServiceModel.GetListaPacienteByFitro(pFiltroObj);
+                var pListDbResponse = this.PacienteServiceModel.GetListaPacienteByFitro(pacienteFiltroObj);
 
                 if (pListDbResponse.HasValue)
                     jsonResult = JsonConvert.SerializeObject(pListDbResponse);
@@ -140,7 +142,7 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de Grupos Contribuyentes. Por favor, inténtelo nuevamente " + ex;
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de Pacientes. Por favor, inténtelo nuevamente " + ex;
             }
 
             return jsonResult;
@@ -178,13 +180,12 @@ namespace AppMasInfo.Web.Controllers
                         FchIngreso = objRespuestaDb.Value.DetallePacienteUbicacion.FchIngreso,
                         DetalleUbicacion = objRespuestaDb.Value.DetalleUbicacion,
                         DetalleEquipoPaciente = objRespuestaDb.Value.DetalleEquipoPaciente,
-
                     };
                     //Deshabilitar la opcion de modificar la observacion ingresada al paciente, esta opcion
                     //queda solo habilitada para roles asignados
                     var RolActual = (((System.Security.Claims.ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).FirstOrDefault());
 
-                    if(RolActual == "Técnico" || RolActual == "Auxiliar")
+                    if (RolActual == "Técnico" || RolActual == "Auxiliar")
                     {
                         viewModel.Disabled = true;
                     }
@@ -253,10 +254,10 @@ namespace AppMasInfo.Web.Controllers
 
             return View(viewModel);
         }
-      
+
         [HttpPost]
         public ActionResult Detail(SeleccionPacienteDetailViewModel p_ViewModel)
-        {           
+        {
             try
             {
                 // Creamos un objeto para almacenar los datos de la tabla PacienteUbicacion modificados por el usuario
@@ -279,7 +280,7 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un Error al Obtener Datos. Por favor, Inténtelo Nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un Error al Obtener Datos. Por favor, Inténtelo Nuevamente" + ex;
             }
 
             return View(p_ViewModel);

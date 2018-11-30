@@ -7,6 +7,26 @@
 <script src="~/Scripts/sha256.js"></script>
 @section Scripts {
     <script type="text/javascript">
+
+        function PlantillaRut(Rut) {
+
+            // Despejar Puntos
+            var valor = Rut.value.replace('.', '');
+            // Despejar Guión
+            valor = valor.replace('-', '');
+            // Aislar Cuerpo y Dígito Verificador
+            cuerpo = valor.slice(0, -1);
+
+            dv = valor.slice(-1).toUpperCase();
+
+            // Formatear RUN
+            Rut.value = cuerpo + '-' + dv;
+
+            if (Rut.value === '-') {
+                Rut.value = '';
+            }
+        }
+
         $("#IdCargo .funcion").hide();
 
         $("#divStatus").hide();
@@ -55,7 +75,23 @@
                     $("#lstFuncion").hide();
                 }
             });
-            
+
+            $("#IdTipoTelefono").on("change", function () {
+                console.log("entro")
+                var idTipoTelefono = $(this).val();
+
+                if (idTipoTelefono != 2 && idTipoTelefono != 3) {
+                    $("#telefono").focus()
+                    $("#telefono").val("+562");
+                    $("#telefono").unbind();
+
+                } else {
+                    $("#telefono").focus()
+                    $("#telefono").val("+569");
+                    $("#telefono").unbind();
+                }
+            });
+
             //evento que controla el confirm de la contraseña y encripta la contraseña
             $("#passwordTest").on("change", function () {
                 if (userSHA == storedSHA) {
@@ -104,7 +140,6 @@
                );
             }
         });
-
     </script>
 }
 
@@ -127,6 +162,13 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <fieldset>
                 <legend class="legend">Datos Personales del Trabajador</legend>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Rut, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Rut, new { htmlAttributes = new { @class = "form-control", oninput = "PlantillaRut(this)", @placeholder = "Ingrese Rut" } })
+                        @Html.ValidationMessageFor(model => model.Rut, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -159,6 +201,25 @@
                         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdTipoTelefono, "Tipo Teléfono", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.IdTipoTelefono,
+                                  new SelectList(Model.LstTipoTelefono , "IdTipoTelefono", "Descripcion"),
+                                  "Selecciona Tipo", new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.IdTipoTelefono, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Telefono, "Télefono", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese Teléfono", id = "telefono", name = "telefono" } })
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
             </fieldset>
 
             <fieldset>
@@ -185,7 +246,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.ConfirmPass, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.ConfirmPass, "Confirma Password", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div>
                         <div class="col-md-4">
                             <div class="input-group">
@@ -198,7 +259,7 @@
 
                 <div class="form-group">
                     <label class="control-label col-md-2"></label>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="alert alert-info" id="divStatus">
                             <p id="status"></p>
                         </div>
@@ -220,7 +281,7 @@
                 <legend class="legend">Datos Profesionales del Trabajador</legend>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.IdCargoFuncion, "Función", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.IdCargoFuncion, "Cargo", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
                         @Html.DropDownListFor(model => model.IdCargoFuncion,
                                   new SelectList(Model.LstCargoFuncion, "Id", "Descripcion"),
@@ -231,7 +292,7 @@
 
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.IdCargo, "Cargo", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.IdCargo, "Especialidad", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
                         <select id="IdCargo" class="form-control" name="IdCargo">
                             <option value="0" class="">Selecciona Cargo</option>

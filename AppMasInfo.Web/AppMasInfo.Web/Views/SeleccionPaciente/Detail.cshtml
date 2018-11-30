@@ -2,7 +2,7 @@
 
 @{
     Layout = null;
-    object attributesSegunRol =  new { @class = "form-control", cols = "70", rows = "6" };
+    object attributesSegunRol = new { @class = "form-control", cols = "70", rows = "6" };
     string habilitado = "";
     if (Model.Disabled)
     {
@@ -13,7 +13,7 @@
 
 <style>
     .legend {
-        font-size: 15px;
+        font-size: 18px;
     }
 </style>
 
@@ -21,103 +21,140 @@
     <div class="panel-body">
         <form class="form-horizontal" role="form">
 
-            <fieldset>
-                <legend style="font-size:20px;">Datos Personales Paciente</legend>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.RutPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.RutPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel-group" id="accordion-test-2">
+                        <div class="panel panel-info panel-color">
+                            <div class="panel-heading" style="background:#3292e0;">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion-test-2" href="#collapseOne-2" aria-expanded="false" class="collapsed">
+                                        <i class="glyphicon glyphicon-info-sign">&nbsp;</i>Datos Personales Paciente
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne-2" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.RutPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.RutPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.NombrePaciente, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.NombrePaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.NombrePaciente, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.NombrePaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ApellidoPaternoPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ApellidoPaternoPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ApellidoPaternoPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.ApellidoPaternoPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.ApellidoMaternoPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.ApellidoMaternoPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.ApellidoMaternoPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.ApellidoMaternoPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.Edad, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.Edad, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.Edad, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.Edad, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DireccionPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.DireccionPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.DireccionPaciente, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.DireccionPaciente, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.NumeroTelefono, htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.NumeroTelefono, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.NumeroTelefono, htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.NumeroTelefono, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </fieldset>
+            </div>
 
             <br />
 
-            <fieldset>
-                <legend style="font-size:20px;">Datos Personales Tutor Asignado</legend>
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DetalleTutor, "Rut", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.DetalleTutor.Rut, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel-group" id="accordion-test-2">
+                        <div class="panel panel-info panel-color">
+                            <div class="panel-heading" style="background:#3292e0;">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion-test-2" href="#collapseTwo-2" aria-expanded="false" class="collapsed">
+                                        <i class="glyphicon glyphicon-info-sign">&nbsp;</i>Datos Personales Tutor Asignado
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo-2" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <fieldset>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.DetalleTutor, "Rut", htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.DetalleTutor.Rut, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DetalleTutor, "Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.DetalleTutor.Nombre, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.DetalleTutor, "Nombre", htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.DetalleTutor.Nombre, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DetalleTutor, "Apellido Paterno", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.DetalleTutor.ApellidoPaterno, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.DetalleTutor, "Apellido Paterno", htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.DetalleTutor.ApellidoPaterno, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DetalleTutor, "Apellido Materno", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.DetalleTutor.ApellidoMaterno, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                    </div>
-                </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.DetalleTutor, "Apellido Materno", htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.DetalleTutor.ApellidoMaterno, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(model => model.DetalleTutor, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
-                    <div class="col-md-10">
-                        @Html.EditorFor(model => model.DetalleTutor.Email, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.DetalleTutor, "Email", htmlAttributes: new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.EditorFor(model => model.DetalleTutor.Email, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </fieldset>
+            </div>
+
         </form>
 
         <br />
 
         <fieldset>
-            <legend style="font-size:20px;">Datos Personales Equipo Cl&iacute;nico Asignado</legend>
+            <legend style="font-size:18px;">Datos Personales Equipo Cl&iacute;nico Asignado</legend>
             <fieldset>
                 <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
                     <thead>
@@ -136,7 +173,7 @@
                                     <td>@item.Trabajador.Nombre &nbsp;  @item.Trabajador.ApellidoPaterno&nbsp;  @item.Trabajador.ApellidoMaterno</td>
                                     <td>@item.Trabajador.DetalleFuncion.Descripcion</td>
                                     <td>@item.Trabajador.DetalleCargo.Descripcion</td>
-                                    
+
                                 </tr>
                             }
                         }
@@ -159,7 +196,7 @@
             @Html.HiddenFor(model => model.IdPaciente)
             @Html.HiddenFor(model => model.IdPacienteUbicacion)
             <fieldset id="observacion">
-                <legend style="font-size:20px;">Observaci&oacute;n Estado del Paciente</legend>
+                <legend style="font-size:18px;">Observaci&oacute;n Estado del Paciente</legend>
                 <div class="form-group">
                     @Html.LabelFor(model => model.Observacion, "Observación", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-8">
@@ -182,10 +219,10 @@
         }
 
         <fieldset>
-            <legend style="font-size:20px;">Lista Datos Ubicaci&oacute;n</legend>
+            <legend style="font-size:18px;">Lista Datos Ubicaci&oacute;n</legend>
             <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
                 <thead>
-                    <tr>                       
+                    <tr>
                         <th><h6 align="left">Rut</h6></th>
                         <th><h6 align="left">Nombre Paciente</h6></th>
                         <th><h6 align="left">Ubicaciones</h6></th>
@@ -197,7 +234,7 @@
                     {
                         foreach (var item in Model.LstPacienteUbicacion)
                         {
-                            <tr>                               
+                            <tr>
                                 <td>@item.DetallePaciente.Rut</td>
                                 <td>@item.DetallePaciente.Nombre &nbsp;@item.DetallePaciente.ApellidoPaterno &nbsp;@item.DetallePaciente.ApellidoMaterno</td>
                                 <td>@item.DetalleUbicacion.Descripcion</td>

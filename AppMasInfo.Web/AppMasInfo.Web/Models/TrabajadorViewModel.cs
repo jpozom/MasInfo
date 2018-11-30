@@ -33,12 +33,17 @@ namespace AppMasInfo.Web.Models
 
         public int? FiltroIdEstado { get; set; }
         
-        public int FiltroIdRol { get; set; }        
+        public int? FiltroIdRol { get; set; }        
     }
 
     public class TrabajadorCreateViewModel
     {
         #region propiedades
+
+
+        [Display(Name = "Rut")]
+        [Required(ErrorMessage = "Debe Ingresar un Rut")]
+        public string Rut { get; set; }
 
         [Display(Name = "Nombre")]
         [Required(ErrorMessage = Validacion.Mensajes.Required)]
@@ -68,6 +73,13 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string Email { get; set; }
 
+        [Display(Name = "Teléfono")]
+        [Phone]
+        [Required(ErrorMessage = "Debe Ingresar un Teléfono")]
+        public string Telefono { get; set; }
+
+        public int IdTipoTelefono { get; set; }
+
         [Required(ErrorMessage = "Debe Ingresar un Rol")]
         public int IdRol { get; set; }
         
@@ -87,12 +99,17 @@ namespace AppMasInfo.Web.Models
 
         public List<CargoFuncionDto> LstCargoFuncion { get; set; }
 
+        public List<TipoTelefonoDto> LstTipoTelefono { get; set; }
+
         #endregion              
     }
 
     public class TrabajadorEditViewModel
     {       
         public long IdTrabajador { get; set; }
+
+        [Display(Name = "Rut")]        
+        public string Rut { get; set; }
 
         [Display(Name = "Nombre")]        
         public string Nombre { get; set; }
@@ -103,16 +120,23 @@ namespace AppMasInfo.Web.Models
         [Display(Name = "Apellido Materno")]        
         public string ApellidoMaterno { get; set; }
 
-        [Display(Name = "Ingrese Username")]        
+        [Display(Name = "Username")]        
         public string Username { get; set; }
 
-        [Display(Name = "Ingrese Password")]       
+        [Display(Name = "Password")]       
         public string Pass { get; set; }
 
-        [Display(Name = "Ingrese Email")]        
+        [Display(Name = "Email")]        
         public string Email { get; set; }
 
-        [Display(Name = "Ingrese Cargo")]       
+        [Display(Name = "Teléfono")]
+        public string Telefono { get; set; }
+
+        public int IdTipoTelefono { get; set; }
+
+        public int IdTelefono { get; set; }
+
+        [Display(Name = "Cargo")]       
         public int? IdCargo { get; set; }
         
         public int? IdCargoFuncion { get; set; }
@@ -128,7 +152,9 @@ namespace AppMasInfo.Web.Models
         public List<CargoDto> LstCargo { get; set; }
 
         public List<CargoFuncionDto> LstCargoFuncion { get; set; }
-       
+
+        public List<TipoTelefonoDto> LstTipoTelefono { get; set; }
+
         public string ConfirmPass { get; set; }
         
         public UsuarioDto DatosUsuario { get; set; }
@@ -137,6 +163,9 @@ namespace AppMasInfo.Web.Models
     public class TrabajadorDetailViewModel
     {
         public long Id { get; set; }
+
+        [Display(Name = "Rut")]
+        public string Rut { get; set; }
 
         [Display(Name = "Nombre Usuario")]
         public string Nombre { get; set; }
@@ -177,6 +206,9 @@ namespace AppMasInfo.Web.Models
         [Display(Name = "Funcion")]
         public int Funcion { get; set; }
 
+        [Display(Name = "Número Télefono")]
+        public int Telefono { get; set; }
+
         public UsuarioDto DatosUsuario { get; set; }
 
         public EstadoDto DetalleEstado { get; set; }
@@ -186,6 +218,8 @@ namespace AppMasInfo.Web.Models
         public CargoFuncionDto DetalleFuncion { get; set; }
 
         public RolDto DetalleRol { get; set; }
+
+        public TelefonoDto DetalleTelefono { get; set; }
 
     }
 }

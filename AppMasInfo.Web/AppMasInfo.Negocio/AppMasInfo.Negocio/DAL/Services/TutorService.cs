@@ -49,6 +49,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        ApellidoPaterno = t.ApellidoPaterno,
                                        ApellidoMaterno = t.ApellidoMaterno,
                                        Direccion = t.Direccion,
+                                       Edad = t.Edad,
                                        IdUsuario = t.IdUsuario,
                                        IdEstado = t.IdEstado,
                                        Email = t.Email,
@@ -97,6 +98,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                             ApellidoPaterno = p_Obj.ApellidoPaterno,
                             ApellidoMaterno = p_Obj.ApellidoMaterno,
                             Direccion = p_Obj.Direccion,
+                            Edad = p_Obj.Edad,
                             FchCreate = p_Obj.FchCreate,
                             UsrCreate = p_Obj.UsrCreate,
                             Email = p_Obj.Email,
@@ -135,7 +137,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                 {
                     var tutorDb = (from p in this.dbContext.Tutor
                                    join es in this.dbContext.Estado on p.IdEstado equals es.Id
-                                   where p.Rut == p_Filtro.FiltroRut
+                                   where p.Rut == p_Filtro.FiltroRut &&
+                                   p.IdEstado == p_Filtro.FiltroIdEstado 
                                    select new TutorDto
                                    {
                                        Id = p.Id,
@@ -143,6 +146,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        Nombre = p.Nombre,
                                        ApellidoPaterno = p.ApellidoPaterno,
                                        ApellidoMaterno = p.ApellidoMaterno,
+                                       Edad = p.Edad,
                                        Direccion = p.Direccion,
                                        FchCreate = p.FchCreate,
                                        UsrCreate = p.UsrCreate,
@@ -188,7 +192,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                     {
                         tutorDb.Nombre = p_Obj.Nombre;
                         tutorDb.ApellidoPaterno = p_Obj.ApellidoPaterno;
-                        tutorDb.ApellidoMaterno = p_Obj.ApellidoMaterno;                       
+                        tutorDb.ApellidoMaterno = p_Obj.ApellidoMaterno;
+                        tutorDb.Edad = p_Obj.Edad;
                         tutorDb.Email = p_Obj.Email;
                         tutorDb.Direccion = p_Obj.Direccion;
                         tutorDb.FchUpdate = p_Obj.FchUpdate;
@@ -281,6 +286,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        Nombre = t.Nombre,
                                        ApellidoPaterno = t.ApellidoPaterno,
                                        ApellidoMaterno = t.ApellidoMaterno,
+                                       Edad = t.Edad,
                                        FchCreate = t.FchCreate,
                                        UsrCreate = t.UsrCreate,
                                        FchUpdate = t.FchUpdate,
@@ -373,6 +379,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        Rut = t.Rut,
                                        ApellidoPaterno = t.ApellidoPaterno,
                                        ApellidoMaterno = t.ApellidoMaterno,
+                                       Edad = t.Edad,
                                        Direccion = t.Direccion,
                                        FchCreate = t.FchCreate,
                                        UsrCreate = t.UsrCreate,
@@ -444,6 +451,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                        Rut = t.Rut,
                                        ApellidoPaterno = t.ApellidoPaterno,
                                        ApellidoMaterno = t.ApellidoMaterno,
+                                       Edad = t.Edad,
                                        Direccion = t.Direccion,
                                        FchCreate = t.FchCreate,
                                        UsrCreate = t.UsrCreate,

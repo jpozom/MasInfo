@@ -52,5 +52,7 @@ namespace AppMasInfo.Negocio.DAL.Services
         BaseDto<TrabajadorDto> GetTrabajadorById(TrabajadorDto p_Filtro);
 
         BaseDto<TrabajadorDto> GetTrabajadorByUsuarioId(TrabajadorDto p_Filtro);
+
+        BaseDto<TrabajadorDto> GetTrabajadorByRut(TrabajadorDto p_Filtro);
     }
 }

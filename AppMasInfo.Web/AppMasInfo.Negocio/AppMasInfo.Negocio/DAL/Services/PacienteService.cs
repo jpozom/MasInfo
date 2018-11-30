@@ -32,7 +32,46 @@ namespace AppMasInfo.Negocio.DAL.Services
         #region Metodos Publicos
 
         #region GetListaPacienteAll
-        public BaseDto<List<PacienteDto>> GetListaPacienteAll(PacienteDto p_Filtro)
+        public BaseDto<List<PacienteDto>> GetListaPacienteAll()
+        {
+            BaseDto<List<PacienteDto>> objResult = null;
+
+            try
+            {
+                using (this.dbContext = new Database.MasInfoWebEntities_02())
+                {
+                    var pacienteDb = (from p in this.dbContext.Paciente                                                                           
+                                      select new PacienteDto
+                                      {
+                                          Id = p.Id,
+                                          Rut = p.Rut,
+                                          Nombre = p.Nombre,
+                                          ApellidoPaterno = p.ApellidoPaterno,
+                                          ApellidoMaterno = p.ApellidoMaterno,
+                                          Edad = p.Edad,
+                                          Direccion = p.Direccion,
+                                          IdEstado = p.IdEstado,
+                                          NumeroTelefono = p.NumeroTelefono,                                         
+                                      }).ToList();
+
+                    objResult = new BaseDto<List<PacienteDto>>(pacienteDb);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                objResult = new BaseDto<List<PacienteDto>>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                objResult = new BaseDto<List<PacienteDto>>(true, ex);
+            }
+
+            return objResult;
+        }
+        #endregion
+
+        #region GetListaPacienteByUbicacion
+        public BaseDto<List<PacienteDto>> GetListaPacienteByUbicacion(PacienteDto p_Filtro)
         {
             BaseDto<List<PacienteDto>> objResult = null;
 
@@ -41,6 +80,8 @@ namespace AppMasInfo.Negocio.DAL.Services
                 using (this.dbContext = new Database.MasInfoWebEntities_02())
                 {
                     var pacienteDb = (from p in this.dbContext.Paciente
+                                      join pu in this.dbContext.PacienteUbicacion on p.Id equals pu.IdPaciente
+                                      join u in this.dbContext.Ubicacion on pu.IdUbicacion equals u.Id
                                       where p.IdEstado == p_Filtro.FiltroIdEstado
                                       select new PacienteDto
                                       {
@@ -53,6 +94,58 @@ namespace AppMasInfo.Negocio.DAL.Services
                                           Direccion = p.Direccion,
                                           IdEstado = p.IdEstado,
                                           NumeroTelefono = p.NumeroTelefono,
+                                          DetalleUbicacion = new UbicacionDto
+                                          {
+                                              Id = u.Id,
+                                              Descripcion = u.Descripcion
+                                          }
+                                      }).ToList();
+
+                    objResult = new BaseDto<List<PacienteDto>>(pacienteDb);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                objResult = new BaseDto<List<PacienteDto>>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                objResult = new BaseDto<List<PacienteDto>>(true, ex);
+            }
+
+            return objResult;
+        }
+        #endregion
+
+        #region GetListaPacienteByEstado
+        public BaseDto<List<PacienteDto>> GetListaPacienteByEstado(PacienteDto p_Filtro)
+        {
+            BaseDto<List<PacienteDto>> objResult = null;
+
+            try
+            {
+                using (this.dbContext = new Database.MasInfoWebEntities_02())
+                {
+                    var pacienteDb = (from p in this.dbContext.Paciente   
+                                      join es in this.dbContext.Estado on p.IdEstado equals es.Id
+                                      where p.IdEstado == p_Filtro.FiltroIdEstado
+                                      select new PacienteDto
+                                      {
+                                          Id = p.Id,
+                                          Rut = p.Rut,
+                                          Nombre = p.Nombre,
+                                          ApellidoPaterno = p.ApellidoPaterno,
+                                          ApellidoMaterno = p.ApellidoMaterno,
+                                          Edad = p.Edad,
+                                          Direccion = p.Direccion,
+                                          IdEstado = p.IdEstado,
+                                          NumeroTelefono = p.NumeroTelefono,
+                                          DetalleEstado = new EstadoDto
+                                          {
+                                              Id = es.Id,
+                                              Descripcion = es.Descripcion,
+                                              Tabla = es.Tabla,                                              
+                                          }
                                       }).ToList();
 
                     objResult = new BaseDto<List<PacienteDto>>(pacienteDb);
@@ -169,12 +262,12 @@ namespace AppMasInfo.Negocio.DAL.Services
                 {
                     var pacienteDb = (from p in this.dbContext.Paciente
                                       join es in this.dbContext.Estado on p.IdEstado equals es.Id
-                                      join t in this.dbContext.Tutor on p.Id equals t.IdPaciente                                                                                                                
+                                      join t in this.dbContext.Tutor on p.Id equals t.IdPaciente
                                       join ep in this.dbContext.EquipoPaciente on p.Id equals ep.IdPaciente into tmpCf
-                                      join pu in this.dbContext.PacienteUbicacion on p.Id equals pu.IdPaciente into tmpC                                      
+                                      join pu in this.dbContext.PacienteUbicacion on p.Id equals pu.IdPaciente into tmpC
                                       from ep in tmpCf.DefaultIfEmpty()
                                       from pu in tmpC.DefaultIfEmpty()
-                                      where p.Id == p_Filtro.FiltroId                                       
+                                      where p.Id == p_Filtro.FiltroId
                                       orderby pu.FchIngreso descending
                                       select new PacienteDto
                                       {
@@ -213,7 +306,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                               IdUsuario = t.IdUsuario,
                                               IdEstado = t.IdEstado,
                                               IdPaciente = t.IdPaciente
-                                          },                                                                                    
+                                          },
                                           DetalleEquipoPaciente = new EquipoPacienteDto
                                           {
                                               Id = ep == null ? 0 : ep.Id,
@@ -228,14 +321,14 @@ namespace AppMasInfo.Negocio.DAL.Services
                                               Observacion = pu.Observacion,
                                           },
                                           DetalleUbicacion = (from ub in this.dbContext.Ubicacion
-                                                        join pu in this.dbContext.PacienteUbicacion on ub.Id equals pu.IdUbicacion
-                                                        where ub.Id == pu.IdUbicacion
-                                                        select new UbicacionDto
-                                                        {
-                                                            Id = ub.Id,
-                                                            Descripcion = ub.Descripcion
+                                                              join pu in this.dbContext.PacienteUbicacion on ub.Id equals pu.IdUbicacion
+                                                              where ub.Id == pu.IdUbicacion
+                                                              select new UbicacionDto
+                                                              {
+                                                                  Id = ub.Id,
+                                                                  Descripcion = ub.Descripcion
 
-                                                        }).FirstOrDefault()
+                                                              }).FirstOrDefault()
                                       }).FirstOrDefault();
 
                     objResult = new BaseDto<PacienteDto>(pacienteDb);
@@ -356,49 +449,76 @@ namespace AppMasInfo.Negocio.DAL.Services
             {
                 using (this.dbContext = new MasInfoWebEntities_02())
                 {
-                    if (p_Filtro.FiltroNombre != null || p_Filtro.FiltroId != null)
-                    {
-                        lstResultado = (from p in this.dbContext.Paciente
-                                        where (p.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null) &&
-                                              (p.Nombre.Contains(p_Filtro.FiltroNombre) || string.IsNullOrEmpty(p_Filtro.FiltroNombre) &&
-                                              (p.Id == p_Filtro.FiltroId))
-                                        select new PacienteDto
+                    lstResultado = (from p in this.dbContext.Paciente
+                                    join es in this.dbContext.Estado on p.IdEstado equals es.Id                                   
+                                    where (p.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null) &&
+                                           (p.Id == p_Filtro.FiltroId || p_Filtro.FiltroId == null) &&
+                                           (p.Nombre.Contains(p_Filtro.FiltroNombre) || string.IsNullOrEmpty(p_Filtro.FiltroNombre))
+                                    select new PacienteDto
+                                    {
+                                        Id = p.Id,
+                                        Nombre = p.Nombre,
+                                        ApellidoPaterno = p.ApellidoPaterno,
+                                        ApellidoMaterno = p.ApellidoMaterno,
+                                        Direccion = p.Direccion,
+                                        Edad = p.Edad,
+                                        Rut = p.Rut,
+                                        FchCreate = p.FchCreate,
+                                        FchUpdate = p.FchUpdate,
+                                        IdEstado = p.IdEstado,
+                                        DetalleEstado = new EstadoDto
                                         {
-                                            Id = p.Id,
-                                            Nombre = p.Nombre,
-                                            ApellidoPaterno = p.ApellidoPaterno,
-                                            ApellidoMaterno = p.ApellidoMaterno,
-                                            Direccion = p.Direccion,
-                                            Edad = p.Edad,
-                                            Rut = p.Rut,
-                                            FchCreate = p.FchCreate,
-                                            FchUpdate = p.FchUpdate,
-                                            IdEstado = p.IdEstado
-                                        }).ToList();
-                    }
-                    else
-                    {
-                        lstResultado = (from p in this.dbContext.Paciente
-                                        where (p.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null)
-                                        select new PacienteDto
-                                        {
-                                            Id = p.Id,
-                                            Nombre = p.Nombre,
-                                            ApellidoPaterno = p.ApellidoPaterno,
-                                            ApellidoMaterno = p.ApellidoMaterno,
-                                            Direccion = p.Direccion,
-                                            Edad = p.Edad,
-                                            Rut = p.Rut,
-                                            FchCreate = p.FchCreate,
-                                            FchUpdate = p.FchUpdate,
-                                            IdEstado = p.IdEstado                                            
-                                        }).ToList();
-                    }
-
-
+                                            Id = es.Id,
+                                            Descripcion = es.Descripcion,
+                                            Tabla = es.Tabla,
+                                        },                                       
+                                    }).ToList();
                     PaginadorDto datosPaginado = p_Filtro.DatosPaginado;
                     var lstPaginada = DataPaginationUtils.GetPagedList<PacienteDto>(ref datosPaginado, lstResultado);
                     result = new BaseDto<List<PacienteDto>>(true, datosPaginado, lstPaginada);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                result = new BaseDto<List<PacienteDto>>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                result = new BaseDto<List<PacienteDto>>(true, new Exception("Error al intentar obtener los pacientes", ex));
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region GetListaPacienteByIdTutor
+        public BaseDto<List<PacienteDto>> GetListaPacienteByIdTutor(PacienteDto p_Filtro)
+        {
+            BaseDto<List<PacienteDto>> result = null;
+            var lstResultado = new List<PacienteDto>();
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+
+                    lstResultado = (from p in this.dbContext.Paciente
+                                    join t in this.dbContext.Tutor on p.Id equals t.IdPaciente
+                                    where t.Id == p_Filtro.FiltroIdTutor &&
+                                    (p.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null)
+                                    select new PacienteDto
+                                    {
+                                        Id = p.Id,
+                                        Nombre = p.Nombre,
+                                        ApellidoPaterno = p.ApellidoPaterno,
+                                        ApellidoMaterno = p.ApellidoMaterno,
+                                        Direccion = p.Direccion,
+                                        Edad = p.Edad,
+                                        Rut = p.Rut,
+                                        FchCreate = p.FchCreate,
+                                        FchUpdate = p.FchUpdate,
+                                        IdEstado = p.IdEstado
+                                    }).ToList();
                 }
             }
             catch (SqlException sqlEx)

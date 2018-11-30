@@ -208,7 +208,7 @@ namespace AppMasInfo.Negocio.DAL.Services
         }
         #endregion
 
-        #region GetListaTrabajadorbyFiltro
+        #region GetListaUsuariobyFiltro
         public BaseDto<List<UsuarioDto>> GetListaUsuariobyFiltro(UsuarioDto p_Filtro)
         {
             BaseDto<List<UsuarioDto>> objResult = null;

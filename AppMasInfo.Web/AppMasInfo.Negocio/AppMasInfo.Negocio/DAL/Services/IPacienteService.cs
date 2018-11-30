@@ -9,12 +9,8 @@ namespace AppMasInfo.Negocio.DAL.Services
 {
     public interface IPacienteService
     {
-        /// <summary>
-        /// Metodo para obtener una lista de todos los pacientes activos en DB
-        /// </summary>
-        /// <param name="p_Filtro"></param>
-        /// <returns></returns>
-        BaseDto<List<PacienteDto>> GetListaPacienteAll(PacienteDto p_Filtro);
+        
+        BaseDto<List<PacienteDto>> GetListaPacienteAll();
 
         /// <summary>
         /// Metodo para insertar un nuevo paciente en DB
@@ -58,6 +54,10 @@ namespace AppMasInfo.Negocio.DAL.Services
         /// <returns></returns>
         BaseDto<List<PacienteDto>> GetListaPacienteByFitro(PacienteDto p_Filtro);
 
+        BaseDto<List<PacienteDto>> GetListaPacienteByIdTutor(PacienteDto p_Filtro);
 
+        BaseDto<List<PacienteDto>> GetListaPacienteByUbicacion(PacienteDto p_Filtro);
+
+        BaseDto<List<PacienteDto>> GetListaPacienteByEstado(PacienteDto p_Filtro);
     }
 }

@@ -104,18 +104,19 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Rut" Type="varchar" MaxLength="12" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ApellidoPaterno" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ApellidoMaterno" Type="varchar" MaxLength="30" Nullable="false" />
-          <Property Name="IdCargo" Type="int" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="FchCreate" Type="datetime" />
           <Property Name="UsrCreate" Type="varchar" MaxLength="50" />
           <Property Name="FchUpdate" Type="datetime" />
           <Property Name="UsrUpdate" Type="varchar" MaxLength="50" />
-          <Property Name="Email" Type="varchar" MaxLength="80" Nullable="false" />
-          <Property Name="IdEstado" Type="int" Nullable="false" />
           <Property Name="IdUsuario" Type="bigint" Nullable="false" />
+          <Property Name="IdCargo" Type="int" />
           <Property Name="IdCargoFuncion" Type="int" />
+          <Property Name="IdEstado" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Tutor">
           <Key>
@@ -126,15 +127,16 @@
           <Property Name="Nombre" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ApellidoPaterno" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="ApellidoMaterno" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Edad" Type="int" Nullable="false" />
           <Property Name="Direccion" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="30" Nullable="false" />
           <Property Name="FchCreate" Type="datetime" />
           <Property Name="UsrCreate" Type="varchar" MaxLength="50" />
           <Property Name="FchUpdate" Type="datetime" />
           <Property Name="UsrUpdate" Type="varchar" MaxLength="50" />
           <Property Name="IdUsuario" Type="bigint" Nullable="false" />
-          <Property Name="IdEstado" Type="int" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="80" Nullable="false" />
           <Property Name="IdPaciente" Type="bigint" Nullable="false" />
+          <Property Name="IdEstado" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Ubicacion">
           <Key>
@@ -545,7 +547,7 @@
           <Property Name="UsrCreate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="FchUpdate" Type="DateTime" Precision="3" />
           <Property Name="UsrUpdate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IdEstado" Type="Int32" Nullable="false" />
           <Property Name="IdUsuario" Type="Int64" Nullable="false" />
           <Property Name="IdCargoFuncion" Type="Int32" />
@@ -554,6 +556,7 @@
           <NavigationProperty Name="Estado" Relationship="Self.FK_Trabajador_Estado" FromRole="Trabajador" ToRole="Estado" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Trabajador_Usuario" FromRole="Trabajador" ToRole="Usuario" />
           <NavigationProperty Name="EquipoPaciente" Relationship="MasInfoWebModel.FK_EquipoPaciente_Trabajador" FromRole="Trabajador" ToRole="EquipoPaciente" />
+          <Property Name="Rut" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Tutor">
           <Key>
@@ -571,11 +574,12 @@
           <Property Name="UsrUpdate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IdUsuario" Type="Int64" Nullable="false" />
           <Property Name="IdEstado" Type="Int32" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="80" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IdPaciente" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Estado" Relationship="Self.FK_Tutor_Estado" FromRole="Tutor" ToRole="Estado" />
           <NavigationProperty Name="Paciente" Relationship="Self.FK_Tutor_Paciente" FromRole="Tutor" ToRole="Paciente" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Tutor_Usuario" FromRole="Tutor" ToRole="Usuario" />
+          <Property Name="Edad" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Ubicacion">
           <Key>
@@ -985,6 +989,7 @@
           <EntitySetMapping Name="Trabajador">
             <EntityTypeMapping TypeName="MasInfoWebModel.Trabajador">
               <MappingFragment StoreEntitySet="Trabajador">
+                <ScalarProperty Name="Rut" ColumnName="Rut" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="ApellidoPaterno" ColumnName="ApellidoPaterno" />
@@ -1004,6 +1009,7 @@
           <EntitySetMapping Name="Tutor">
             <EntityTypeMapping TypeName="MasInfoWebModel.Tutor">
               <MappingFragment StoreEntitySet="Tutor">
+                <ScalarProperty Name="Edad" ColumnName="Edad" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Rut" ColumnName="Rut" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />

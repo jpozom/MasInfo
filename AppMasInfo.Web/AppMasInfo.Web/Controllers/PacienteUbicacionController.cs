@@ -62,7 +62,7 @@ namespace AppMasInfo.Web.Controllers
                 var pacienteFiltroObj = new PacienteDto();
                 pacienteFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
                 //se envia el objeto al servicio
-                var pacienteListDbResponse = this.PacienteServiceModel.GetListaPacienteAll(pacienteFiltroObj);
+                var pacienteListDbResponse = this.PacienteServiceModel.GetListaPacienteByEstado(pacienteFiltroObj);
 
                 //se devuelve la consulta
                 viewModel.lstPaciente = pacienteListDbResponse.HasValue ? pacienteListDbResponse.Value : new List<PacienteDto>();

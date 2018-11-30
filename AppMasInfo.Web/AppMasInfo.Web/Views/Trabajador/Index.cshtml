@@ -9,6 +9,7 @@
     <script type="text/javascript">
 
         var filtroBusqueda = function () {
+            
             var objRequestData = new Object();
             objRequestData.FiltroIdRol = $('#FiltroIdRol').find('option:selected').val();
             objRequestData.FiltroUsername = $('#FiltroUsername').val();
@@ -16,7 +17,7 @@
             objRequestData.FiltroPaginado.PaginaActual = parseInt($('#PaginaActual').val());
             objRequestData.FiltroPaginado.TamanoPagina = parseInt($('#TamanoPagina').find('option:selected').val());
 
-             console.log('objRequestData');
+             console.log('entro');
              console.log(objRequestData);
 
             $.ajax({

@@ -28,6 +28,7 @@ namespace AppMasInfo.Negocio.DAL.Database
         public int IdEstado { get; set; }
         public string Email { get; set; }
         public long IdPaciente { get; set; }
+        public int Edad { get; set; }
     
         public virtual Estado Estado { get; set; }
         public virtual Paciente Paciente { get; set; }

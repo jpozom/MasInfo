@@ -12,7 +12,7 @@
 
         $("#divStatus").hide();
 
-        $("#lstFuncion").hide();
+        $("#lstFuncion").show();
 
         //evento que permite ocultar y mostrar la contraseña
         $(document).on("ready", function () {
@@ -54,6 +54,22 @@
                     $("#lstFuncion").show();
                 } else {
                     $("#lstFuncion").hide();
+                }
+            });
+
+            $("#IdTipoTelefono").on("change", function () {
+                console.log("entro")
+                var idTipoTelefono = $(this).val();
+
+                if (idTipoTelefono != 2 && idTipoTelefono != 3) {
+                    $("#telefono").focus()
+                    $("#telefono").val("+562");
+                    $("#telefono").unbind();
+
+                } else {
+                    $("#telefono").focus()
+                    $("#telefono").val("+569");
+                    $("#telefono").unbind();
                 }
             });
 
@@ -119,10 +135,19 @@
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.IdUsuario)
-            @Html.HiddenFor(model => model.IdTrabajador)           
+            @Html.HiddenFor(model => model.IdTrabajador)
+            @Html.HiddenFor(model => model.IdTelefono)
 
             <fieldset>
                 <legend class="legend">Datos Personales del Usuario</legend>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Rut, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Rut, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.Rut, "", new { @class = "text-danger" })
+                    </div>
+                </div>
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -153,6 +178,24 @@
                     <div class="col-md-4">
                         @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", type = "email", placeholder = "example@mail.ru" } })
                         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IdTipoTelefono, "Tipo Teléfono", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.DropDownListFor(model => model.IdTipoTelefono,
+                                  new SelectList(Model.LstTipoTelefono , "IdTipoTelefono", "Descripcion"),
+                                  "Selecciona Tipo", new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.IdTipoTelefono, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control", id = "telefono", name = "telefono" } })
+                        @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
                     </div>
                 </div>
             </fieldset>
@@ -194,7 +237,7 @@
 
                 <div class="form-group">
                     <label class="control-label col-md-2"></label>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="alert alert-info" id="divStatus">
                             <p id="status"></p>
                         </div>
@@ -202,7 +245,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.IdRol, " Asigne Rol", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.IdRol, "Rol", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
                         @Html.DropDownListFor(model => model.IdRol,
                                   new SelectList(Model.LstRol , "Id", "Descripcion"),
@@ -215,7 +258,7 @@
             <fieldset id="lstFuncion">
                 <legend class="legend">Datos Profesionales del Usuario</legend>
                 <div class="form-group">
-                    @Html.LabelFor(model => model.IdCargoFuncion, "Asigne Función", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.IdCargoFuncion, "Cargo", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
                         @Html.DropDownListFor(model => model.IdCargoFuncion,
                                   new SelectList(Model.LstCargoFuncion, "Id", "Descripcion"),
@@ -225,7 +268,7 @@
                 </div>
 
                 <div class="form-group">
-                    @Html.LabelFor(model => model.IdCargo, "Asigne Cargo", htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.IdCargo, "Especialidad", htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
                         <select id="IdCargo" class="form-control" name="IdCargo">
                             <option value="0" class="">Seleccionar</option>

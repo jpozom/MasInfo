@@ -108,7 +108,7 @@
                         </div>
                         <div class="col-md-5">
                             @Html.DropDownListFor(model => model.Idtrabajador,
-                                      new SelectList(Model.LstTrabajadores, "Id", "NombreCompleto" ),
+                                      new SelectList(Model.LstTrabajadores, "Id", "NombreCompletoCargo"),
                                       "Selecciona", new { @class = "form-control"})
                             @Html.ValidationMessageFor(model => model.Idtrabajador, "", new { @class = "text-danger" })
                         </div>

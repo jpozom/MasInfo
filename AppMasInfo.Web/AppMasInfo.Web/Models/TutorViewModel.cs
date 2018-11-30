@@ -140,7 +140,10 @@ namespace AppMasInfo.Web.Models
         public string ApellidoMaternoTutor { get; set; }
 
         [Display(Name = "Edad")]
-        public int Edad { get; set; }       
+        public int Edad { get; set; }
+
+        [Display(Name = "Email")]
+        public string Email { get; set; }
 
         [Display(Name = "Dirección")]
         public string DireccionTutor { get; set; }

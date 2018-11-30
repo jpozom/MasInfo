@@ -46,6 +46,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                         new Database.Trabajador
                         {
                             IdUsuario = p_Obj.IdUsuario,
+                            Rut = p_Obj.Rut,
                             Nombre = p_Obj.Nombre,
                             ApellidoPaterno = p_Obj.ApellidoPaterno,
                             ApellidoMaterno = p_Obj.ApellidoMaterno,
@@ -131,9 +132,11 @@ namespace AppMasInfo.Negocio.DAL.Services
                 using (this.dbContext = new Database.MasInfoWebEntities_02())
                 {
                     var lstResult = (from usr in this.dbContext.Trabajador
+                                     join c in this.dbContext.Cargo on usr.IdCargo equals c.Id
                                      select new TrabajadorDto
                                      {
                                          Id = usr.Id,
+                                         Rut = usr.Rut,
                                          Nombre = usr.Nombre,
                                          ApellidoPaterno = usr.ApellidoPaterno,
                                          ApellidoMaterno = usr.ApellidoMaterno,
@@ -141,7 +144,12 @@ namespace AppMasInfo.Negocio.DAL.Services
                                          UsrCreate = usr.UsrCreate,
                                          Email = usr.Email,
                                          IdUsuario = usr.IdUsuario,
-                                         IdEstado = usr.IdEstado
+                                         IdEstado = usr.IdEstado,
+                                         DetalleCargo = new CargoDto
+                                         {
+                                             Id = c == null ? 0 : c.Id,
+                                             Descripcion = c.Descripcion,                                             
+                                         },
                                      }).ToList();
                     objResult = new BaseDto<List<TrabajadorDto>>(lstResult);
                 }
@@ -172,14 +180,14 @@ namespace AppMasInfo.Negocio.DAL.Services
                                      join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                      join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
                                      join r in this.dbContext.Rol on u.IdRol equals r.Id
-                                     where (t.IdUsuario == p_Filtro.FiltroIdUsuario || p_Filtro.FiltroIdUsuario == null) &&
-                                           (t.Nombre.Contains(p_Filtro.FiltroNombre) || string.IsNullOrEmpty(p_Filtro.FiltroNombre)) &&
-                                           (t.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null) &&
+                                     where (t.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null) &&
                                            (u.IdRol == p_Filtro.FiltroIdRol || p_Filtro.FiltroIdRol == null) &&
-                                           (u.Username.Contains(p_Filtro.FiltroUsername) || string.IsNullOrEmpty(p_Filtro.FiltroUsername))
+                                           (u.Username.Contains(p_Filtro.FiltroUsername)|| string.IsNullOrEmpty(p_Filtro.FiltroUsername)) &&
+                                           u.Habilitado == true
                                      select new TrabajadorDto
                                      {
                                          Id = t.Id,
+                                         Rut = t.Rut,
                                          Nombre = t.Nombre,
                                          ApellidoPaterno = t.ApellidoPaterno,
                                          Email = t.Email,
@@ -199,8 +207,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                          DatosUsuario = new UsuarioDto
                                          {
                                              Id = u.Id,
-                                             Username = u.Username,
-                                             Pass = u.Pass,
+                                             Username = u.Username,                                           
                                              IdRol = u.IdRol,
                                          },
                                          DetalleRol = new RolDto
@@ -240,6 +247,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                         join es in this.dbContext.Estado on t.IdEstado equals es.Id
                                         join u in this.dbContext.Usuario on t.IdUsuario equals u.Id
                                         join r in this.dbContext.Rol on u.IdRol equals r.Id
+                                        join tel in this.dbContext.Telefono on u.Id equals tel.IdUsuario
                                         join cf in this.dbContext.CargoFuncion on t.IdCargoFuncion equals cf.Id into tmpCf
                                         join c in this.dbContext.Cargo on t.IdCargo equals c.Id into tmpC
                                         from cf in tmpCf.DefaultIfEmpty()
@@ -249,6 +257,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                         select new TrabajadorDto
                                         {
                                             Id = t.Id,
+                                            Rut = t.Rut,
                                             Nombre = t.Nombre,
                                             ApellidoPaterno = t.ApellidoPaterno,
                                             ApellidoMaterno = t.ApellidoMaterno,
@@ -289,6 +298,60 @@ namespace AppMasInfo.Negocio.DAL.Services
                                             {
                                                 Id = cf == null ? 0 : cf.Id,
                                                 Descripcion = cf.Descripcion
+                                            },
+                                            DetalleTelefono = new TelefonoDto
+                                            {
+                                                Id = tel.Id,
+                                                NumeroTelefono = tel.NumeroTelefono
+                                            },
+                                        }).FirstOrDefault();
+
+                    objResult = new BaseDto<TrabajadorDto>(trabajadorDb);
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                objResult = new BaseDto<TrabajadorDto>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                objResult = new BaseDto<TrabajadorDto>(true, ex);
+            }
+
+            return objResult;
+        }
+        #endregion
+
+        #region GetTrabajadorByRut
+        public BaseDto<TrabajadorDto> GetTrabajadorByRut(TrabajadorDto p_Filtro)
+        {
+            BaseDto<TrabajadorDto> objResult = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    var trabajadorDb = (from p in this.dbContext.Trabajador
+                                        join es in this.dbContext.Estado on p.IdEstado equals es.Id
+                                        where p.Rut == p_Filtro.FiltroRut &&
+                                        p.IdEstado == p_Filtro.FiltroIdEstado
+                                        select new TrabajadorDto
+                                        {
+                                            Id = p.Id,
+                                            Rut = p.Rut,
+                                            Nombre = p.Nombre,
+                                            ApellidoPaterno = p.ApellidoPaterno,
+                                            ApellidoMaterno = p.ApellidoMaterno,
+                                            FchCreate = p.FchCreate,
+                                            UsrCreate = p.UsrCreate,
+                                            FchUpdate = p.FchUpdate,
+                                            UsrUpdate = p.UsrUpdate,
+                                            IdEstado = p.IdEstado,
+                                            DetalleEstado = new EstadoDto
+                                            {
+                                                Id = es.Id,
+                                                Descripcion = es.Descripcion,
+                                                Tabla = es.Tabla
                                             }
                                         }).FirstOrDefault();
 
@@ -367,6 +430,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                         select new TrabajadorDto
                                         {
                                             Id = t.Id,
+                                            Rut = t.Rut,
                                             Nombre = t.Nombre,
                                             ApellidoPaterno = t.ApellidoPaterno,
                                             ApellidoMaterno = t.ApellidoMaterno,
