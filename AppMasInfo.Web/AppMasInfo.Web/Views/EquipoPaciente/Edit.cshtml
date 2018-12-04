@@ -6,12 +6,11 @@
 }
 @section Scripts{
     <script type="text/javascript">
-        $(function () {
 
               var deleteItem = function (id) {
             confirmationDialog(
-                'Eliminar Paciente',
-                '¿Esta seguro(a) que desea eliminar a el Paciente?',
+                'Eliminar Asignación',
+                '¿Esta seguro(a) que desea eliminar la asignación de este trabajador?',
                 function () { doDeleteItem(id); }
             );
         };
@@ -19,9 +18,11 @@
         var doDeleteItem = function (id) {
             var objRequestData = new Object();
             objRequestData.Id = id;
+            console.log("entro")
+            console.log(objRequestData)
 
             $.ajax({
-                url: '@Url.Action("Delete", "Paciente")',
+                url: '@Url.Action("Delete", "EquipoPaciente")',
                 method: 'POST',
                 contentType: "application/json;charset=utf-8",
                 dataType: "json",
@@ -30,12 +31,13 @@
                     showModalLoading();
                 },
                 success: function (data) {
+                    console.log(data)
                     if (data !== '') {
                         if (data.status === 'ok') {
                             showMessageDialogRedirect(BootstrapDialog.TYPE_INFO,
                                 'Información',
                                 data.message,
-                                '@Url.Action("Index", "Paciente")');
+                                '@Url.Action("Index", "EquipoPaciente")');
                         }
                         else {
                             showMessageDialog(BootstrapDialog.TYPE_ERROR,
@@ -83,7 +85,7 @@
                    errorMessage
                );
             }
-        });
+
     </script>
 }
 <div class="panel panel-primary">
@@ -98,6 +100,7 @@
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.HiddenFor(model => model.IdPaciente)
+            @Html.HiddenFor(model => model.Id)
 
             <fieldset class="panel panel-default">
                 <div class="panel-heading">Asignar</div>
@@ -126,10 +129,11 @@
             <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
                 <thead>
                     <tr>
+                        <th><h6 align="left">Rut</h6></th>
                         <th><h6 align="left">Trabajador</h6></th>
                         <th><h6 align="left">Cargo</h6></th>
-                        <th><h6 align="left">Funci&oacute;n</h6></th>
-                        <th><h6 align="left">Acci&oacute;n</h6></th>
+                        <th><h6 align="left">Especialidad</h6></th>
+                        <th><h6 align="center">Acci&oacute;n</h6></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -138,11 +142,12 @@
                         foreach (var item in Model.Equipo)
                         {
                             <tr>
-                                <td>@item.Trabajador.Nombre &nbsp;  @item.Trabajador.ApellidoPaterno </td>
-                                <td>@item.Trabajador.DetalleCargo.Descripcion</td>
+                                <td>@item.Trabajador.Rut</td>
+                                <td>@item.Trabajador.Nombre &nbsp;  @item.Trabajador.ApellidoPaterno&nbsp;  @item.Trabajador.ApellidoMaterno </td>
                                 <td>@item.Trabajador.DetalleFuncion.Descripcion</td>
-                                <td>
-                                    <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash mdi-24px"></i>&nbsp;</a>
+                                <td>@item.Trabajador.DetalleCargo.Descripcion</td>
+                                <td align="center">
+                                    <a href="javascript:deleteItem(@item.Id)"><i title="Eliminar" class="glyphicon glyphicon-trash"></i>&nbsp;</a>
                                 </td>
                             </tr>
                         }

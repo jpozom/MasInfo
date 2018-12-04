@@ -9,7 +9,7 @@
 
         var deleteItem = function (id) {
             confirmationDialog(
-                'Eliminar Paciente',
+                'Eliminar Asignación',
                 '¿Esta seguro(a) que desea eliminar la Asociación?',
                 function () { doDeleteItem(id); }
             );
@@ -18,8 +18,7 @@
         var doDeleteItem = function (id) {
             var objRequestData = new Object();
             objRequestData.Id = id;
-            console.log("dasdasd")
-            console.log(objRequestData)
+            
             $.ajax({
                 url: '@Url.Action("Delete", "PacienteUbicacion")',
                 method: 'POST',
@@ -99,10 +98,10 @@
             @Html.HiddenFor(model => model.Id)
 
             <fieldset>
-                <legend style="font-size:15px;">Paciente &nbsp; <strong>@Model.DetallePaciente.Nombre &nbsp; @Model.DetallePaciente.ApellidoPaterno &nbsp; @Model.DetallePaciente.ApellidoMaterno </strong></legend>
+                <legend style="font-size:18px;">Paciente &nbsp; <strong>@Model.DetallePaciente.Nombre &nbsp; @Model.DetallePaciente.ApellidoPaterno &nbsp; @Model.DetallePaciente.ApellidoMaterno </strong></legend>
             </fieldset>
 
-            <fieldset class="panel panel-default">
+            <fieldset class="panel panel-primary">
                 <div class="panel-heading">Asignar</div>
                 <div class="row panel-body">
                     <div class="form-group">
@@ -135,7 +134,7 @@
 
                 <div class="form-group col-sm-12">
                     <div class="col-md-12 text-right">
-                        <input type="submit" value="Asignar Ubicación" class="btn btn-primary" />
+                        <input type="submit" value="Guardar" class="btn btn-primary"/>
                     </div>
                 </div>
             </fieldset>

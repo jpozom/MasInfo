@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace AppMasInfo.Web.Controllers
 {
-    [Authorize(Roles = "Administrador, Tutor")]
+    [Authorize(Roles = "Tutor")]
     public class PacienteDatosController : Controller
     {
         #region propiedades privadas
@@ -93,7 +93,6 @@ namespace AppMasInfo.Web.Controllers
         #region Metodos Publicos
 
         #region Index
-
         public ActionResult Index()
         {
             PacienteDatosViewModel viewModel = new PacienteDatosViewModel();
@@ -130,7 +129,7 @@ namespace AppMasInfo.Web.Controllers
                         if (tutorDB.Value.DetallePacienteUbicacion.Habilitado == true)
                         {
                             viewModel.Observacion = tutorDB.Value.DetallePacienteUbicacion.Observacion;
-                            viewModel.FchIngreso = tutorDB.Value.DetallePacienteUbicacion.FchIngreso;
+                            viewModel.FchIngreso = tutorDB.Value.DetallePacienteUbicacion.FechaHora;
                         }
 
                         var filtroP = new PacienteDto();
@@ -169,12 +168,11 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener registros de DB. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener registros de DB. Por favor, inténtelo nuevamente" + ex;
             }
 
             return View(viewModel);
         }
-
         #endregion
 
         #region GetEquipoTrabajo
@@ -208,7 +206,6 @@ namespace AppMasInfo.Web.Controllers
                         FchIngreso = objRespuestaDb.Value.DetallePacienteUbicacion.FchIngreso,
                         DetalleUbicacion = objRespuestaDb.Value.DetalleUbicacion,
                         DetalleEquipoPaciente = objRespuestaDb.Value.DetalleEquipoPaciente,
-
                     };
                 }
                 else

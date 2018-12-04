@@ -1,48 +1,10 @@
 ﻿@model AppMasInfo.Web.Models.PacienteViewModel
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
 }
-@section Scripts{
-    <script type="text/javascript">
 
-         var viewDetailItem = function (id) {
-            var urlDetallePaciente = '@Url.Content("~/Paciente/Detail")?p_id=' + id;
-            dialogInstanceArchivo = BootstrapDialog.show({
-                title: 'masInfo - Detalle Usuario',
-                message: $('<div></div>').load(urlDetallePaciente),
-                size: BootstrapDialog.SIZE_WIDE,
-                buttons: [{
-                    label: 'Cerrar',
-                    action: function (dialogRef) {
-                        dialogRef.close();
-                    }
-                }]
-            });
-        };
-
-
-         $(function () {
-            var saveMessage = '@TempData["SaveOkMessage"]';
-            if (saveMessage !== '') {
-                showMessageDialog(
-                    BootstrapDialog.TYPE_SUCCESS,
-                    'Información',
-                    saveMessage
-                );
-            }
-
-            var errorMessage = '@TempData["ErrorMessage"]';
-            if (errorMessage !== '') {
-                ShowMessageDialog(
-                   BootstrapDialog.TYPE_DANGER,
-                   'Error',
-                   errorMessage
-               );
-            }
-        });
-    </script>
-}
 <div class="panel panel-primary">
     <div class="panel-body" id="panel">
         <h5 class="m-b-30 m-t-0">Asigna Ubicaci&oacute;n a Paciente</h5>
@@ -55,11 +17,11 @@
                 <table id="" class="table table-hover" role="grid" aria-describedby="datatable_info">
                     <thead>
                         <tr>
-                            <th><h6 align="left">Id</h6></th>
                             <th><h6 align="left">Rut</h6></th>
                             <th><h6 align="left">Nombre</h6></th>
                             <th><h6 align="left">Apellido Paterno</h6></th>
                             <th><h6 align="left">Apellido Materno</h6></th>
+                            <th><h6 align="left">Edad</h6></th>                           
                             <th><h6 align="left">Acci&oacute;n</h6></th>
                         </tr>
                     </thead>
@@ -69,45 +31,25 @@
                             foreach (var item in Model.lstPaciente)
                             {
                                 <tr>
-                                    <td>@item.Id</td>
                                     <td>@item.Rut</td>
                                     <td>@item.Nombre</td>
                                     <td>@item.ApellidoPaterno</td>
                                     <td>@item.ApellidoMaterno</td>
+                                    <td>@item.Edad</td>                                   
                                     <td>
-                                        <a href="@Url.Action("Edit", "PacienteUbicacion", new { p_Id = item.Id })" class="btn btn-primary">&nbsp;Asignar Ubicaci&oacute;n</a>&nbsp;
+                                        <a href="@Url.Action("Edit", "PacienteUbicacion", new { p_Id = item.Id })" class="btn btn-primary"><i class="glyphicon glyphicon-list"></i>&nbsp;&nbsp;Asignar Ubicaci&oacute;n</a>
                                     </td>
                                 </tr>
                             }
                         }
                         else
                         {
-                            <tr><td colspan="8">No existen datos</td></tr>
+                            <tr><td colspan="6">No existen datos</td></tr>
                         }
                     </tbody>
                 </table>
             </div>
         </fieldset>
-    </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="Eliminar" role="dialog">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Eliminar Registro</h4>
-            </div>
-            <div class="modal-body">
-                <p>Desea Eliminar este Registro</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Aceptar</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
     </div>
 </div>
 

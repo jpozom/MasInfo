@@ -16,10 +16,7 @@
             objRequestData.FiltroPaginado = new Object();
             objRequestData.FiltroPaginado.PaginaActual = parseInt($('#PaginaActual').val());
             objRequestData.FiltroPaginado.TamanoPagina = parseInt($('#TamanoPagina').find('option:selected').val());
-
-             console.log('entro');
-             console.log(objRequestData);
-
+            
             $.ajax({
                 url: '@Url.Action("Index", "Trabajador")',
                 method: 'POST',
@@ -186,7 +183,6 @@
             // de búsqueda de datos de la página actual
             bindPagerControlToEvents(filtroBusqueda);
         });
-
     </script>
 }
 

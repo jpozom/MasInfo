@@ -29,7 +29,7 @@ namespace AppMasInfo.Negocio.DAL.Services
         #endregion
 
         #region AddEquipoPaciente
-        public BaseDto<bool>  AddEquipoPaciente(EquipoPacienteDto equipo)
+        public BaseDto<bool> AddEquipoPaciente(EquipoPacienteDto equipo)
         {
             BaseDto<bool> result = null;
 
@@ -79,27 +79,30 @@ namespace AppMasInfo.Negocio.DAL.Services
                                 where ep.IdPaciente == p_Filtro.FiltroId
                                 select new EquipoPacienteDto
                                 {
+                                    Id = ep.Id,
                                     IdPaciente = ep.IdPaciente,
-                                    Idtrabajador  = ep.IdTrabajador,
-                                    Trabajador = new TrabajadorDto { Id =  ep.IdTrabajador,
-                                                                    Nombre = t.Nombre,
-                                                                    ApellidoPaterno = t.ApellidoPaterno,
-                                                                    ApellidoMaterno = t.ApellidoMaterno,
-                                                                    IdUsuario = t.IdUsuario ,
-                                                                    IdCargo = t.IdCargo ,
-                                                                    IdCargoFuncion = t.IdCargoFuncion,
-                                                                    DetalleCargo = new CargoDto { Id = c.Id, Descripcion = c.Descripcion , IdCargoFuncion = c.IdCargoFuncion },
-                                                                    DetalleFuncion = new CargoFuncionDto {  Id= cf.Id, Descripcion = cf.Descripcion}
-                                                                    
-                                                                  },
-                                    
-                                    Paciente = new PacienteDto { Id =p.Id,
-                                                                     Nombre = p.Nombre,
-                                                                     ApellidoPaterno = p.ApellidoPaterno,
-                                                                     ApellidoMaterno = p.ApellidoMaterno,
-                                                                     Rut = p.Rut
-                                                                }
-
+                                    Idtrabajador = ep.IdTrabajador,
+                                    Trabajador = new TrabajadorDto
+                                    {
+                                        Id = ep.IdTrabajador,
+                                        Nombre = t.Nombre,
+                                        Rut = t.Rut,
+                                        ApellidoPaterno = t.ApellidoPaterno,
+                                        ApellidoMaterno = t.ApellidoMaterno,
+                                        IdUsuario = t.IdUsuario,
+                                        IdCargo = t.IdCargo,
+                                        IdCargoFuncion = t.IdCargoFuncion,
+                                        DetalleCargo = new CargoDto { Id = c.Id, Descripcion = c.Descripcion, IdCargoFuncion = c.IdCargoFuncion },
+                                        DetalleFuncion = new CargoFuncionDto { Id = cf.Id, Descripcion = cf.Descripcion }
+                                    },
+                                    Paciente = new PacienteDto
+                                    {
+                                        Id = p.Id,
+                                        Nombre = p.Nombre,
+                                        ApellidoPaterno = p.ApellidoPaterno,
+                                        ApellidoMaterno = p.ApellidoMaterno,
+                                        Rut = p.Rut
+                                    }
                                 }).ToList();
 
                     objResult = new BaseDto<List<EquipoPacienteDto>>(epDb);
@@ -115,6 +118,47 @@ namespace AppMasInfo.Negocio.DAL.Services
             }
 
             return objResult;
+        }
+        #endregion
+
+        #region Delete
+        public BaseDto<bool> Delete(EquipoPacienteDto p_Obj)
+        {
+            BaseDto<bool> result = null;
+
+            try
+            {
+                using (this.dbContext = new MasInfoWebEntities_02())
+                {
+                    //Obtener el objeto origen desde base de datos
+                    //El metodo .FirstOrDefault, retorna el primer objeto encontrado de acuerdo
+                    // a un determinado filtro de búsqueda, y en caso contrario, retorna null
+                    var objOrigenDb = this.dbContext.EquipoPaciente.FirstOrDefault(u => u.Id == p_Obj.Id);
+
+                    if (objOrigenDb != null)
+                    {
+                        objOrigenDb.Id = p_Obj.Id;
+
+                        this.dbContext.EquipoPaciente.RemoveRange(this.dbContext.EquipoPaciente.Where(u => u.Id == p_Obj.Id));
+                        this.dbContext.SaveChanges();
+                       
+                        result = new BaseDto<bool>(true);
+                    }
+                    else
+                    {
+                        throw new Exception("Id EquipoPaciente no encontrado en base de datos");
+                    }
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                result = new BaseDto<bool>(true, sqlEx);
+            }
+            catch (Exception ex)
+            {
+                result = new BaseDto<bool>(true, ex);
+            }
+            return result;
         }
         #endregion
     }

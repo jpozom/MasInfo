@@ -10,5 +10,6 @@ namespace AppMasInfo.Negocio.DAL.Services
     {
         BaseDto<List<EquipoPacienteDto>> GetEquipoPacienteByIdPaciente(PacienteDto p_Filtro);
         BaseDto<bool> AddEquipoPaciente(EquipoPacienteDto equipo);
+        BaseDto<bool> Delete(EquipoPacienteDto p_Obj);
     }
 }

@@ -2,6 +2,7 @@
 using AppMasInfo.Negocio.DAL.Services;
 using AppMasInfo.Utils.Utils;
 using AppMasInfo.Web.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,7 +72,7 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de pacientes. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener la lista de pacientes. Por favor, inténtelo nuevamente" + ex;
             }
 
             return View(viewModel);
@@ -117,8 +118,7 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente";
-
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente" + ex;
                 return RedirectToAction("Index");
             }
 
@@ -135,7 +135,7 @@ namespace AppMasInfo.Web.Controllers
                 //guardar asignacion
                 EquipoPacienteDto equipo = new EquipoPacienteDto();
                 equipo.IdPaciente = viewModel.IdPaciente;
-                equipo.Idtrabajador= viewModel.Idtrabajador;
+                equipo.Idtrabajador= viewModel.Idtrabajador;               
                 BaseDto<bool> res = this.EquipoPacienteServiceModel.AddEquipoPaciente(equipo);
 
                 if (res.Value)
@@ -174,15 +174,53 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente";
-
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente" + ex;
                 return RedirectToAction("Index");
             }
 
             return View(viewModel);
         }
+        #endregion
 
+        #region Delete
+        [HttpPost]
+        public string Delete(EquipoPacienteViewModel p_ViewModel)
+        {
+            String jsonResult = String.Empty;
 
+            try
+            {
+                EquipoPacienteDto equipoDelete = new EquipoPacienteDto();
+                equipoDelete.Id = p_ViewModel.Id;
+
+                var objRespuesta = this.EquipoPacienteServiceModel.Delete(equipoDelete);
+
+                if (!objRespuesta.HasError)
+                {
+                    jsonResult = JsonConvert.SerializeObject(
+                        new
+                        {
+                            status = "ok",
+                            message = "Asignación Eliminada Correctamente"
+                        });
+                }
+                else
+                {
+                    jsonResult = JsonConvert.SerializeObject(
+                            new
+                            {
+                                status = "error",
+                                message = "No se Puede Eliminar la Asiganación. Por favor, Intente Nuevamente"
+                            });
+                }
+            }
+            catch (Exception ex)
+            {
+                jsonResult = JsonConvert.SerializeObject(new { status = "error", message = "Error al intentar eliminar el usuario", ex });
+            }
+
+            return jsonResult;
+        }
         #endregion
 
         #endregion       

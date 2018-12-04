@@ -97,7 +97,7 @@ namespace AppMasInfo.Web.Controllers
                 viewModel.LstPaciente.Value = lstPaciente.HasValue ? lstPaciente.Value : new List<PacienteDto>();
 
                 //se crea un objeto
-                var pacienteFiltroObj = new PacienteDto(1,10);
+                var pacienteFiltroObj = new PacienteDto(1, 10);
                 pacienteFiltroObj.FiltroIdEstado = (int)EnumUtils.EstadoEnum.Paciente_Habilitado;
                 //se envia el objeto al servicio
                 var pacienteListDbResponse = this.PacienteServiceModel.GetListaPacienteByFitro(pacienteFiltroObj);
@@ -105,7 +105,7 @@ namespace AppMasInfo.Web.Controllers
                 if (!pacienteListDbResponse.HasError)
                 {
                     viewModel.LstPaciente = pacienteListDbResponse;
-                }                
+                }
 
                 if (pacienteListDbResponse.HasError)
                 {
@@ -164,34 +164,47 @@ namespace AppMasInfo.Web.Controllers
 
                 if (objRespuestaDb.HasValue)
                 {
-                    viewModel = new SeleccionPacienteDetailViewModel
-                    {
-                        RutPaciente = objRespuestaDb.Value.Rut,
-                        IdPaciente = objRespuestaDb.Value.Id,
-                        NombrePaciente = objRespuestaDb.Value.Nombre,
-                        ApellidoPaternoPaciente = objRespuestaDb.Value.ApellidoPaterno,
-                        ApellidoMaternoPaciente = objRespuestaDb.Value.ApellidoMaterno,
-                        Edad = objRespuestaDb.Value.Edad,
-                        NumeroTelefono = objRespuestaDb.Value.NumeroTelefono,
-                        DireccionPaciente = objRespuestaDb.Value.Direccion,
-                        DetalleTutor = objRespuestaDb.Value.DetalleTutor,
-                        IdPacienteUbicacion = objRespuestaDb.Value.DetallePacienteUbicacion.Id,
-                        Observacion = objRespuestaDb.Value.DetallePacienteUbicacion.Observacion,
-                        FchIngreso = objRespuestaDb.Value.DetallePacienteUbicacion.FchIngreso,
-                        DetalleUbicacion = objRespuestaDb.Value.DetalleUbicacion,
-                        DetalleEquipoPaciente = objRespuestaDb.Value.DetalleEquipoPaciente,
-                    };
-                    //Deshabilitar la opcion de modificar la observacion ingresada al paciente, esta opcion
-                    //queda solo habilitada para roles asignados
-                    var RolActual = (((System.Security.Claims.ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).FirstOrDefault());
+                    TutorDto filtroTutor = new TutorDto();
+                    filtroTutor.FiltroId = objRespuestaDb.Value.DetalleTutor.Id;
 
-                    if (RolActual == "Técnico" || RolActual == "Auxiliar")
+                    var objRespDb = TutorServiceModel.GetTutorById(filtroTutor);
+
+                    if (objRespDb.HasValue)
                     {
-                        viewModel.Disabled = true;
+                        viewModel = new SeleccionPacienteDetailViewModel
+                        {
+                            RutPaciente = objRespuestaDb.Value.Rut,
+                            IdPaciente = objRespuestaDb.Value.Id,
+                            NombrePaciente = objRespuestaDb.Value.Nombre,
+                            ApellidoPaternoPaciente = objRespuestaDb.Value.ApellidoPaterno,
+                            ApellidoMaternoPaciente = objRespuestaDb.Value.ApellidoMaterno,
+                            Edad = objRespuestaDb.Value.Edad,
+                            NumeroTelefono = objRespuestaDb.Value.NumeroTelefono,
+                            DireccionPaciente = objRespuestaDb.Value.Direccion,
+                            DetalleTutor = objRespuestaDb.Value.DetalleTutor,
+                            NumeroTelefonoTutor = objRespDb.Value.DetalleTelefono.NumeroTelefono,
+                            IdPacienteUbicacion = objRespuestaDb.Value.DetallePacienteUbicacion.Id,
+                            Observacion = objRespuestaDb.Value.DetallePacienteUbicacion.Observacion,
+                            FchIngreso = objRespuestaDb.Value.DetallePacienteUbicacion.FchIngreso,
+                            DetalleUbicacion = objRespuestaDb.Value.DetalleUbicacion,
+                            DetalleEquipoPaciente = objRespuestaDb.Value.DetalleEquipoPaciente,
+                        };
+                        //Deshabilitar la opcion de modificar la observacion ingresada al paciente, esta opcion
+                        //queda solo habilitada para roles asignados
+                        var RolActual = (((System.Security.Claims.ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).FirstOrDefault());
+
+                        if (RolActual == "Técnico" || RolActual == "Auxiliar")
+                        {
+                            viewModel.Disabled = true;
+                        }
+                        else
+                        {
+                            viewModel.Disabled = false;
+                        }
                     }
                     else
                     {
-                        viewModel.Disabled = false;
+                        TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente";
                     }
                 }
                 else

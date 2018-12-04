@@ -93,13 +93,7 @@ namespace AppMasInfo.Web.Controllers
 
                         // Si el usuario es distinto de nulo, significa que esta autenticado en el sistema
                         if (userDb != null)
-                        {
-                            ////string nombreCompleto = string.Format("{0} {1} {2}",
-                            //    userDb.ListaTrabajador.FirstOrDefault().Nombre,
-                            //    userDb.ListaTrabajador.FirstOrDefault().ApellidoPaterno,
-                            //    userDb.ListaTrabajador.FirstOrDefault().ApellidoMaterno,
-                            //    userDb.ListaTrabajador.FirstOrDefault().Email);
-
+                        {                            
                             // Generamos la identidad con Owin
                             var identity = new ClaimsIdentity(DefaultAuthenticationTypes.ApplicationCookie);
                             identity.AddClaims(new List<Claim>

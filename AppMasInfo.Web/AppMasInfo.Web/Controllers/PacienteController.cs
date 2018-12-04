@@ -106,11 +106,10 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener registros de DB. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener registros de DB. Por favor, inténtelo nuevamente" + ex;
             }
 
             return View(viewModel);
-
         }
         #endregion
 
@@ -332,7 +331,7 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Paciente. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un Error al crear el Paciente. Por favor, inténtelo nuevamente" + ex;
             }
 
             return View(p_ViewModel);
@@ -426,8 +425,7 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente";
-
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos. Por favor, inténtelo nuevamente" + ex;
                 return RedirectToAction("Index");
             }
 
@@ -511,7 +509,7 @@ namespace AppMasInfo.Web.Controllers
 
                                         if (objResutTelefono.HasValue)
                                         {
-                                            TempData["SaveOkMessage"] = "Registro Actualiazado Correctamente";
+                                            TempData["SaveOkMessage"] = "Registro Actualizado Correctamente";
                                             return RedirectToAction("Index");
                                         }
                                         else
@@ -553,7 +551,7 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un Error al Actualizar el Registro. Por favor, Inténtelo Nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un Error al Actualizar el Registro. Por favor, Inténtelo Nuevamente" + ex;
             }
 
             return View(p_ViewModel);

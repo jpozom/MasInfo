@@ -57,11 +57,10 @@
             </span>
         </a>
         <ul class="dropdown-menu">
-            <li><a href="javascript:void(0)"> Profile</a></li>
-            <li><a href="@Url.Action("Index", "CambioPass")"><span class="badge badge-success pull-right"></span> Cambio de Contraseña</a></li>
-            <li><a href="javascript:void(0)"> Lock screen</a></li>
             <li class="divider"></li>
-            <li><a href="javascript:logoutConfirmation('@Url.Content("~/Account/Logout")')">Logout</a></li>
+            <li><a href="@Url.Action("Index", "CambioPass")"><span class="badge badge-success pull-right"></span> Cambio de Contraseña</a></li>
+            <li class="divider"></li>
+            <li><a href="javascript:logoutConfirmation('@Url.Content("~/Account/Logout")')">Cierre su Sesión</a></li>
         </ul>
     </li>
 </ul>

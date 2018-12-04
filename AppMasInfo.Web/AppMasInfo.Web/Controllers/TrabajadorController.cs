@@ -390,7 +390,7 @@ namespace AppMasInfo.Web.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos del usuario. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un error al obtener los datos del usuario. Por favor, inténtelo nuevamente" + ex;
                 return RedirectToAction("Index");
             }
 
@@ -465,7 +465,7 @@ namespace AppMasInfo.Web.Controllers
             catch (Exception ex)
             {
                 this.CargarDatosEditView(ref p_ViewModel);
-                TempData["ErrorMessage"] = "Ha ocurrido un error al actualizar el Trabajador. Por favor, inténtelo nuevamente";
+                TempData["ErrorMessage"] = "Ha ocurrido un error al actualizar el Trabajador. Por favor, inténtelo nuevamente" + ex;
             }
 
             return View(p_ViewModel);

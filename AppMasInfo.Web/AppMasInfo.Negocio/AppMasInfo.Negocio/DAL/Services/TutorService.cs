@@ -278,7 +278,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                                    join tel in this.dbContext.Telefono on u.Id equals tel.IdUsuario
                                    join p in this.dbContext.Paciente on t.IdPaciente equals p.Id
                                    join tt in this.dbContext.TipoTelefono on tel.IdTipoTelefono equals tt.IdTipoTelefono
-                                   where t.Id == p_Filtro.FiltroId                                 
+                                   where t.Id == p_Filtro.FiltroId                               
                                    select new TutorDto
                                    {
                                        Id = t.Id,

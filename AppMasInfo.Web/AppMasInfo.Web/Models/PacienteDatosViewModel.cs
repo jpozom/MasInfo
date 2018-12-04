@@ -37,7 +37,9 @@ namespace AppMasInfo.Web.Models
         [Display(Name = "Número teléfono")]
         public string NumeroTelefono { get; set; }
 
-        public Nullable<System.DateTime> FchIngreso { get; set; }
+        public Nullable<System.DateTime> fchIngreso { get; set; }
+
+        public string FchIngreso { get; set; }
 
         public int IdPacienteUbicacion { get; set; }
 

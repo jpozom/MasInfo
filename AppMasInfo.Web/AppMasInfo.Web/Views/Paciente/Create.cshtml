@@ -26,9 +26,11 @@
                 Rut.value = '';
             }
         }
-      
+
 
         $("#divStatus").hide();
+
+        $("#divtxtEdad").hide();
 
         $(function () {
 
@@ -52,8 +54,9 @@
 
             })
 
+            //evento que inserta al change del combobox tipo telefono dependiendo si es celular o telefono fijo
+            //el sufijo telefonico correspondiente
             $("#IdTipoTelefono").on("change", function () {
-                console.log("entro")
                 var idTipoTelefono = $(this).val();
 
                 if (idTipoTelefono != 2 && idTipoTelefono != 3)
@@ -63,9 +66,26 @@
                     $("#telefono").unbind();
 
                 } else {
-                    $("#telefono").focus()
+                    $("#telefono").focus();
                     $("#telefono").val("+569");
                     $("#telefono").unbind();
+                }
+            });
+
+            //evento que controla el ingreso de la edda Arroajando un aviso
+            $("#txtEdad").on("change", function () {
+                var edadLimite = $(this).val();
+
+                if (edadLimite < 18)
+                {
+                    $("#txtEdad").focus();
+                    $("#infoEdad").html("<span class=\"label label-danger\">Edad Tutor:</span>  <b>No</b> cumple con la edad necesaria. <b>Informar</b>");
+                    $("#divtxtEdad").show();
+                    
+                }
+                else
+                {
+                    $("#divtxtEdad").hide();
                 }
             });
 
@@ -117,7 +137,6 @@
                );
             }
         });
-
     </script>
 }
 
@@ -230,8 +249,16 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.EdadTutor, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-4">
-                        @Html.EditorFor(model => model.EdadTutor, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese Edad" } })
+                        @Html.EditorFor(model => model.EdadTutor, new { htmlAttributes = new { @class = "form-control", @placeholder = "Ingrese Edad", id = "txtEdad" } })
                         @Html.ValidationMessageFor(model => model.EdadTutor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2"></label>
+                    <div class="col-md-4">
+                        <div class="alert alert-info" id="divtxtEdad">
+                            <p id="infoEdad"></p>
+                        </div>
                     </div>
                 </div>
 

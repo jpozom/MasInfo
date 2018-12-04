@@ -253,7 +253,6 @@ namespace AppMasInfo.Negocio.DAL.Services
                                         from cf in tmpCf.DefaultIfEmpty()
                                         from c in tmpC.DefaultIfEmpty()
                                         where t.Id == p_Filtro.FiltroId
-
                                         select new TrabajadorDto
                                         {
                                             Id = t.Id,

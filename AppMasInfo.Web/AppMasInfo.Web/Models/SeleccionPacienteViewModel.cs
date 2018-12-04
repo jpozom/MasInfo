@@ -45,6 +45,9 @@ namespace AppMasInfo.Web.Models
         [Display(Name = "Número teléfono")]
         public string NumeroTelefono { get; set; }
 
+        [Display(Name = "Número teléfono")]
+        public string NumeroTelefonoTutor { get; set; }
+
         [Display(Name = "Rut")]
         public string RutPaciente { get; set; }
 
