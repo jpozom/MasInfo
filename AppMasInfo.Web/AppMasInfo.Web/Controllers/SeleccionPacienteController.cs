@@ -13,7 +13,8 @@ using System.Web.Mvc;
 
 namespace AppMasInfo.Web.Controllers
 {
-    [Authorize]
+    //Describe cómo usar el atributo Authorize para controlar el acceso a las paginas y a sus metodos.
+    [Authorize(Roles = "Administrador, Médico, Enfermero/a, Técnico, Auxiliar")]
     public class SeleccionPacienteController : Controller
     {
         #region propiedades privadas
@@ -193,7 +194,7 @@ namespace AppMasInfo.Web.Controllers
                         //queda solo habilitada para roles asignados
                         var RolActual = (((System.Security.Claims.ClaimsIdentity)User.Identity).Claims.Where(c => c.Type == System.Security.Claims.ClaimTypes.Role).Select(c => c.Value).FirstOrDefault());
 
-                        if (RolActual == "Técnico" || RolActual == "Auxiliar")
+                        if (RolActual == "Auxiliar")
                         {
                             viewModel.Disabled = true;
                         }

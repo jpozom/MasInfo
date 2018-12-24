@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace AppMasInfo.Negocio.DAL.Services
 {
     public interface IPacienteService
-    {
-        
+    {        
         BaseDto<List<PacienteDto>> GetListaPacienteAll();
 
         /// <summary>

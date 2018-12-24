@@ -12,6 +12,8 @@ using System.Web.Mvc;
 
 namespace AppMasInfo.Web.Controllers
 {
+    //Describe cómo usar el atributo Authorize para controlar el acceso a las paginas y a sus metodos.
+    [Authorize(Roles = "Administrador, Médico, Enfermero/a")]
     public class PacienteUbicacionController : Controller
     {
         #region propiedades privadas

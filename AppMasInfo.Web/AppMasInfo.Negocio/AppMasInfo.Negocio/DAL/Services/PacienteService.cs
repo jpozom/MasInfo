@@ -452,7 +452,7 @@ namespace AppMasInfo.Negocio.DAL.Services
                     lstResultado = (from p in this.dbContext.Paciente
                                     join es in this.dbContext.Estado on p.IdEstado equals es.Id                                   
                                     where (p.IdEstado == p_Filtro.FiltroIdEstado || p_Filtro.FiltroIdEstado == null) &&
-                                           (p.Id == p_Filtro.FiltroId || p_Filtro.FiltroId == null) &&
+                                           (p.Id == p_Filtro.FiltroId || p_Filtro.FiltroId == null || p_Filtro.FiltroId == 0) &&
                                            (p.Nombre.Contains(p_Filtro.FiltroNombre) || string.IsNullOrEmpty(p_Filtro.FiltroNombre))
                                     select new PacienteDto
                                     {

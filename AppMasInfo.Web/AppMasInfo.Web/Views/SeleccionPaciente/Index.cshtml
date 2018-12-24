@@ -9,8 +9,8 @@
     <script type="text/javascript">
 
          var filtroBusqueda = function () {
-             var objRequestData = new Object();
-             objRequestData.FiltroRut = $('#FiltroRut').find('option:selected').val();
+            var objRequestData = new Object();
+            objRequestData.FiltroRut = $('#FiltroRut').find('option:selected').val();
             objRequestData.FiltroPaginado = new Object();
             objRequestData.FiltroPaginado.PaginaActual = parseInt($('#PaginaActual').val());
             objRequestData.FiltroPaginado.TamanoPagina = parseInt($('#TamanoPagina').find('option:selected').val());

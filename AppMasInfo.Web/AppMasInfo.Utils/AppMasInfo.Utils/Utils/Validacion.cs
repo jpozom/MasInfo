@@ -16,7 +16,7 @@ namespace AppMasInfo.Utils.Utils
         }
         public class Patterns
         {
-            public const string DecimalMonto = @"^(\d{1})?(\d+?)+([.,]\d{2})?$"; //@"^[0-9]{1,18}([\.\,][0-9]{1,2})?$";
+            public const string Rut = @"^[0-9]{7,8}-[0-9Kk]{1}";
             public const string Entero = @"^[0-9]{1,18}$";
             public const string Alfanumerico = @"^[A-Za-z0-9 ._áéíóúñÁÉÍÓÚÑ?¡!¿@]+${1,}";
             public const string Texto = @"^[A-Za-z ._áéíóúñÁÉÍÓÚÑ?¡!¿@]+${1,}";

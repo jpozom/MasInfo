@@ -21,6 +21,14 @@ namespace AppMasInfo.Web.Controllers
             get { return UsuarioService.GetInstance(); }
         }
 
+        public int Property
+        {
+            get => default(int);
+            set
+            {
+            }
+        }
+
         #endregion
 
         #region Metodos Publicos
@@ -103,24 +111,22 @@ namespace AppMasInfo.Web.Controllers
                                 new Claim(ClaimTypes.Role, userDb.DetalleRol.Descripcion),
                                 //new Claim(ClaimTypes.Email, userInfo.),
                             });
-                            HttpContext.GetOwinContext().Authentication.SignIn(identity);
-                            //userInfo.AccesoPaginas = userDb.Value.DetalleRol.AccesoPaginasWeb;
-                            //SessionStore.Store<ContextoDto>(SessionKeys.UsuarioSessionKey, userInfo);
+                            HttpContext.GetOwinContext().Authentication.SignIn(identity);                         
 
                             if (userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Tutor)
                             {
                                 return RedirectToAction("Index", "PacienteDatos");
                             }
 
-                            if (userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Administrador)
+                            if (userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Administrador ||
+                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Enfermera ||
+                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Medico)
                             {
                                 return RedirectToAction("Index", "Home");
                             }
 
-                            if (userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Tecnico ||
-                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Enfermera ||
-                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Auxiliar ||
-                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Medico)
+                            if (userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Tecnico ||                          
+                                userDb.DetalleRol.Id == (int)EnumUtils.RolEnum.Auxiliar)                              
                             {
                                 return RedirectToAction("Index", "SeleccionPaciente");
                             }

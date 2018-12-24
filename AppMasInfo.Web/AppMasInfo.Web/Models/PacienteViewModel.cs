@@ -29,8 +29,9 @@ namespace AppMasInfo.Web.Models
     public class PacienteCreateViewModel
     {
         #region Propiedades PacienteCreate
-
-        [Required(ErrorMessage = "Debe ingresar un Rut")]       
+       
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
+        [RegularExpression(Validacion.Patterns.Rut, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         [Display(Name = "Rut")]        
         public string Rut { get; set; }
 
@@ -59,7 +60,7 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string Direccion { get; set; }
 
-        [Phone(ErrorMessage = "Dee ingresar un número de teléfono correcto")]
+        [Phone(ErrorMessage = "Debe ingresar un número de teléfono correcto")]
         [Display(Name = "Teléfono")]             
         public string Telefono { get; set; }
 
@@ -67,9 +68,10 @@ namespace AppMasInfo.Web.Models
         #endregion
 
         #region Propiedades TutorCreate
-
-        [Required(ErrorMessage = "Debe ingresar un Rut")]
+        
         [Display(Name = "Rut")]
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
+        [RegularExpression(Validacion.Patterns.Rut, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string RutTutor { get; set; }
 
         [Display(Name = "Nombre")]
@@ -97,7 +99,6 @@ namespace AppMasInfo.Web.Models
         [RegularExpression(Validacion.Patterns.Alfanumerico, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         public string DireccionTutor { get; set; }
 
-
         [Phone]
         [Display(Name = "Teléfono")]
         [Required(ErrorMessage = "Debe Ingresar una Télefono")]
@@ -105,6 +106,7 @@ namespace AppMasInfo.Web.Models
 
         [Display(Name = "Email")]
         [EmailAddress(ErrorMessage = "Debe ingresar Correo")]
+        [Required(ErrorMessage = "Debe Ingresar un Email")]
         public string Email { get; set; }
 
         public long IdUsuario { get; set; }
@@ -152,7 +154,7 @@ namespace AppMasInfo.Web.Models
         [Display(Name = "Nombre")]
         public string Nombre { get; set; }
 
-        [Display(Name = "Apellido Paterno")]
+        [Display(Name = "Apellido Paterno")]       
         public string ApellidoPaterno { get; set; }
 
         [Display(Name = "Apellido Materno")]        
@@ -178,12 +180,13 @@ namespace AppMasInfo.Web.Models
         public string RutTutor { get; set; }
 
         [Display(Name = "Nombre")]
+        
         public string NombreTutor { get; set; }
 
-        [Display(Name = "Apellido Paterno")]
+        [Display(Name = "Apellido Paterno")]       
         public string ApellidoPaternoTutor { get; set; }
 
-        [Display(Name = "Apellido Materno")]  
+        [Display(Name = "Apellido Materno")]       
         public string ApellidoMaternoTutor { get; set; }
 
         [Display(Name = "Edad")]        

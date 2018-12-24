@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace AppMasInfo.Web.Controllers
 {
-    [Authorize/*(Roles = "Administrador, Médico")*/]
+    [Authorize(Roles = "Administrador, Médico, Enfermero/a, Técnico, Auxiliar, Tutor")]
     public class CambioPassController : Controller
     {
         #region propiedades privadas

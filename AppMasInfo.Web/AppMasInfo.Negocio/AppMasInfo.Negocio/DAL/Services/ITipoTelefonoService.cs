@@ -10,7 +10,7 @@ namespace AppMasInfo.Negocio.DAL.Services
     public interface ITipoTelefonoService
     {
         /// <summary>
-        /// Metodo para obtener todos los roles existentes en DB
+        /// Metodo para obtener todos los tipo telefonos existentes en DB
         /// </summary>
         /// <returns></returns>
         BaseDto<List<TipoTelefonoDto>> GetListaTipoTelefonoAll();

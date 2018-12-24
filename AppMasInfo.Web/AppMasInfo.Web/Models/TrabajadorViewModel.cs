@@ -41,8 +41,9 @@ namespace AppMasInfo.Web.Models
         #region propiedades
 
 
+        [Required(ErrorMessage = Validacion.Mensajes.Required)]
+        [RegularExpression(Validacion.Patterns.Rut, ErrorMessage = Validacion.Mensajes.RegularExpression)]
         [Display(Name = "Rut")]
-        [Required(ErrorMessage = "Debe Ingresar un Rut")]
         public string Rut { get; set; }
 
         [Display(Name = "Nombre")]

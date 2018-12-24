@@ -8,5 +8,6 @@ namespace AppMasInfo.Negocio.DAL.Services
 {
     public interface IEstadoService
     {
+
     }
 }
